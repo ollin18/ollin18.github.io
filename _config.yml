@@ -75,3 +75,5 @@ defaults:
     values:
       layout: post
       read_time: true
+
+google_analytics: UA-102171656-1
