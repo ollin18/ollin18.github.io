@@ -32,7 +32,7 @@ logo: /assets/images/logo.png # path of site logo, e.g. "/assets/images/logo.png
 
 # Build settings
 markdown: kramdown
-theme: basically-basic
+theme: jekyll-theme-basically-basic
 gems:
   - jekyll-feed
   - jekyll-seo-tag
