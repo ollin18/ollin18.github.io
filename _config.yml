@@ -14,7 +14,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 lang: en-US
-title: Ollin Demian's place
+title: Ollin Demian
 email: ollin.demian@gmail.com
 description: This is my personal space where I share my work and interests
 baseurl: # the optional subpath of your site, e.g. "/blog"
