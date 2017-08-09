@@ -1,0 +1,158 @@
+{
+  "basics": {
+    "name": "Ollin Demian Langle-Chimal",
+    "label": "Data Scientist",
+    "email": "ollin.demian@gmail.com",
+    "phone": "+52 1 5518117484",
+    "website": "https://ollin18.github.io",
+    "summary": I'm from Mexico City and I found myself very passionated about cience and arts. I earned a BSc degree in physics from the National Autonomous University of Mexico (UNAM) and have succesfully concluded a MSc in Data Science at the Techonologic Autonomous Institute of Mexico (ITAM). The social and environmental problems are the main focus of my interests, with the sustainability as the main one.",
+    "location": {
+      "address": "Coyoacan",
+      "postalCode": "04390",
+      "city": "Mexico City",
+      "countryCode": "MX",
+      "region": "Mexico City"
+    },
+    "profiles": []
+  },
+  "work": [
+    {
+      "company": "Stevens Institute of Technology",
+      "position": "Summer Research",
+      "website": "https://www.stevens.edu",
+      "startDate": "2017-06-05",
+      "endDate": "2017-08-05",
+      "summary": "Complex Systems department, working on profiling cities",
+      "highlights": [
+        "Analize social media data",
+        "Build a georeferenced database",
+        "Visualization"
+      ]
+    },
+    {
+      "company": "Institute of Analytics",
+      "position": "Data Scientist",
+      "website": "",
+      "startDate": "2017-01-01",
+      "endDate": "2017-05-30",
+      "summary": "Analize the mexican entrepeneur system.",
+      "highlights": [
+        "Complex network analysis"
+      ]
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "INMEGEN",
+      "position": "Researcher",
+      "website": "https://www.inmegen.gob.mx",
+      "startDate": "2015-08-01",
+      "endDate": "2017-08-10",
+      "summary": "National Institute of Genomic Medicine",
+      "highlights": [
+        "Complex network analysis"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "UNAM",
+      "area": "Physics",
+      "studyType": "Bachelor",
+      "startDate": "2006-08-01",
+      "endDate": "2012-05-30",
+      "gpa": "3.34",
+      "courses": []
+    },
+    {
+      "institution": "ITAM",
+      "area": "Data Science",
+      "studyType": "Master",
+      "startDate": "2016-05-01",
+      "endDate": "2017-05-30",
+      "gpa": "3.67",
+      "courses": []
+    }
+  ],
+  "awards": [
+    {
+      "title": "SoFiA 2016",
+      "date": "2016-11-07",
+      "awarder": "Full scholarship",
+      "summary": "Latin American School and Workshop on Data Analysis and Mathematical Modelling of Social Sciences"
+    }
+  ],
+  "publications": [],
+  "skills": [
+    {
+      "name": "Data Science",
+      "level": "Master",
+      "keywords": [
+        "Julia",
+        "Python",
+        "R",
+        "Docker",
+        "AWS",
+        "Luigi",
+        "Bokeh",
+        "Git"
+      ]
+    }
+  ],
+  "languages": [
+    {
+      "language": "Spanish",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "English",
+      "fluency": "Full professional proficiency"
+    },
+    {
+      "language": "French",
+      "fluency": "Iintermediate (speaking, reading); basic (writing)"
+    },
+    {
+      "language": "Japanese",
+      "fluency": "Basic (speaking, reading, writing)"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Photography",
+      "keywords": [
+        "Urban",
+        "Action",
+        "Dance"
+      ]
+    },
+    {
+      "name": "Sports",
+      "keywords": [
+        "Soccer",
+        "Running",
+        "Cycling",
+        "Mountaineering",
+        "Climbing"
+      ]
+    },
+    {
+      "name": "Music",
+      "keywords": [
+        "Drums",
+        "Percussions",
+        "Classical Guitar"
+      ]
+    }
+  ],
+  "references": [
+    {
+      "name": "Mauricio Garcia Tec",
+      "reference": " Ollin has been my student in three courses in Statistics at the Master’s program in Data Science at Instituto Tecnologico Autonomo de Mexico (ITAM). In all my courses, Ollin has distinguished himself as the best student in the class. From my point of view and experience, Mr. Langle has more than enough academic qualifications for succeeding in an advanced graduate program in Data Sciences or any related field."
+    },
+    {
+      "name": "Jesús Espinal",
+      "reference": "I know Ollin Langle since October of 2015. I adviced his BSc thesis, and during that time he always shown a great interest in the understanding of complex systems, in particular social complex systems."
+    }
+  ]
+}
