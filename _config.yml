@@ -1,0 +1,91 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely edit after that. If you find
+# yourself editing this file very often, consider using Jekyll's data files
+# feature for the data you need to update frequently.
+#
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
+lang: en-US
+title: Ollin D. Langle
+alt_title: Ollin D. Langle
+email: ollin.demian@gmail.com
+description: > # this means to ignore newlines until "baseurl:"
+    Hi, I'm Ollin. Welcome to my personal website! A place where I share some of my work and contact details.
+short_description: I'm a physicist turning into data scientist.
+baseurl: # the optional subpath of your site, e.g. "/blog"
+url: "https://www.ollinlangle.com"
+author:
+  name: Ollin Demian
+  twitter: Nietzchrodinger
+  instagram: ollin18
+  lastfm: ollinlangle
+  picture: /assets/images/convilla.jpg
+twitter_username: Nietzchrodinger
+github_username: ollin18
+instagram_username: ollin18
+lastfm_username: ollinlangle
+jsonresume_username: ollin18
+logo: /assets/images/logo.png # path of site logo, e.g. "/assets/images/logo.png"
+
+# Build settings
+markdown: kramdown
+theme: jekyll-theme-basically-basic
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-paginate
+  - jekyll-twitter-plugin
+feed:
+  path: atom.xml
+
+# Pagination - https://jekyllrb.com/docs/pagination/
+paginate: 10
+paginate_path: /page:num/
+
+# Exclude from processing.
+exclude:
+  - .asset-cache
+  - .bundle
+  - .codeclimate.yml
+  - .editorconfig
+  - .gitattributes
+  - .jekyll-assets-cache
+  - .sass-cache
+  - .scss-lint.yml
+  - CHANGELOG
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE
+  - node_modules
+  - Rakefile
+  - README
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - /docs # ignore Basically Basic sample site
+  - /example # ignore Basically Basic dev site
+
+disqus:
+    shortname: ollin18
+
+# Front Matter Defaults
+defaults:
+   #_posts
+  - scope:
+      path: "_posts"
+      type: posts
+    values:
+      layout: post
+      read_time: true
+
+google_analytics: UA-102171656-1
