@@ -1,25 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" style="height: 100%">
 <head>
     <meta charset="utf-8">
-    <title>ECharts</title>
+    <title>Mobility by Risk of Informality</title>
+</head>
+<body  style="height: 100%; margin: 0">
+    <div id="container" style="height:100%;"></div>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@latest/dist/echarts.min.js"></script>
-    <style>
-        #main {
-            width: 90%;
-            height: 600px;
-        }
-    </style>
-</head>
-<body>
-    <div id="main"></div>
-    <script>
-        var chartDom = document.getElementById('main');
+
+    <script  type="text/javascript">
+        var chartDom = document.getElementById('container');
         var myChart = echarts.init(chartDom);
         var option;
 
         $.getJSON('https://raw.githubusercontent.com/ollin18/ollin18.github.io/master/complex_sytems/2018/10/25/mobility.json', function (data) {
+            const filteredData = data.filter(row => row.date <= '2021-02-28'); // Filter data up to February 2021
+
 
             const datasetWithFilters = [];
             const seriesList = [];
@@ -95,6 +92,7 @@
 
             myChart.setOption(option);
         });
+    window.addEventListener('resize', myChart.resize);
     </script>
 </body>
 </html>
