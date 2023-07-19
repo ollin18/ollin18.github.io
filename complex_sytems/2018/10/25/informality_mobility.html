@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@latest/dist/echarts.min.js"></script>
+    <style>
+        #main {
+            width: 90%;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+    <div id="main"></div>
+    <script>
+        var chartDom = document.getElementById('main');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        $.getJSON('https://raw.githubusercontent.com/ollin18/ollin18.github.io/master/complex_sytems/2018/10/25/mobility.json', function (data) {
+
+            const datasetWithFilters = [];
+            const seriesList = [];
+
+            const Tasa_bins = Array.from(new Set(data.map(row => row['Tasa_bin'])));
+
+            Tasa_bins.forEach(Tasa_bin => {
+                var datasetId = 'dataset_' + Tasa_bin;
+                datasetWithFilters.push({
+                    id: datasetId,
+                    fromDatasetId: 'dataset_raw',
+                    transform: {
+                        type: 'filter',
+                        config: { 'dimension': 'Tasa_bin', '=': Tasa_bin }
+                    }
+                });
+
+                seriesList.push({
+                    type: 'line',
+                    datasetId: datasetId,
+                    showSymbol: false,
+                    name: Tasa_bin,
+                    endLabel: {
+                        show: true,
+                        formatter: function (params) {
+                            return 'Informality: ' + params.data.Tasa_bin;
+                        }
+                    },
+                    labelLayout: {
+                        moveOverlap: 'shiftY'
+                    },
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    encode: {
+                        x: 'date',
+                        y: 'mean_val',
+                        label: ['Tasa_bin','mean_val'],
+                        itemName: 'date',
+                        tooltip: ['mean']
+                    }
+                });
+            });
+
+            option = {
+                animationDuration: 10000,
+                dataset: [
+                    {
+                        id: 'dataset_raw',
+                        source: data
+                    },
+                    ...datasetWithFilters
+                ],
+                title: {
+                    text: 'Change in mobility by informality over time'
+                },
+                tooltip: {
+                    order: 'valueDesc',
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    nameLocation: 'middle'
+                },
+                yAxis: {
+                    name: 'Pct. change in mobility',
+                },
+                grid: {
+                    right: 140
+                },
+                series: seriesList
+            };
+
+            myChart.setOption(option);
+        });
+    </script>
+</body>
+</html>
+
