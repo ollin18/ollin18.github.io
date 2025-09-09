@@ -14,35 +14,35 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 lang: en-US
-title: My Awesome Site
-email:
-description:
+title: Ollin D. Langle-Chimal
+#alt_title: Ollin D. Langle-Chimal
+email: ollin.demian@gmail.com
+#short_description: I'm a physicist turning into data scientist.
 baseurl: # the optional subpath of your site, e.g. "/blog"
-url: # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url: "https://www.ollinlangle.com"
+#url: "https://ollinlangle.com"
 author:
-  name:
-  twitter:
-  picture:
-twitter_username:
-github_username:
-logo: # path of site logo, e.g. "/assets/images/logo.png"
-search: # true, false (default)
-search_full_content: false # true, false (default)
-search_provider: # lunr (default), algolia
-algolia:
-  application_id: # YOUR_APPLICATION_ID
-  index_name: # YOUR_INDEX_NAME
-  search_only_api_key: # YOUR_SEARCH_ONLY_API_KEY
-  powered_by: # true (default), false
+  name: Ollin Demian
+  twitter: Nietzchrodinger
+  instagram: ollin18
+  lastfm: ollinlangle
+  picture: /assets/images/convilla.jpg
+twitter_username: Nietzchrodinger
+github_username: ollin18
+instagram_username: ollin18
+lastfm_username: ollinlangle
+jsonresume_username: ollin18
+logo: /assets/images/logo.png # path of site logo, e.g. "/assets/images/logo.png"
 
 # Build settings
 markdown: kramdown
 theme: jekyll-theme-basically-basic
-plugins: # previsously gems
+plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-paginate
+  - jekyll-twitter-plugin
 feed:
   path: atom.xml
 
@@ -74,12 +74,17 @@ exclude:
   - /docs # ignore Basically Basic sample site
   - /example # ignore Basically Basic dev site
 
+disqus:
+    shortname: ollin18
+
 # Front Matter Defaults
 defaults:
-  # _posts
+   #_posts
   - scope:
       path: "_posts"
       type: posts
     values:
       layout: post
       read_time: true
+
+google_analytics: G-9FS4V8SGLR
