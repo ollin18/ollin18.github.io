@@ -1,0 +1,1 @@
+**Layla**. If you don't pay attention, she'll kiss you right on the mouth. She has the most adorable tongue ever. Very independent, likes her own space but where she can see you. She'll need alone time before going to bed but she'll knock on the door past midnight to be let in and sleep on your feet.

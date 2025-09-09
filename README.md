@@ -1,979 +1,508 @@
-# [Basically Basic Jekyll Theme][1]
+# multi-language-al-folio
 
-[![LICENSE](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/mmistakes/jekyll-theme-basically-basic/blob/master/LICENSE)
-[![Jekyll](https://img.shields.io/badge/jekyll-%3E%3D%203.6-blue.svg)](https://jekyllrb.com/)
+<div align="center">
 
-Basically Basic is a [Jekyll theme](https://jekyllrb.com/docs/themes/) meant as 
-a substitute for the default [Minima](https://github.com/jekyll/minima), with a 
-few enhancements thrown in for good measure:
+[![Preview](readme_preview/al-folio-preview.png)](https://george-gca.github.io/multi-language-al-folio/)
 
-- Clean responsive design with [six customizable skins](#skin)
-- Curriculum Vitæ/Resume layout powered by [JSON data](http://registry.jsonresume.org/)
-- About page layout
-- Site-wide search provided by [Algolia](https://www.algolia.com/) or [Lunr](https://lunrjs.com/).
-- Disqus Comments and Google Analytics support
-- SEO best practices via [Jekyll SEO Tag](https://github.com/jekyll/jekyll-seo-tag/)
-
-[![Basically Basic live preview][2]][1]
-
-[1]: https://mmistakes.github.io/jekyll-theme-basically-basic/
-[2]: https://cloud.githubusercontent.com/assets/1376749/24117647/6dede894-0d81-11e7-9c2c-f19bea45e219.jpg (live preview)
-
-## Installation
-
-If you're running Jekyll v3.5+ and self-hosting you can quickly install the 
-theme as a Ruby gem. If you're hosting with GitHub Pages you can install as a 
-remote theme or directly copy all of the theme files (see [structure](#structure) 
-below) into your project.
-
-### Ruby Gem Method
-
-1. Add this line to your Jekyll site's `Gemfile`:
-
-   ```ruby
-   gem "jekyll-theme-basically-basic"
-   ```
-2. Add this line to your Jekyll site's `_config.yml` file:
-
-   ```yaml
-   theme: jekyll-theme-basically-basic
-   ```
-
-2. Then run [Bundler](http://bundler.io/) to install the theme gem and dependencies:
-   
-   ```terminal
-   bundle install
-   ```
-
-### GitHub Pages Method
-
-GitHub Pages has added [full support](https://github.com/blog/2464-use-any-theme-with-github-pages) 
-for any GitHub-hosted theme.
-
-1. Replace `gem "jekyll"` with:
-
-   ```ruby
-   gem "github-pages", group: :jekyll_plugins
-   ```
-
-2. Run `bundle update` and verify that all gems install properly.
-
-3. Add `remote_theme: "mmistakes/jekyll-theme-basically-basic@1.4.5"` to your 
-   `_config.yml` file. Remove any other `theme:` or `remote_theme:` entries.
+**A multilingual version of the [al-folio theme](https://github.com/alshedivat/al-folio), a simple, clean, and responsive [Jekyll](https://jekyllrb.com/) theme for academics.**
 
 ---
 
-**Note:** Your Jekyll site should be viewable immediately at 
-<http://USERNAME.github.io>. If it's not, you can force a rebuild by 
-**Customizing Your Site** (see below for more details).
+[![deploy](https://github.com/george-gca/multi-language-al-folio/actions/workflows/deploy.yml/badge.svg)](https://github.com/george-gca/multi-language-al-folio/actions/workflows/deploy.yml)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/fd22b3da-3970-4612-8dee-5579601589a3/deploy-status)](https://app.netlify.com/sites/multi-language-al-folio/deploys)
+[![Maintainers](https://img.shields.io/badge/maintainers-1-success.svg)](#maintainers)
+[![GitHub contributors](https://img.shields.io/github/contributors/alshedivat/al-folio.svg)](https://github.com/george-gca/multi-language-al-folio/graphs/contributors/)
 
-If you're hosting several Jekyll based sites under the same GitHub username you 
-will have to use Project Pages instead of User Pages. Essentially you rename the 
-repo to something other than **USERNAME.github.io** and create a `gh-pages` 
-branch off of `master`. For more details on how to set things up check 
-[GitHub's documentation](https://help.github.com/articles/user-organization-and-project-pages/).
+[![Docker Image Version](https://img.shields.io/docker/v/georgegca/multi-language-al-folio?sort=semver&label=docker%20image&color=blueviolet)](https://hub.docker.com/r/georgegca/multi-language-al-folio)
+[![Docker Image Size](https://img.shields.io/docker/image-size/georgegca/multi-language-al-folio?sort=date&label=docker%20image%20size&color=blueviolet)](https://hub.docker.com/r/georgegca/multi-language-al-folio)
+[![Docker Pulls](https://img.shields.io/docker/pulls/georgegca/multi-language-al-folio?color=blueviolet)](https://hub.docker.com/r/georgegca/multi-language-al-folio)
 
-#### Remove the Unnecessary
+[![GitHub release](https://img.shields.io/github/v/release/george-gca/multi-language-al-folio)](https://github.com/george-gca/multi-language-al-folio/releases/latest)
+[![GitHub license](https://img.shields.io/github/license/george-gca/multi-language-al-folio?color=blue)](https://github.com/george-gca/multi-language-al-folio/blob/main/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/george-gca/multi-language-al-folio)](https://github.com/george-gca/multi-language-al-folio)
+[![GitHub forks](https://img.shields.io/github/forks/george-gca/multi-language-al-folio)](https://github.com/george-gca/multi-language-al-folio/fork)
 
-If you forked or downloaded the `jekyll-theme-basically-basic` repo you can 
-safely remove the following files and folders:
+[![pt-br](https://img.shields.io/badge/leia--me-pt--br-green.svg)](README.pt-br.md)
 
-- `.editorconfig`
-- `.gitattributes`
-- `.github`
-- `.scss-lint.yml`
-- `CHANGELOG.md`
-- `jekyll-theme-basically-basic.gemspec`
-- `LICENSE`
-- `Rakefile`
-- `README.md`
-- `screenshot.png`
-- `/docs`
-- `/example`
+</div>
 
-## Upgrading
+## User community
 
-If you're using the Ruby Gem or remote theme versions of Basically Basic, 
-upgrading is fairly painless.
+The vibrant community of **al-folio** users is growing!
+Academics around the world use this theme for their homepages, blogs, lab pages, as well as webpages for courses, workshops, conferences, meetups, and more.
+Check out the community webpages below.
+Feel free to add your own page(s) by sending a PR.
 
-To check which version you are currently using, view the source of your built 
-site and you should something similar to:
+<table>
+<tr>
+<td>Academics</td>
+<td>
+<a href="https://martinbulla.github.io" target="_blank">★</a>
+<a href="https://maruan.alshedivat.com" target="_blank">★</a>
+<a href="https://www.cs.columbia.edu/~chen1ru/" target="_blank">★</a>
+<a href="https://maithraraghu.com" target="_blank">★</a>
+<a href="https://platanios.org" target="_blank">★</a>
+<a href="https://otiliastr.github.io" target="_blank">★</a>
+<a href="https://www.maths.dur.ac.uk/~sxwc62/" target="_blank">★</a>
+<a href="https://jessachandler.com/" target="_blank">★</a>
+<a href="https://mayankm96.github.io/" target="_blank">★</a>
+<a href="https://markdean.info/" target="_blank">★</a>
+<a href="https://kakodkar.github.io/" target="_blank">★</a>
+<a href="https://sahirbhatnagar.com/" target="_blank">★</a>
+<a href="https://spd.gr/" target="_blank">★</a>
+<a href="https://jay-sarkar.github.io/" target="_blank">★</a>
+<a href="https://aborowska.github.io/" target="_blank">★</a>
+<a href="https://aditisgh.github.io/" target="_blank">★</a>
+<a href="https://alexhaydock.co.uk/" target="_blank">★</a>
+<a href="https://alixkeener.net/" target="_blank">★</a>
+<a href="https://andreea7b.github.io/" target="_blank">★</a>
+<a href="https://rishabhjoshi.github.io/" target="_blank">★</a>
+<a href="https://sheelabhadra.github.io/" target="_blank">★</a>
+<a href="https://giograno.me/" target="_blank">★</a>
+<a href="https://immsrini.github.io/" target="_blank">★</a>
+<a href="https://apooladian.github.io/" target="_blank">★</a>
+<a href="https://chinmoy-dutta.github.io/" target="_blank">★</a>
+<a href="https://liamcli.com/" target="_blank">★</a>
+<a href="https://yoonholee.com/" target="_blank">★</a>
+<a href="https://zrqiao.github.io/" target="_blank">★</a>
+<a href="https://abstractgeek.github.io/" target="_blank">★</a>
+<a href="https://www.compphys.de/" target="_blank">★</a>
+<a href="https://julianstreyczek.github.io" target="_blank">★</a>
+<a href="https://sdaza.com" target="_blank">★</a>
+<a href="https://niweera.gq" target="_blank">★</a>
+<a href="https://www.alihkw.com" target="_blank">★</a>
+<a href="https://amirpourmand.ir" target="_blank">★</a>
+<a href="https://scottleechua.github.io" target="_blank">★</a>
+<a href="https://sk1y101.github.io" target="_blank">★</a>
+<a href="https://yyang768osu.github.io" target="_blank">★</a>
+<a href="https://veedata.github.io" target="_blank">★</a>
+<a href="https://K-Wu.github.io" target="_blank">★</a>
+<a href="https://amalawilson.com" target="_blank">★</a>
+<a href="https://tirtharajdash.github.io" target="_blank">★</a>
+<a href="https://carolinacarreira.github.io" target="_blank">★</a>
+<a href="https://manandey.github.io" target="_blank">★</a>
+<a href="https://johanneshoerner.github.io" target="_blank">★</a>
+<a href="https://ioannismavromatis.com" target="_blank">★</a>
+<a href="https://taidnguyen.github.io" target="_blank">★</a>
+<a href="https://lbugnon.github.io" target="_blank">★</a>
+<a href="https://joahannes.github.io" target="_blank">★</a>
+<a href="https://dominikstrb.github.io" target="_blank">★</a>
+<a href="https://tylerbarna.com" target="_blank">★</a>
+<a href="https://daviddmc.github.io/" target="_blank">★</a>
+<a href="https://andreaskuster.ch/" target="_blank">★</a>
+<a href="https://ellisbrown.github.io/" target="_blank">★</a>
+<a href="https://djherron.github.io/" target="_blank">★</a>
+<a href="https://rodosingh.github.io/" target="_blank">★</a>
+<a href="https://vdivakar.github.io/" target="_blank">★</a>
+<a href="https://george-gca.github.io/" target="_blank">★</a>
+<a href="https://bashirkazimi.github.io/" target="_blank">★</a>
+<a href="https://dohaison.github.io/" target="_blank">★</a>
+<a href="https://raphaaal.github.io/" target="_blank">★</a>
+<a href="https://varuniyer.info/" target="_blank">★</a>
+<a href="https://yukimasano.github.io/" target="_blank">★</a>
+<a href="https://hashe037.github.io/" target="_blank">★</a>
+<a href="https://wang-boyu.github.io/" target="_blank">★</a>
+<a href="https://qingqingchen.info" target="_blank">★</a>
+<a href="https://bajinsheng.github.io/" target="_blank">★</a>
+<a href="https://www.silviofanzon.com/" target="_blank">★</a>
+<a href="https://kaikaiyao.github.io/" target="_blank">★</a>
+<a href="https://alchemz.github.io/" target="_blank">★</a>
+<a href="https://samadamday.com/" target="_blank">★</a>
+<a href="https://fanpu.io/" target="_blank">★</a>
+<a href="https://abigalekim.github.io/" target="_blank">★</a>
+<a href="https://lucasresck.github.io/" target="_blank">★</a>
+<a href="https://users.wpi.edu/~lfichera/" target="_blank">★</a>
+<a href="https://anmspro.github.io/" target="_blank">★</a>
+<a href="https://berlyne.net/" target="_blank">★</a>
+<a href="https://filippomazzoli.github.io/" target="_blank">★</a>
+<a href="https://www.escontrela.me/" target="_blank">★</a>
+<a href="https://raffaem.github.io/" target="_blank">★</a>
+<a href="https://cbueth.de/" target="_blank">★</a>
+<a href="https://kyleaoman.github.io/" target="_blank">★</a>
+<a href="https://decwest.github.io/" target="_blank">★</a>
+<a href="https://www.jedburkat.com" target="_blank">★</a>
+<a href="https://hrzhang.me" target="_blank">★</a>
+<a href="https://kudhru.github.io/" target="_blank">★</a>
+<a href="https://mbarbetti.github.io/" target="_blank">★</a>
+<a href="https://www.zhivotenko.com/" target="_blank">★</a>
+<a href="https://giordanodaloisio.github.io/" target="_blank">★</a>
+<a href="https://aadityaura.github.io/" target="_blank">★</a>
+<a href="https://abhinav-mehta.github.io/" target="_blank">★</a>
+<a href="https://shubhashisroydipta.com/" target="_blank">★</a>
+<a href="https://astanziola.github.io" target="_blank">★</a>
+<a href="https://tinkerer.in" target="_blank">★</a>
+<a href="https://sam-bieberich.github.io/" target="_blank">★</a>
+<a href="https://afraniomelo.github.io/en/" target="_blank">★</a>
+<a href="https://jonaruthardt.github.io" target="_blank">★</a>
+<a href="https://www.zla.app/" target="_blank">★</a>
+<a href="https://stavros.github.io" target="_blank">★</a>
+<a href="https://ericslyman.com" target="_blank">★</a>
+<a href="https://ztjona.github.io/" target="_blank">★</a>
+<a href="https://chrischoi314.github.io" target="_blank">★</a>
+<a href="https://riccobelli.faculty.polimi.it" target="_blank">★</a>
+<a href="https://kishanved.tech/" target="_blank">★</a>
+<a href="https://abhilesh.github.io/" target="_blank">★</a>
+<a href="https://jackjburnett.github.io/" target="_blank">★</a>
+<a href="https://physics-morris.github.io/" target="_blank">★</a>
+<a href="https://sraf.ir" target="_blank">★</a>
+<a href="https://acad.garywei.dev/" target="_blank">★</a>
+<a href="https://tonideleo.github.io/" target="_blank">★</a>
+<a href="https://alonkellner.com/" target="_blank">★</a>
+<a href="https://berylbir.github.io/" target="_blank">★</a>
+<a href="https://thefermi0n.github.io/" target="_blank">★</a>
+<a href="https://mingsun-kaust.github.io/" target="_blank">★</a>
+<a href="https://hdocmsu.github.io/" target="_blank">★</a>
+<a href="https://trandangtrungduc.github.io/" target="_blank">★</a>
+<a href="https://kinghowler.github.io/" target="_blank">★</a>
+<a href="https://anurye.github.io/" target="_blank">★</a>
+<a href="https://charlie-xiao.github.io/" target="_blank">★</a>
+<a href="https://giuseppeperelli.github.io/" target="_blank">★</a>
+<a href="https://shlee-lab.github.io/" target="_blank">★</a>
+<a href="https://devos50.github.io/" target="_blank">★</a>
+<a href="https://kocikowski.com/" target="_blank">★</a>
+<a href="https://vmooers.github.io/" target="_blank">★</a>
+<a href="https://jpfonseca.github.io/" target="_blank">★</a>
+<a href="https://dmitryryumin.github.io/" target="_blank">★</a>
+<a href="https://alexiglad.github.io/" target="_blank">★</a>
+<a href="https://nishanthjkumar.com/" target="_blank">★</a>
+</td>
+</tr>
+<tr>
+<td>Labs</td>
+<td>
+<a href="https://www.haylab.caltech.edu/" target="_blank">★</a>
+<a href="https://sjkimlab.github.io/" target="_blank">★</a>
+<a href="https://systemconsultantgroup.github.io/scg-folio/" target="_blank">★</a>
+<a href="https://decisionlab.ucsf.edu/" target="_blank">★</a>
+<a href="https://programming-group.com/" target="_blank">★</a>
+<a href="https://sailing-lab.github.io/" target="_blank">★</a>
+<a href="https://inbt.jhu.edu/epidiagnostics/" target="_blank">★</a>
+<a href="https://www.nuesl.org/" target="_blank">★</a>
+<a href="https://big-culture.github.io/" target="_blank">★</a>
+</td>
+</tr>
+<tr>
+<td>Courses</td>
+<td>
+CMU PGM (<a href="https://sailinglab.github.io/pgm-spring-2019/" target="_blank">S-19</a>) <br>
+CMU DeepRL (<a href="https://cmudeeprl.github.io/403_website/" target="_blank">S-21</a>, <a href="https://cmudeeprl.github.io/703website_f21/" target="_blank">F-21</a>, <a href="https://cmudeeprl.github.io/403website_s22/" target="_blank">S-22</a>, <a href="https://cmudeeprl.github.io/703website_f22/" target="_blank">F-22</a>, <a href="https://cmudeeprl.github.io/403website_s23/" target="_blank">S-23</a>, <a href="https://cmudeeprl.github.io/703website_f23/" target="_blank">F-23</a>) <br>
+CMU MMML (<a href="https://cmu-multicomp-lab.github.io/mmml-course/fall2020/" target="_blank">F-20</a>, <a href="https://cmu-multicomp-lab.github.io/mmml-course/fall2022/" target="_blank">F-22</a>) <br>
+CMU AMMML (<a href="https://cmu-multicomp-lab.github.io/adv-mmml-course/spring2022/" target="_blank">S-22</a>, <a href="https://cmu-multicomp-lab.github.io/adv-mmml-course/spring2023/" target="_blank">S-23</a>) <br>
+CMU ASI (<a href="https://cmu-multicomp-lab.github.io/asi-course/spring2023/" target="_blank">S-23</a>) <br>
+CMU Distributed Systems (<a href="https://andrew.cmu.edu/course/15-440/" target="_blank">S-24</a>)
+</td>
+</tr>
+<tr>
+<td>Conferences & workshops</td>
+<td>
+ICLR Blog Post Track (<a href="https://iclr-blogposts.github.io/2023/" target="_blank">2023</a>, <a href="https://iclr-blogposts.github.io/2024/about" target="_blank">2024</a>) <br>
+ML Retrospectives (NeurIPS: <a href="https://ml-retrospectives.github.io/neurips2019/" target="_blank">2019</a>, <a href="https://ml-retrospectives.github.io/neurips2020/" target="_blank">2020</a>; ICML: <a href="https://ml-retrospectives.github.io/icml2020/" target="_blank">2020</a>) <br>
+HAMLETS (NeurIPS: <a href="https://hamlets-workshop.github.io/" target="_blank">2020</a>) <br>
+ICBINB (NeurIPS: <a href="https://i-cant-believe-its-not-better.github.io/" target="_blank">2020</a>, <a href="https://i-cant-believe-its-not-better.github.io/neurips2021/" target="_blank">2021</a>) <br>
+Neural Compression (ICLR: <a href="https://neuralcompression.github.io/" target="_blank">2021</a>) <br>
+Score Based Methods (NeurIPS: <a href="https://score-based-methods-workshop.github.io/" target="_blank">2022</a>)<br>
+Images2Symbols (CogSci: <a href="https://images2symbols.github.io/" target="_blank"> 2022</a>) <br>
+Medical Robotics Junior Faculty Forum (ISMR: <a href="https://junior-forum-ismr.github.io/" target="_blank"> 2023</a>)<br>
+Beyond Vision: Physics meets AI (ICIAP: <a href="https://physicsmeetsai.github.io/beyond-vision/" target="_blank">2023</a>) <br>
+Workshop on Diffusion Models (NeurIPS: <a href="https://diffusionworkshop.github.io/" target="_blank">2023</a>) <br>
+Workshop on Structured Probabilistic Inference & Generative Modeling (ICML: <a href="https://spigmworkshop.github.io/" target="_blank">2023</a>, <a href="https://spigmworkshop2024.github.io/" target="_blank">2024</a>)
+</td>
+</tr>
+</table>
 
-```
-<!--
-    Basically Basic Jekyll Theme 1.4.5
-    Copyright 2017-2018 Michael Rose - mademistakes.com | @mmistakes
-    Free for personal and commercial use under the MIT license
-    https://github.com/mmistakes/jekyll-basically-theme/blob/master/LICENSE
--->
-```
+## Lighthouse PageSpeed Insights
 
-At the top of every `.html` file, `/assets/css/main.css`, and `/assets/js/main.js`.
+### Desktop
 
-### Ruby Gem
+[![Google Lighthouse PageSpeed Insights](lighthouse_results/desktop/pagespeed.svg)](https://htmlpreview.github.io/?https://github.com/george-gca/multi-language-al-folio/blob/main/lighthouse_results/desktop/george_gca_github_io_multi_language_al_folio_.html)
 
-Simply run `bundle update` if you're using Bundler (have a `Gemfile`) or `gem 
-update jekyll-theme-basically-basic` if you're not.
+Run the test yourself: [Google Lighthouse PageSpeed Insights](https://pagespeed.web.dev/report?url=https%3A%2F%2Fgeorge-gca.github.io%2Fmulti-language-al-folio%2F&form_factor=desktop)
 
-### Remote Theme
+### Mobile
 
-Verify you have the [latest version](https://github.com/mmistakes/jekyll-theme-basically-basic/releases) assigned in `_config.yml`
+[![Google Lighthouse PageSpeed Insights](lighthouse_results/mobile/pagespeed.svg)](https://htmlpreview.github.io/?https://github.com/george-gca/multi-language-al-folio/blob/main/lighthouse_results/mobile/george_gca_github_io_multi_language_al_folio_.html)
 
-```
-remote_theme: "mmistakes/jekyll-theme-basically-basic@1.4.5"
-```
+Run the test yourself: [Google Lighthouse PageSpeed Insights](https://pagespeed.web.dev/report?url=https%3A%2F%2Fgeorge-gca.github.io%2Fmulti-language-al-folio%2F&form_factor=mobile)
 
-Note: If `@x.x.x` is omitted the theme's current `master` branch will be used. It is advised to ["lock" `remote_theme`](https://github.com/benbalter/jekyll-remote-theme#declaring-your-theme) at a specific version to avoid introducing breaking changes to your site.
+## Table Of Contents
 
-The next step requires rebuilding your [GitHub Pages](https://pages.github.com/) site so it can pull down the latest theme updates. This can be achieved by pushing up a commit to your GitHub repo.
+- [multi-language-al-folio](#multi-language-al-folio)
+  - [User community](#user-community)
+  - [Lighthouse PageSpeed Insights](#lighthouse-pagespeed-insights)
+    - [Desktop](#desktop)
+    - [Mobile](#mobile)
+  - [Table Of Contents](#table-of-contents)
+  - [Getting started](#getting-started)
+  - [Installing and Deploying](#installing-and-deploying)
+  - [Customizing](#customizing)
+  - [Features](#features)
+    - [Multi Language Support](#multi-language-support)
+    - [Light/Dark Mode](#lightdark-mode)
+    - [CV](#cv)
+    - [People](#people)
+    - [Publications](#publications)
+    - [Collections](#collections)
+    - [Layouts](#layouts)
+      - [The iconic style of Distill](#the-iconic-style-of-distill)
+      - [Full support for math \& code](#full-support-for-math--code)
+      - [Photos, Audio, Video and more](#photos-audio-video-and-more)
+    - [Other features](#other-features)
+      - [GitHub's repositories and user stats](#githubs-repositories-and-user-stats)
+      - [Theming](#theming)
+      - [Social media previews](#social-media-previews)
+      - [Atom (RSS-like) Feed](#atom-rss-like-feed)
+      - [Related posts](#related-posts)
+      - [Code quality checks](#code-quality-checks)
+  - [FAQ](#faq)
+  - [Contributing](#contributing)
+    - [Maintainers](#maintainers)
+    - [All Contributors](#all-contributors)
+  - [Star History](#star-history)
+  - [License](#license)
 
-An empty commit will get the job done too if you don't have anything to push at the moment:
+## Getting started
 
-```terminal
-git commit --allow-empty -m "Force rebuild of site"
-```
+Want to learn more about Jekyll? Check out [this tutorial](https://www.taniarascia.com/make-a-static-website-with-jekyll/). Why Jekyll? Read [Andrej Karpathy's blog post](https://karpathy.github.io/2014/07/01/switching-to-jekyll/)! Why write a blog? Read [Rachel Thomas blog post](https://medium.com/@racheltho/why-you-yes-you-should-blog-7d2544ac1045).
 
-### Use Git
+## Installing and Deploying
 
-If you want to get the most out of the Jekyll + GitHub Pages workflow, then 
-you'll need to utilize Git. To pull down theme updates you must first ensure 
-there's an upstream remote. If you forked the theme's repo then you're likely 
-good to go.
+For installation and deployment details please refer to [INSTALL.md](INSTALL.md).
 
-To double check, run `git remote -v` and verify that you can fetch from `origin https://github.com/mmistakes/jekyll-theme-basically-basic.git`.
+## Customizing
 
-To add it you can do the following:
+For customization details please refer to [CUSTOMIZE.md](CUSTOMIZE.md).
 
-```terminal
-git remote add upstream https://github.com/mmistakes/jekyll-theme-basically-basic.git
-```
+## Features
 
-#### Pull Down Updates
+### Multi Language Support
 
-Now you can pull any commits made to theme's `master` branch with:
+In a previous version this was achieved using the [jekyll-multiple-languages-plugin](https://github.com/kurtsson/jekyll-multiple-languages-plugin), but since the plugin repository has been archived it was replaced by the [polyglot](https://github.com/untra/polyglot) plugin. This plugin was created based on the functionalities of the [jekyll-multiple-languages-plugin](https://github.com/kurtsson/jekyll-multiple-languages-plugin) and it is actively maintained. For more information about this change, see [UPGRADING.md](UPGRADING.md).
 
-```terminal
-git pull upstream master
-```
+The default language (and used as a fallback language when a link for a different language is not found) will be the language defined as `default_lang` in the [\_config.yml](_config.yml) file. When using two languages, the theme will show a button in the header that switches to the other language directly.
 
-Depending on the amount of customizations you've made after forking, there's 
-likely to be merge conflicts. Work through any conflicting files Git flags, 
-staging the changes you wish to keep, and then commit them.
+![Switch language](readme_preview/multi-language-diff-1.png)
+![Switch back language](readme_preview/multi-language-diff-2.png)
 
-### Update Files Manually
+It is also possible to display the country flag instead of the language name.
 
-Another way of dealing with updates is [downloading the theme](https://github.com/mmistakes/jekyll-theme-basically-basic/archive/master.zip) 
---- replacing your layouts, includes, and assets with the newer ones manually. 
-To be sure that you don't miss any changes it's probably a good idea to review 
-the theme's [commit history](https://github.com/mmistakes/jekyll-theme-basically-basic/commits/master) 
-to see what's changed since.
+![Use country flag instead of language name](readme_preview/country_flag.png)
 
-Here's a quick checklist of the important folders/files you'll want to be 
-mindful of:
+When using three or more, it will be created a dropdown menu with all the available languages.
 
-| Name                   |     |
-| ----                   | --- |
-| `_layouts`             | Replace all. Apply edits if you customized any layouts. |
-| `_includes`            | Replace all. Apply edits if you customized any includes. |
-| `assets`               | Replace all. Apply edits if you customized stylesheets or scripts. |
-| `_sass`                | Replace all. Apply edits if you customized Sass partials. |
-| `_data/theme.yml`      | Safe to keep. Verify that there were no major structural changes or additions. |
-| `_config.yml`          | Safe to keep. Verify that there were no major structural changes or additions. |
+![Switch language between 3 or more](readme_preview/multi-language-3-or-more.png)
+
+Note that throughout the [README.md](README.md) and [CUSTOMIZE.md](CUSTOMIZE.md) files, the default language is English (LANG = en-us). You must have an equivalent file or path for each language you have defined in [\_config.yml](_config.yml). For example, if you have defined `languages: ["en-us", "pt-br"]`, you must have 2 versions of the file `_data/LANG/cv.yml`: [\_data/en-us/cv.yml](_data/en-us/cv.yml) and [\_data/pt-br/cv.yml](_data/pt-br/cv.yml).
 
 ---
 
-**Note:** If you're not seeing the latest version, be sure to flush browser and 
-CDN caches. Depending on your hosting environment older versions of 
-`/assets/css/main.css`, `/assets/js/main.js`, or `*.html` may be cached.
+### Light/Dark Mode
 
-## Structure
+This template has a built-in light/dark mode. It detects the user preferred color scheme and automatically switches to it. You can also manually switch between light and dark mode by clicking on the sun/moon icon in the top right corner of the page.
 
-Layouts, includes, Sass partials, and data files are all placed in their default 
-locations. Stylesheets and scripts in `assets`, and a few development related 
-files in the project's root directory.
+<p align="center">
+<img src="readme_preview/light.png" width=400>
+<img src="readme_preview/dark.png" width=400>
+</p>
 
-**Please note:** If you installed Basically Basic via the Ruby Gem method, theme 
-files found in `/_layouts`, `/_includes`, `/_sass`, and `/assets` will be 
-missing. This is normal as they are bundled with the [`jekyll-theme-basically-basic`](https://rubygems.org/gems/jekyll-theme-basically-basic) gem.
-
-```terminal
-jekyll-theme-basically-basic
-├── _data                      # data files
-|  └── theme.yml               # theme settings and custom text
-├── _includes                  # theme includes and SVG icons
-├── _layouts                   # theme layouts (see below for details)
-├── _sass                      # Sass partials
-├── assets
-|  ├── javascripts
-|  |  └── main.js
-|  └── stylesheets
-|     └── main.scss
-├── _config.yml                # sample configuration
-└── index.md                   # sample home page (all posts/not paginated)
-```
-
-### Starting Fresh
-
-After creating a `Gemfile` and installing the theme you'll need to add and edit 
-the following files:
-
-- [`_config.yml`](_config.yml)
-- [`/_data/theme.yml`](_data/theme.yml)
-- [`index.md`](index.md) 
-
-**Note:** Consult the [**pagination**](#pagination) documentation below for
-instructions on how to enable it for the home page.
-
-### Starting from `jekyll new`
-
-Using the `jekyll new` command will get you up and running the quickest.
-
-Edit `_config.yml` and create `_data/theme.yml` as instructed above and you're 
-good to go.
-
-## Configuration
-
-Configuration of site-wide elements (`lang`, `title`, `description`, `logo`, 
-`author`, etc.) happens in your project's `_config.yml`. See the 
-[example configuration](example/_config.yml) in this repo for additional 
-reference.
-
-|                    | Description                                                               |
-| ------------------ | ------------------------------------------------------------------------- |
-| `lang`             | Used to indicate the language of text (e.g., en-US, en-GB, fr)            |
-| `title`            | Your site's title (e.g., Dungan's Awesome Site)                           |
-| `description`      | Short site description (e.g., A blog about grasshopper mash)              |
-| `url`              | The full URL to your site (e.g., https://groverloaf.org)                  |
-| `author`           | Global author information (see below)                                     |
-| `logo`             | Path to a site-wide logo ~100x100px (e.g., /assets/your-company-logo.png) |
-| `twitter_username` | Site-wide Twitter username, used as a link in sidebar                     |
-| `github_username`  | Site-wide GitHub username, used as a link in sidebar                      |
-
-For more configuration options be sure to consult the documentation for: 
-[**jekyll-seo-tag**][jekyll-seo-tag], [**jekyll-feed**][jekyll-feed], 
-[**jekyll-paginate**][jekyll-paginate], and [**jekyll-sitemap**][jekyll-sitemap].
-
-[jekyll-seo-tag]: https://github.com/jekyll/jekyll-seo-tag
-[jekyll-feed]: https://github.com/jekyll/jekyll-feed
-[jekyll-paginate]: https://github.com/jekyll/jekyll-paginate
-[jekyll-sitemap]: https://github.com/jekyll/jekyll-sitemap
-
-### Skin
-
-This theme comes in six different skins (color variations). To change skins add 
-one of the following to your [`/_data/theme.yml`](_data/theme.yml) file:
-
-| `skin: default` | `skin: night` | `skin: plum` |
-| --- | --- | --- |
-| ![default-skin](https://cloud.githubusercontent.com/assets/1376749/24115744/c0618c90-0d7a-11e7-8e2d-ec70f9db0c1b.png) | ![night-skin](https://cloud.githubusercontent.com/assets/1376749/24115770/d61127f8-0d7a-11e7-9158-986bee2be8e7.png) | ![plum-skin](https://cloud.githubusercontent.com/assets/1376749/24115778/db523a0e-0d7a-11e7-9452-8692b736d67e.png) |
-
-| `skin: sea` | `skin: soft` | `skin: steel` |
-| --- | --- | --- |
-| ![sea-skin](https://cloud.githubusercontent.com/assets/1376749/24115788/e27d818a-0d7a-11e7-8c56-2480e9ae83fb.png) | ![soft-skin](https://cloud.githubusercontent.com/assets/1376749/24115790/e6e548e8-0d7a-11e7-8e2d-d8053e8befd1.png) | ![steel-skin](https://cloud.githubusercontent.com/assets/1376749/24115799/eb2108e8-0d7a-11e7-8cc3-a6f22e4082ee.png) |
-
-### Google Fonts
-
-This theme allows you to easily use [Google Fonts](https://fonts.google.com/) 
-throughout the theme. Simply add the following to your 
-[`/_data/theme.yml`](_data/theme.yml), replacing the font `name` and `weights` 
-accordingly.
-
-```yaml
-google_fonts:
-  - name: "Fira Sans"
-    weights: "400,400i,600,600i"
-  - name: "Fira Sans Condensed"
-```
-
-### Text
-
-To change text found throughout the theme add the following to your 
-[`/_data/theme.yml`](_data/theme.yml) file and customize as necessary.
-
-```yaml
-t:
-  skip_links: "Skip links"
-  skip_primary_nav: "Skip to primary navigation"
-  skip_content: "Skip to content"
-  skip_footer: "Skip to footer"
-  menu: "Menu"
-  search: "Search"
-  site_search: "Site Search"
-  results_found: "Result(s) found"
-  search_placeholder_text: "Enter your search term..."
-  home: "Home"
-  newer: "Newer"
-  older: "Older"
-  email: "Email"
-  subscribe: "Subscribe"
-  read_more: "Read More"
-  posts: "Posts"
-  page: "Page"
-  of: "of"
-  min_read: "min read"
-  present: "Present"
-  cv_awards: "Awards"
-  cv_summary_contact: "Contact"
-  cv_summary_contact_email: "Email"
-  cv_summary_contact_phone: "Phone"
-  cv_summary_contact_website: "Website"
-  cv_location: "Location"
-  cv_education: "Education"
-  cv_education_courses: "Courses"
-  cv_interests: "Interests"
-  cv_languages: "Languages"
-  cv_publications: "Publications"
-  cv_references: "References"
-  cv_skills: "Skills"
-  cv_volunteer: "Volunteer"
-  cv_work: "Work"
-```
-
-### Navigation
-
-By default all internal pages with a `title` will be added to the "off-canvas" 
-menu. For more granular control and sorting of these menu links:
-
-1. Create a custom list to override the default setting by adding a 
-`navigation_pages` array to your [`/_data/theme.yml`](_data/theme.yml) file. 
-
-2. Add raw page paths in the order you'd like:
-
-   ```yaml
-   navigation_pages:
-     - about.md
-     - cv.md
-   ```
-
-Each menu link's title and URL will be populated based on their `title` and 
-`permalink` respectively.
-
-### Pagination
-
-Break up the main listing of posts into smaller lists and display them over 
-multiple pages by [enabling pagination](http://jekyllrb.com/docs/pagination/).
-
-1. Include the `jekyll-paginate` plugin in your `Gemfile`.
-
-   ```ruby
-   group :jekyll_plugins do
-     gem "jekyll-paginate"
-   end
-   ```
-
-2. Add `jekyll-paginate` to `gems` array in your `_config.yml` file and the 
-following pagination settings:
-
-   ```yaml
-   paginate: 5  # amount of posts to show per page
-   paginate_path: /page:num/
-   ```
-
-3. Create `index.html` (or rename `index.md`) in the root of your project and 
-add the following front matter:
-
-   ```yaml
-   layout: home
-   paginate: true
-   ```
-
-### Search
-
-To enable site-wide search add `search: true` to your `_config.yml`.
-
-#### Lunr (default)
-
-The default search uses [**Lunr**](https://lunrjs.com/) to build a search index of all your documents. This method is 100% compatible with sites hosted on GitHub Pages.
-
-**Note:** Only the first 50 words of a post or page's body content is added to the Lunr search index. Setting `search_full_content` to `true` in your `_config.yml` will override this and could impact page load performance.
-
-#### Algolia
-
-For faster and more relevant search ([see demo](https://mmistakes.github.io/jekyll-theme-basically-basic-algolia-search/)):
-
-1. Add the [`jekyll-algolia`](https://github.com/algolia/jekyll-algolia) gem to your `Gemfile`, in the `:jekyll_plugins` section.
-
-   ```ruby
-   group :jekyll_plugins do
-     gem "jekyll-feed"
-     gem "jekyll-seo-tag"
-     gem "jekyll-sitemap"
-     gem "jekyll-paginate"
-     gem "jekyll-algolia"
-   end
-   ```
-
-   Once this is done, download all dependencies by running `bundle install`.
-
-2. Switch search providers from `lunr` to `algolia` in your `_config.yml` file:
-
-   ```yaml
-   search_provider: algolia
-   ```
-
-3. Add the following Algolia credentials to your `_config.yml` file. *If you don't have an Algolia account, you can open a free [Community plan](https://www.algolia.com/users/sign_up/hacker). Once signed in, you can grab your credentials from [your dashboard](https://www.algolia.com/licensing).*
-
-   ```yaml
-   algolia:
-     application_id: # YOUR_APPLICATION_ID
-     index_name: # YOUR_INDEX_NAME
-     search_only_api_key: # YOUR_SEARCH_ONLY_API_KEY
-     powered_by: # true (default), false
-   ```
-
-4. Once your credentials are setup, you can run the indexing with the following command:
-
-   ```
-   ALGOLIA_API_KEY=your_admin_api_key bundle exec jekyll algolia
-   ```
-
-   For Windows users you will have to use `set` to assigned the `ALGOLIA_API_KEY` environment variable.
-
-   ```
-   set ALGOLIA_API_KEY=your_admin_api_key
-   bundle exec jekyll algolia
-   ```
-
-   Note that `ALGOLIA_API_KEY` should be set to your admin API key.
-
-To use the Algolia search with GitHub Pages hosted sites follow [this deployment guide](https://community.algolia.com/jekyll-algolia/github-pages.html). Or this guide for [deploying on Netlify](https://community.algolia.com/jekyll-algolia/netlify.html).
-
-**Note:** The Jekyll Algolia plugin can be configured in several ways. Be sure to check out [their full documentation](https://community.algolia.com/jekyll-algolia/options.html "Algolia configuration") on how to exclude files and other valuable settings.
-
-### Author
-
-Author information is used as meta data for post "by lines" and propagates the 
-`creator` field of Twitter summary cards with the following front matter in 
-`_config.yml`:
-
-```yaml
-author:
-  name: John Doe
-  twitter: johndoetwitter
-  picture: /assets/images/johndoe.png
-```
-
-Site-wide author information can be overridden in a document's front matter in 
-the same way:
-
-```yaml
-author:
-  name: Jane Doe
-  twitter: janedoetwitter
-  picture: /assets/images/janedoe.png
-```
-
-Or by specifying a corresponding key in the document's front matter, that 
-exists in `site.data.authors`. E.g., you have the following in the document's 
-front matter:
-
-```yaml
-author: megaman
-```
-
-And you have the following in `_data/authors.yml`:
-
-```yaml
-megaman:
-  name: Mega Man
-  twitter: megamantwitter
-  picture: /assets/images/megaman.png
-
-drlight:
-  name: Dr. Light
-  twitter: drlighttwitter
-  picture: /assets/images/drlight.png
-```
-
-Currently `author.picture` is only used in `layout: about`. Recommended size is 
-`300 x 300` pixels.
-
-### Reading Time
-
-To enable reading time counts add `read_time: true` to a post or page's YAML 
-Front Matter.
-
-### Comments (via Disqus)
-
-Optionally, if you have a [Disqus](https://disqus.com/) account, you can show a 
-comments section below each post.
-
-To enable Disqus comments, add your [Disqus shortname](https://help.disqus.com/customer/portal/articles/466208) to your project's 
-`_config.yml` file:
-
-```yaml
-  disqus:
-    shortname: my_disqus_shortname
-```
-
-Comments are enabled by default and will only appear in production when built 
-with the following [environment value](http://jekyllrb.com/docs/configuration/#specifying-a-jekyll-environment-at-build-time): 
-`JEKYLL_ENV=production`
-
-If you don't want to display comments for a particular post you can disable 
-them by adding `comments: false` to that post's front matter.
-
-### Google Analytics
-
-To enable Google Analytics, add your [tracking ID](https://support.google.com/analytics/answer/1032385) 
-to `_config.yml` like so:
-
-```yaml
-  google_analytics: UA-NNNNNNNN-N
-```
-
-Similar to comments, the Google Analytics tracking script will only appear in 
-production when using the following environment value: `JEKYLL_ENV=production`.
-
-### Copyright
-
-By default the copyright line in the footer displays the current year 
-(at build time) followed by your site's title. e.g. `© 2018 Basically Basic.`
-
-If you would like to change this add `copyright` to your `_config.yml` file 
-with appropriate text:
-
-```yaml
-copyright: "My custom copyright."
-```
-
-## Layouts
-
-This theme provides the following layouts, which you can use by setting the 
-`layout` [Front Matter](https://jekyllrb.com/docs/frontmatter/) on each page, 
-like so:
-
-```yaml
 ---
-layout: name
+
+### CV
+
+There are currently 2 different ways of generating the CV page content. The first one is by using a json file located in [assets/json/resume_LANG.json](assets/json/resume_en-us.json). It is a [known standard](https://jsonresume.org/) for creating a CV programmatically. The second one, currently used as a fallback when the json file is not found, is by using a yml file located in [\_data/LANG/cv.yml](_data/en-us/cv.yml). This was the original way of creating the CV page content and since it is more human readable than a json file we decided to keep it as an option.
+
+What this means is, if there is no resume data defined in [\_config.yml](_config.yml) and loaded via a json file, it will load the contents of [\_data/LANG/cv.yml](_data/en-us/cv.yml) as fallback.
+
+[![CV Preview](readme_preview/cv.png)](https://george-gca.github.io/multi-language-al-folio/cv/)
+
 ---
-```
 
-### `layout: default`
+### People
 
-This layout handles all of the basic page scaffolding placing the page content 
-between the masthead and footer elements. All other layouts inherit this one 
-and provide additional styling and features inside of the `{{ content }}` block.
+You can create a people page if you want to feature more than one person. Each person can have its own short bio, profile picture, and you can also set if every person will appear at the same or opposite sides.
 
-### `layout: post`
+[![People Preview](readme_preview/people.png)](https://george-gca.github.io/multi-language-al-folio/people/)
 
-This layout accommodates the following front matter:
+---
 
-```yaml
-# optional alternate title to replace page.title at the top of the page
-alt_title: "Basically Basic"
+### Publications
 
-# optional sub-title below the page title
-sub_title: "The name says it all"
+Your publications' page is generated automatically from your BibTex bibliography. Simply edit [\_bibliography/papers.bib](_bibliography/papers.bib). You can also add new `*.bib` files and customize the look of your publications however you like by editing [\_pages/LANG/publications.md](_pages/en-us/publications.md). By default, the publications will be sorted by year and the most recent will be displayed first. You can change this behavior and more in the `Jekyll Scholar` section in [\_config.yml](_config.yml) file.
 
-# optional intro text below titles, Markdown allowed
-introduction: |
-    Basically Basic is a Jekyll theme meant to be a substitute for the default --- [Minima](https://github.com/jekyll/minima). Conventions and features found in Minima are fully supported by **Basically Basic**.
+You can add extra information to a publication, like a PDF file in the [assets/pdf/](assets/pdf/) directory and add the path to the PDF file in the BibTeX entry with the `pdf` field. Some of the supported fields are: `abstract`, `altmetric`, `arxiv`, `bibtex_show`, `blog`, `code`, `dimensions`, `doi`, `eprint`, `html`, `isbn`, `pdf`, `pmid`, `poster`, `slides`, `supp`, `video`, and `website`.
 
-# optional call to action links
-actions:
-  - label: "Learn More"
-    icon: github  # references name of svg icon, see full list below
-    url: "http://url-goes-here.com"
-  - label: "Download"
-    icon: download  # references name of svg icon, see full list below
-    url: "http://url-goes-here.com"
+[![Publications Preview](readme_preview/publications.png)](https://george-gca.github.io/multi-language-al-folio/publications/)
 
-image:  # URL to a hero image associated with the post (e.g., /assets/page-pic.jpg)
+---
 
-# post specific author data if different from what is set in _config.yml 
-author:
-  name: John Doe
-  twitter: johndoetwitter
+### Collections
 
-comments: false  # disable comments on this post
-```
+This Jekyll theme implements `collections` to let you break up your work into categories. The theme comes with two default collections: `news` and `projects`. Items from the `news` collection are automatically displayed on the home page. Items from the `projects` collection are displayed on a responsive grid on projects page.
 
-**Note:** Hero images can be overlaid with a transparent "accent" color to unify them with the theme's palette. To enable, [customize the CSS](#customizing-sass-scss) with the following Sass variable override:
+[![Projects Preview](readme_preview/projects.png)](https://george-gca.github.io/multi-language-al-folio/projects/)
 
-```scss
-$intro-image-color-overlay: true;
-```
+You can easily create your own collections, apps, short stories, courses, or whatever your creative work is. To do this, edit the collections in the [\_config.yml](_config.yml) file, create a corresponding folder, and create a landing page for your collection, similar to `_pages/projects.md`.
 
-### `layout: page`
+---
 
-Visually this layout looks and acts the same as `layout: post`, with two minor 
-differences.
+### Layouts
 
-- Author "by line" and publish date are omitted.
-- Disqus comments are omitted.
+**al-folio** comes with stylish layouts for pages and blog posts.
 
-### `layout: home`
+#### The iconic style of Distill
 
-This layout accommodates the same front matter as `layout: page`, with the 
-addition of the following:
+The theme allows you to create blog posts in the [distill.pub](https://distill.pub/) style:
 
-```yaml
-paginate: true  # enables pagination loop, see section above for additional setup
-entries_layout: # list (default), grid
-```
+[![Distill Preview](readme_preview/distill.png)](https://george-gca.github.io/multi-language-al-folio/blog/2018/distill/)
 
-By default, posts are shown in a list view. To change to a grid view add `entries_layout: grid` to the page's front matter.
+For more details on how to create distill-styled posts using `<d-*>` tags, please refer to [the example](https://george-gca.github.io/multi-language-al-folio/blog/2018/distill/).
 
-### `layout: posts`
+#### Full support for math & code
 
-This layout displays all posts grouped by the year they were published. It accommodates the same front matter as `layout: page`.
+**al-folio** supports fast math typesetting through [MathJax](https://www.mathjax.org/) and code syntax highlighting using [GitHub style](https://github.com/jwarby/jekyll-pygments-themes). Also supports [chartjs charts](https://www.chartjs.org/), [mermaid diagrams](https://mermaid-js.github.io/mermaid/#/), and [TikZ figures](https://tikzjax.com/).
 
-By default, posts are shown in a list view. To change to a grid view add `entries_layout: grid` to the page's front matter.
+<p align="center">
+<a href="https://george-gca.github.io/multi-language-al-folio/blog/2015/math/" target="_blank"><img src="readme_preview/math.png" width=400 alt="example of post with math"></a>
+<a href="https://george-gca.github.io/multi-language-al-folio/blog/2015/code/" target="_blank"><img src="readme_preview/code.png" width=400 alt="example of post with code"></a>
+</p>
 
-### `layout: categories`
+#### Photos, Audio, Video and more
 
-This layout displays all posts grouped category. It accommodates the same front matter as `layout: page`.
+Photo formatting is made simple using [Bootstrap's grid system](https://getbootstrap.com/docs/4.4/layout/grid/). Easily create beautiful grids within your blog posts and project pages, also with support for [video](https://george-gca.github.io/multi-language-al-folio/blog/2023/videos/) and [audio](https://george-gca.github.io/multi-language-al-folio/blog/2023/audios/) embeds:
 
-By default, posts are shown in a list view. To change to a grid view add `entries_layout: grid` to the page's front matter.
+<p align="center">
+  <a href="https://george-gca.github.io/multi-language-al-folio/projects/1_project/">
+    <img src="readme_preview/photos-screenshot.png" width="75%">
+  </a>
+</p>
 
-### `layout: tags`
+---
 
-This layout displays all posts grouped by tag. It accommodates the same front matter as `layout: page`.
+### Other features
 
-By default, posts are shown in a list view. To change to a grid view add `entries_layout: grid` to the page's front matter.
+#### GitHub's repositories and user stats
 
-### `layout: collection`
+**al-folio** uses [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) and [github-profile-trophy](https://github.com/ryo-ma/github-profile-trophy) to display GitHub repositories and user stats on the `/repositories/` page.
 
-This layout displays all documents grouped by a specific collection. It accommodates the same front matter as `layout: page` with the addition of the following:
+[![Repositories Preview](readme_preview/repositories.png)](https://george-gca.github.io/multi-language-al-folio/repositories/)
 
-```yaml
-collection: # collection name
-entries_layout: # list (default), grid
-show_excerpts: # true (default), false
-sort_by: # date (default) title
-sort_order: # forward (default), reverse
-```
+Edit the `_data/repositories.yml` and change the `github_users` and `github_repos` lists to include your own GitHub profile and repositories to the `/repositories/` page.
 
-To create a page showing all documents in the `recipes` collection you'd create `recipes.md` in the root of your project and add this front matter:
-
-```yaml
-title: Recipes
-layout: collection
-permalink: /recipes/
-collection: recipes
-```
-
-By default, documents are shown in a list view. To change to a grid view add `entries_layout: grid` to the page's front matter. If you want to sort the collection by title add `sort_by: title`. If you want reverse sorting, add `sort_order: reverse`.
-
-### `layout: category`
-
-This layout displays all posts grouped by a specific category. It accommodates the same front matter as `layout: page` with the addition of the following:
-
-```yaml
-taxonomy: # category name
-entries_layout: # list (default), grid
-```
-
-By default, posts are shown in a list view. To change to a grid view add `entries_layout: grid` to the page's front matter.
-
-To create a page showing all posts assigned to the category `foo` you'd create `foo.md` in the root of your project and add this front matter:
-
-```yaml
-title: Foo
-layout: category
-permalink: /categories/foo/
-taxonomy: foo
-```
-
-### `layout: tag`
-
-This layout displays all posts grouped by a specific tag. It accommodates the same front matter as `layout: page` with the addition of the following:
-
-```yaml
-taxonomy: # tag name
-entries_layout: # list (default), grid
-```
-
-By default, posts are shown in a list view. To change to a grid view add `entries_layout: grid` to the page's front matter.
-
-To create a page showing all posts assigned to the tag `foo bar` you'd create `foo-bar.md` in the root of your project and add this front matter:
-
-```yaml
-title: Foo Bar
-layout: tag
-permalink: /tags/foo-bar/
-taxonomy: foo bar
-```
-
-### `layout: about`
-
-This layout accommodates the same front matter as `layout: page`, with the 
-addition of the following to display an author picture:
-
-```yaml
-author:
-  name: John Doe
-  picture: /assets/images/johndoe.png
-```
-
-Recommended `picture` size is approximately `300 x 300` pixels. If `author` 
-object is not explicitly set in the about page's front matter the theme 
-will default to the value set in `_config.yml`.
-
-If blank there no image will appear.
-
-### `layout: cv`
-
-This layout accommodates the same front matter as `layout: page`. It 
-leverages a [JSON-based file standard](https://jsonresume.org/schema/) for 
-resume data to conveniently render a curriculum vitæ or resume painlessly.
-
-Simply use JSON Resume's [in-browser resume builder](http://registry.jsonresume.org/) 
-to export a JSON file and save to your project as `_data/cv.json`.
-
-## Images
-
-Suggested image sizes in pixels are as follows:
-
-| Image | Description | Size |
-| ----- | ----------- | ---- |
-| `page.image.path` | Large full-width document image. | Tall images will push content down the page. `1600 x 600` is a good middle-ground size to aim for. |
-| `page.image` | Short-hand for `page.image.path` when used alone (without `thumbnail`, `caption`, or other variables). | Same as `page.image.path` |
-| `page.image.thumbnail` | Small document image used in grid view. | `400 x 200` |
-| `author.picture` | Author page image. | `300 x 300` |
-
-## Customization
-
-The default structure, style, and scripts of this theme can be overridden and 
-customized in the following two ways.
-
-### Overriding Includes and Layouts
-
-Theme defaults can be [overridden](http://jekyllrb.com/docs/themes/#overriding-theme-defaults) 
-by placing a file with the same name into your project's `_includes` or 
-`_layouts` directory. For instance:
-
-- To specify a custom style path or meta data to the [`_includes/head.html `](_includes/head.html) 
-file, create an `_includes` directory in your project, copy 
-`_includes/head.html` from Basically Basic's gem folder to 
-`<your_project>/_includes` and start editing that file.
-
-**ProTip:** to locate the theme's files on your computer run 
-`bundle info jekyll-theme-basically-basic`. This returns the location of the 
-gem-based theme files.
-
-### Customizing Sass (SCSS)
-
-To override the default [Sass](http://sass-lang.com/guide) (located in theme's 
-`_sass` directory), do one of the following:
-
-1. Copy directly from the Basically Basic gem
-
-   - Go to your local Basically Basic gem installation directory (run 
-     `bundle info jekyll-theme-basically-basic` to get the path to it).
-   - Copy the contents of `/assets/stylesheets/main.scss` from there to 
-     `<your_project>`.
-   - Customize what you want inside `<your_project>/assets/stylesheets/main.scss`.
-
-2. Copy from this repo.
-
-   - Copy the contents of [assets/stylesheets/main.scss](assets/stylesheets/main.scss) 
-     to `<your_project>`.
-   - Customize what you want inside `<your_project/assets/stylesheets/main.scss`.
-
-**Note:** To make more extensive changes and customize the Sass partials bundled 
-in the gem. You will need to copy the complete contents of the `_sass` directory 
-to `<your_project>` due to the way Jekyll currently reads those files.
-
-To make basic tweaks to theme's style Sass variables can be overridden by adding 
-to `<your_project>/assets/stylesheets/main.scss`. For instance, to change the 
-accent color used throughout the theme add the following:
-
-```scss
-$accent-color: red;
-```
-
-### Customizing JavaScript
-
-To override the default JavaScript bundled in the theme, do one of the following:
-
-1. Copy directly from the Basically Basic gem
-
-   - Go to your local Basically Basic gem installation directory (run 
-     `bundle info jekyll-theme-basically-basic` to get the path to it).
-   - Copy the contents of `/assets/javascripts/main.js` from there to 
-     `<your_project>`.
-   - Customize what you want inside `<your_project>/assets/javascripts/main.js`.
-
-2. Copy from this repo.
-
-   - Copy the contents of [assets/javascripts/main.js](assets/javascripts/main.js) 
-     to `<your_project>`.
-   - Customize what you want inside `<your_project>/assets/javascripts/main.js`.
-
-### SVG Icons
-
-The theme uses social network logos and other iconography saved as SVGs for 
-performance and flexibility. Said SVGs are located in the `_includes` directory 
-and prefixed with `icon-`. Each icon has been sized and designed to fit a 
-`16 x 16` viewbox and optimized with [SVGO](https://github.com/svg/svgo).
-
-| Icon | Filename |
-| --- | --- |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-arrow-left.svg" width="16" height="16"> | icon-arrow-left.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-arrow-right.svg" width="16" height="16"> | icon-arrow-right.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-bitbucket.svg" width="16" height="16"> | icon-bitbucket.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-calendar.svg" width="16" height="16"> | icon-calendar.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-codepen.svg" width="16" height="16"> | icon-codepen.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-download.svg" width="16" height="16"> | icon-download.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-dribbble.svg" width="16" height="16"> | icon-dribbble.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-email.svg" width="16" height="16"> | icon-email.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-facebook.svg" width="16" height="16"> | icon-facebook.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-flickr.svg" width="16" height="16"> | icon-flickr.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-github.svg" width="16" height="16"> | icon-github.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-gitlab.svg" width="16" height="16"> | icon-gitlab.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-googleplus.svg" width="16" height="16"> | icon-googleplus.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-instagram.svg" width="16" height="16"> | icon-instagram.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-lastfm.svg" width="16" height="16"> | icon-lastfm.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-linkedin.svg" width="16" height="16"> | icon-linkedin.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-pdf.svg" width="16" height="16"> | icon-pdf.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-pinterest.svg" width="16" height="16"> | icon-pinterest.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-rss.svg" width="16" height="16"> | icon-rss.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-soundcloud.svg" width="16" height="16"> | icon-soundcloud.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-stackoverflow.svg" width="16" height="16"> | icon-stackoverflow.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-stopwatch.svg" width="16" height="16"> | icon-stopwatch.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-tumblr.svg" width="16" height="16"> | icon-tumblr.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-twitter.svg" width="16" height="16"> | icon-twitter.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-xing.svg" width="16" height="16"> | icon-xing.svg |
-| <img src="https://cdn.rawgit.com/mmistakes/jekyll-theme-basically-basic/master/_includes/icon-youtube.svg" width="16" height="16"> | icon-youtube.svg |
-
-Fill colors are defined in the `_sass/basically-basic/_icons.scss` partial and 
-set with `.icon-name` where class name matches the corresponding icon.
-
-For example the Twitter icon is given a fill color of `#1da1f2` like so:
+You may also use the following codes for displaying this in any other pages.
 
 ```html
-<span class="icon icon--twitter">{% include icon-twitter.svg %}</span>
+<!-- code for GitHub users -->
+{% if site.data.repositories.github_users %}
+<div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center">
+  {% for user in site.data.repositories.github_users %} {% include repository/repo_user.liquid username=user %} {% endfor %}
+</div>
+{% endif %}
+
+<!-- code for GitHub trophies -->
+{% if site.repo_trophies.enabled %} {% for user in site.data.repositories.github_users %} {% if site.data.repositories.github_users.size > 1 %}
+<h4>{{ user }}</h4>
+{% endif %}
+<div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center">
+  {% include repository/repo_trophies.liquid username=user %}
+</div>
+{% endfor %} {% endif %}
+
+<!-- code for GitHub repositories -->
+{% if site.data.repositories.github_repos %}
+<div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center">
+  {% for repo in site.data.repositories.github_repos %} {% include repository/repo.liquid repository=repo %} {% endfor %}
+</div>
+{% endif %}
 ```
-
-Alongside the SVG assets, there are icon helper includes to aid in generating 
-social network links.
-
-| Include Parameter | Description                      | Required                |
-| ----------------- | ---------------------------------| ----------------------- |
-| `username`        | Username on given social network | **Required**            |
-| `label`           | Text used for hyperlink | Optional, defaults to `username` |
-
-For example, the following `icon-github.html` include:
-
-```liquid
-{% include icon-github.html username=jekyll label='GitHub' %}
-```
-
-Will output the following HTML:
-
-```html
-<a href="https://github.com/jekyll">
-  <span class="icon icon--github"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414"><path d="M8 0C3.58 0 0 3.582 0 8c0 3.535 2.292 6.533 5.47 7.59.4.075.547-.172.547-.385 0-.19-.007-.693-.01-1.36-2.226.483-2.695-1.073-2.695-1.073-.364-.924-.89-1.17-.89-1.17-.725-.496.056-.486.056-.486.803.056 1.225.824 1.225.824.714 1.223 1.873.87 2.33.665.072-.517.278-.87.507-1.07-1.777-.2-3.644-.888-3.644-3.953 0-.873.31-1.587.823-2.147-.09-.202-.36-1.015.07-2.117 0 0 .67-.215 2.2.82.64-.178 1.32-.266 2-.27.68.004 1.36.092 2 .27 1.52-1.035 2.19-.82 2.19-.82.43 1.102.16 1.915.08 2.117.51.56.82 1.274.82 2.147 0 3.073-1.87 3.75-3.65 3.947.28.24.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.14.46.55.38C13.71 14.53 16 11.53 16 8c0-4.418-3.582-8-8-8"></path></svg></span>
-  <span class="label">GitHub</span>
-</a>
-```
-
-### Customizing Sidebar Content
 
 ---
 
-## Development
+#### Theming
 
-To set up your environment to develop this theme:
+A variety of beautiful theme colors have been selected for you to choose from. The default is purple, but you can quickly change it by editing the `--global-theme-color` variable in the `_sass/_themes.scss` file. Other color variables are listed there as well. The stock theme color options available can be found at [\_sass/\_variables.scss](_sass/_variables.scss). You can also add your own colors to this file assigning each a name for ease of use across the template.
 
-1. Clone this repo
-2. `cd` into `/example` and run `bundle install`.
+---
 
-To test the theme the locally as you make changes to it:
+#### Social media previews
 
-1. `cd` into the root folder of the repo (e.g. `jekyll-theme-basically-basic`).
-2. Run `bundle exec rake preview` and open your browser to 
-   `http://localhost:4000/example/`. 
+**al-folio** supports preview images on social media. To enable this functionality you will need to set `serve_og_meta` to `true` in your [\_config.yml](_config.yml). Once you have done so, all your site's pages will include Open Graph data in the HTML head element.
 
-This starts a Jekyll server using the theme's files and contents of the 
-`example/` directory. As modifications are made, refresh your browser to see 
-any changes.
+You will then need to configure what image to display in your site's social media previews. This can be configured on a per-page basis, by setting the `og_image` page variable. If for an individual page this variable is not set, then the theme will fall back to a site-wide `og_image` variable, configurable in your [\_config.yml](_config.yml). In both the page-specific and site-wide cases, the `og_image` variable needs to hold the URL for the image you wish to display in social media previews.
+
+---
+
+#### Atom (RSS-like) Feed
+
+It generates an Atom (RSS-like) feed of your posts, useful for Atom and RSS readers. The feed is reachable simply by typing after your homepage `/feed.xml`. E.g. assuming your website mountpoint is the main folder, you can type `yourusername.github.io/feed.xml`
+
+---
+
+#### Related posts
+
+By default, there will be a related posts section on the bottom of the blog posts. These are generated by selecting the `max_related` most recent posts that share at least `min_common_tags` tags with the current post. If you do not want to display related posts on a specific post, simply add `related_posts: false` to the front matter of the post. If you want to disable it for all posts, simply set `enabled` to false in the `related_blog_posts` section in [\_config.yml](_config.yml).
+
+---
+
+#### Code quality checks
+
+Currently, we run some checks to ensure that the code quality and generated site are good. The checks are done using GitHub Actions and the following tools:
+
+- [Prettier](https://prettier.io/) - check if the formatting of the code follows the style guide
+- [lychee](https://lychee.cli.rs/) - check for broken links
+- [Axe](https://github.com/dequelabs/axe-core) (need to run manually) - do some accessibility testing
+
+We decided to keep `Axe` runs manual because fixing the issues are not straightforward and might be hard for people without web development knowledge.
+
+## FAQ
+
+For frequently asked questions, please refer to [FAQ.md](FAQ.md).
 
 ## Contributing
 
-Found a typo in the documentation? Interested in adding a feature or 
-[fixing a bug][issues]? Then by all means [submit an issue][new-issue] or take a
-stab at submitting a [pull request][using-pull-requests]. If this is your first 
-pull request, it may be helpful to read up on the [GitHub Flow][github-flow].
+Contributions to multi-language-al-folio are very welcome! Before you get started, please take a look at [the guidelines](CONTRIBUTING.md).
 
-[issues]: https://github.com/mmistakes/jekyll-theme-basically-basic/issues
-[new-issue]: https://github.com/mmistakes/jekyll-theme-basically-basic/issues/new
-[using-pull-requests]: https://help.github.com/articles/using-pull-requests/
-[github-flow]: https://guides.github.com/introduction/flow/
+If you would like to improve documentation or fix a minor inconsistency or bug, please feel free to send a PR directly to `main`. For more complex issues/bugs or feature requests, please open an issue using the appropriate template.
 
-### Pull Requests
+### Maintainers
 
-When submitting a pull request:
+Our most active contributors are welcome to join the maintainers team. If you are interested, please reach out!
 
-1. Clone the repo.
-2. Create a branch off of `master` and give it a meaningful name (e.g.
-   `my-awesome-new-feature`) and describe the feature or fix.
-3. Open a pull request on GitHub.
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://maruan.alshedivat.com"><img src="https://avatars.githubusercontent.com/u/2126561?v=4" width="100px;" alt=""/><br /><sub><b>Maruan</b></sub></a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://rohandebsarkar.github.io"><img src="https://avatars.githubusercontent.com/u/50144004?v=4" width="100px;" alt=""/><br /><sub><b>Rohan Deb Sarkar</b></sub></a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://amirpourmand.ir"><img src="https://avatars.githubusercontent.com/u/32064808?v=4" width="100px;" alt=""/><br /><sub><b>Amir Pourmand</b></sub></a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://george-gca.github.io/"><img src="https://avatars.githubusercontent.com/u/31376482?v=4" width="100px;" alt=""/><br /><sub><b>George</b></sub></a></td>
+    </tr>
+  </tbody>
+</table>
 
-Sample pages can be found in the [`/docs`](docs) and [`/example`](/example) 
-folders if you'd like to tackle any "low-hanging fruit" like fixing typos, bad 
-grammar, etc.
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
 
----
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
-## Credits
+### All Contributors
 
-### Creator
+<a href="https://contrib.rocks">
+  <img src="https://contrib.rocks/image?repo=alshedivat/al-folio&max=500&columns=24" />
+</a>
 
-**Michael Rose**
+## Star History
 
-- <https://mademistakes.com>
-- <https://twitter.com/mmistakes>
-- <https://github.com/mmistakes>
-
-### Icons + Demo Images:
-
-- [Simple Icons](https://simpleicons.org/)
-- [Noun Project](https://thenounproject.com)
-- [Unsplash](https://unsplash.com/)
-
-### Other:
-
-- [Jekyll](http://jekyllrb.com/)
-- [Susy](http://susy.oddbird.net/)
-- [Breakpoint](http://breakpoint-sass.com/)
-
----
+<a href="https://star-history.com/#george-gca/multi-language-al-folio&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=george-gca/multi-language-al-folio&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=george-gca/multi-language-al-folio&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=george-gca/multi-language-al-folio&type=Date" />
+  </picture>
+</a>
 
 ## License
 
-The MIT License (MIT)
+The theme is available as open source under the terms of the [MIT License](https://github.com/george-gca/multi-language-al-folio/blob/main/LICENSE).
 
-Copyright (c) 2017-2021 Michael Rose and contributors
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-Basically Basic incorporates icons from [The Noun Project](https://thenounproject.com/).
-Icons are distributed under Creative Commons Attribution 3.0 United States (CC BY 3.0 US).
-
-Basically Basic incorporates photographs from [Unsplash](https://unsplash.com).
-
-Basically Basic incorporates [Susy](http://susy.oddbird.net/),
-Copyright (c) 2017, Miriam Eric Suzanne.
-Susy is distributed under the terms of the [BSD 3-clause "New" or "Revised" License](https://opensource.org/licenses/BSD-3-Clause).
-
-Basically Basic incorporates [Breakpoint](http://breakpoint-sass.com/).
-Breakpoint is distributed under the terms of the [MIT/GPL Licenses](http://opensource.org/licenses/MIT).
+Originally, **al-folio** was based on the [\*folio theme](https://github.com/bogoli/-folio) (published by [Lia Bogoev](https://liabogoev.com) and under the MIT license). Since then, it got a full re-write of the styles and many additional cool features.

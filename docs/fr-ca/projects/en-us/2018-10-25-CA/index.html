@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="fr-ca">
+  <!-- Head -->
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <!-- Metadata, OpenGraph and Schema.org -->
+
+
+
+
+<!-- Standard metadata -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+
+
+<title>
+  
+    
+      A Cellular Automata Sznajd Model | Ollin D. Langle-Chimal
+    
+  
+</title>
+<meta name="author" content="Ollin D. Langle-Chimal">
+<meta name="description" content="Using a Sznajd model to simulate opinion dynamics in a 2D lattice and the effect of bots.">
+
+  <meta name="keywords" content="complex-systems, complex-networks, urban-science, economics">
+
+
+
+
+
+
+
+
+
+
+<!-- Bootstrap & MDB -->
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css?a4b3f509e79c54a512b890d73235ef04">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous">
+
+
+
+<!-- Fonts & Icons -->
+<link defer rel="stylesheet" href="/assets/css/academicons.min.css?f0b7046b84e425c55f3463ac249818f5">
+<link defer rel="stylesheet" href="/assets/css/scholar-icons.css?62b2ac103a88034e6882a5be5f3e2772">
+<link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap">
+
+<!-- Code Syntax Highlighting -->
+<link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light">
+
+
+
+<!-- Styles -->
+
+
+
+
+  <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
+
+<link rel="stylesheet" href="/assets/css/main.css?d41d8cd98f00b204e9800998ecf8427e">
+<link rel="canonical" href="http://localhost:4000/fr-ca/projects/en-us/2018-10-25-CA/">
+
+<!-- Dark Mode -->
+<script src="/assets/js/theme.js?a81d82887dd692e91686b43de4542f18"></script>
+
+  <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark">
+  <script>
+    initTheme();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  </head>
+
+  <!-- Body -->
+  <body class="fixed-top-nav ">
+    <!-- Header -->
+    <header>
+  <!-- Nav Bar -->
+  <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation">
+    <div class="container">
+      
+        <a class="navbar-brand title font-weight-lighter" href="/fr-ca/">
+          Ollin D. Langle-Chimal
+        </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          
+
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/fr-ca/">about
+              
+            </a>
+          </li>
+
+          <!-- Other pages -->
+          
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/fr-ca/blog/">blog
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/fr-ca/publications/">publications
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item active">
+                  <a class="nav-link" href="/fr-ca/projects/">projects
+                    
+                      <span class="sr-only">(current)</span>
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/fr-ca/repositories/">GitHub
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/fr-ca/cv/">cv
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/fr-ca/teaching/">teaching
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/fr-ca/people/">people
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                
+                <li class="nav-item dropdown ">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">submenus
+                    
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    
+                      
+                        <a class="dropdown-item " href="/fr-ca/books/">bookshelf</a>
+                      
+                    
+                      
+                        <div class="dropdown-divider"></div>
+                      
+                    
+                      
+                        <a class="dropdown-item " href="/fr-ca/blog/">blog</a>
+                      
+                    
+                  </div>
+                </li>
+              
+            
+          
+          
+            <!-- Search -->
+            <li class="nav-item">
+              <button id="search-toggle" title="Search" onclick="openSearchModal()">
+                <span class="nav-link">ctrl k <i class="ti ti-search"></i></span>
+              </button>
+            </li>
+          
+          <!-- Toogle language -->
+          
+            
+              <li class="nav-item dropdown ">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  FR-CA
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                  
+                  
+                    
+                      
+                      
+                        <a class="dropdown-item" href="/projects/en-us/2018-10-25-CA/">
+                          
+                            EN-US</a>
+                      
+                      
+                    
+                  
+                    
+                      
+                        <div class="dropdown-divider"></div>
+                      
+                      
+                        <a class="dropdown-item" href="/es-mx/projects/en-us/2018-10-25-CA/">
+                          
+                            ES-MX</a>
+                      
+                      
+                    
+                  
+                    
+                      
+                        <div class="dropdown-divider"></div>
+                      
+                      
+                        <a class="dropdown-item" href="/pt-br/projects/en-us/2018-10-25-CA/">
+                          
+                            PT-BR</a>
+                      
+                      
+                    
+                  
+                    
+                  
+                </div>
+              </li>
+            
+          
+          
+            <!-- Toogle theme mode -->
+            <li class="toggle-container">
+              <button id="light-toggle" title="Change theme">
+                <i class="ti ti-sun-moon" id="light-toggle-system"></i>
+                <i class="ti ti-moon-filled" id="light-toggle-dark"></i>
+                <i class="ti ti-sun-filled" id="light-toggle-light"></i>
+              </button>
+            </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+    <!-- Scrolling Progress Bar -->
+    <progress id="progress" value="0">
+      <div class="progress-container">
+        <span class="progress-bar"></span>
+      </div>
+    </progress>
+  
+</header>
+
+
+    <!-- Content -->
+    <div class="container mt-5" role="main">
+      
+        
+
+<div class="post">
+  <header class="post-header">
+    <h1 class="post-title">A Cellular Automata Sznajd Model</h1>
+    <p class="post-description">Using a Sznajd model to simulate opinion dynamics in a 2D lattice and the effect of bots.</p>
+  </header>
+
+  <article>
+    <p><img src="/assets/images/CA/2site.gif" alt="sznajd" style="width:280px;"></p>
+
+<h3>TLDR;</h3>
+<p><a href="https://www.ollinlangle.com/slides/reveal/sznajd.html" rel="external nofollow noopener" target="_blank">If you’re here for the presentation slides</a></p>
+
+<p>The song in my mind while doing this was:</p>
+<iframe src="https://open.spotify.com/embed/track/5kW0bDUyXMCnR7UCrusFGp" width="300" height="100" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+<p>This post is inspired by a talk from <a href="https://www.santafe.edu/people/profile/mirta-galesic" rel="external nofollow noopener" target="_blank">Mirta Galesic</a> which
+I had the chance to catch at the <a href="https://www.vermontcomplexsystems.org/events/science-of-stories/" rel="external nofollow noopener" target="_blank">Symposium on the Science of Stories</a>
+which was actually a very refreshing one, as it yelled multidiscipline right from the speakers bios.</p>
+
+<p>Anyway, this particular talk was about communicating complex data to the public as it has been shown that people are often more receptive to
+narratives than to raw data (not everybody’s trained to understand statistics) but how we present this such narratives is crucial to make
+our statement spread. She stated that people in general don’t care about what scientist say in order to form an opinion but rather the likelihood
+of having one or another posture in a a certain topics is conditioned by the one from our closest friends. A particular example she gave was about
+vaccinations; no mather how many papers or interviews to scientist there are about how we should vaccinate, people won’t hear if they have made their
+minds into something, is just when the ones that sorround them differ when they’ll probably change their minds (sounds like a shame based opinion
+dynamics).</p>
+
+<p>Then, to hear about that from her made me rethink a model that I had already played with but in networks… the <a href="https://en.wikipedia.org/wiki/Sznajd_model" rel="external nofollow noopener" target="_blank">Sznajd</a>. This model is a econophysics one that (believe it or not 😜) is based on the <a href="https://en.wikipedia.org/wiki/Ising_model" rel="external nofollow noopener" target="_blank">Ising model</a>.
+This <em>Sznajd</em> model is also known as the <strong>united we stand, divided we fall</strong> model, this is because it’s build on the premise that your opionion is
+based on the opinion of those who are really close to you.</p>
+
+<h3 id="1-site--convincing">1 site  convincing</h3>
+
+<p>The most basic set of rules for this is the <em>1 site convincing</em>, which is really simple. First imagine that you are on a regular square lattice
+<img src="/assets/images/CA/opinion_cycle_2.gif" alt="sznajd" style="width:180px;">
+<u>or any type of topology of your like</u>, but let’s go with the square lattice one for ease. Now we start the lattice with a random distribution of  two opinion, so each one of  the nodes can get <strong>opinion 1</strong> with probability <em>p</em> or <strong>opinion 2</strong> with probability <em>1-p</em>. Then, we randomly choose a subset of nodes and make all their neighboors agree with it.</p>
+
+<p><img src="/assets/images/CA/1site.gif" alt="sznajd" style="width:280px;"></p>
+
+<p>So if we fix some values, like <em>p=0.5</em> and <em>n=0.1</em> the number of randomly selected nodes, we could get a video like this one</p>
+
+<p><img src="/assets/images/CA/1s05.gif" alt="1s05" height="250" width="500"></p>
+
+<h3 id="2-site-convincing">2 site convincing</h3>
+
+<p>To make it more interesting (or realistic) we could say that there’s no way that I’m going to change my whole ideology based on what a random close friend of mine thinks, so what the  2 site convincing rules says is that in order to change your friends opinion you not only need to be selected but randomly select one of your friends, and then if this one friend agrees with you then you both get to make all your friends have the same opinion that you.</p>
+
+<p>Changing opinions</p>
+
+<p><img src="/assets/images/CA/2site.gif" alt="sznajd" style="width:280px;"></p>
+
+<hr>
+
+<p>Not changing opinions</p>
+
+<p><img src="/assets/images/CA/2siten.gif" alt="sznajd" style="width:280px;"></p>
+
+<p>Again, with the same fixed values we get</p>
+
+<p><img src="/assets/images/CA/2s05.gif" alt="2s05" height="500" width="500"></p>
+
+<h3 id="3-site-convincing">3 site convincing</h3>
+
+<p>The third and last one is similar to the <a href="#2-site-convincing">2 site convincing</a>, but now you select 2 random friends and both have to agree with you so you can change  your whole neighborhood opinion.</p>
+
+<p>Changing opinions</p>
+
+<p><img src="/assets/images/CA/3sites.gif" alt="sznajd1" style="width:280px;"></p>
+
+<hr>
+
+<p>Not changing opinions</p>
+
+<p><img src="/assets/images/CA/3siten1.gif" alt="3sznajd1n" style="width:280px;"></p>
+
+<hr>
+
+<p>Also not changing opinions</p>
+
+<p><img src="/assets/images/CA/3siten2.gif" alt="3sznajd2n" style="width:280px;"></p>
+
+<p>Again, with the same fixed values we get</p>
+
+<p><img src="/assets/images/CA/2s05.gif" alt="2s05" height="500" width="500"></p>
+
+<h3 id="statistics">Statistics!</h3>
+
+<s></s><p style="font-size: 50%">Isn't that what we're all here for?</p>
+
+<p>Just the 3 movies from above don’t tell us to much about the behavior  of the overall system, so we need no map the probability <em>p</em> from 0 to 1, so I chose a 0.1 spaced interval to do that and ran everything 30 times and average the results.</p>
+
+<p><img src="/assets/images/CA/sznajd.png" alt="szna" height="500" width="500"></p>
+
+<p>From that figure  we can see that the <a href="#1-site-convincing">1 site convincing</a> is a linear function of the initial probability, but the <a href="#2-site-convincing">2 site convincing</a> and the <a href="#3-site-convincing">3 site convincing</a> are way more interesting, showing us that just like the Ising model this is a phase transition problem. From the looks of it it would be interesting to map (which I didn’t do) all the <em>n sites convincing</em> posibilities to see if there’s a threshold for this 2nd order phase transition to become a 1st order one.</p>
+
+<p>But instead of going through that what I wanted to see was if it would be possible to replicate how do bots or influencers can affect the overall final average opinion.</p>
+
+<h2 id="bots">Bots!</h2>
+
+<p>I decided to go for 3 different types of bots which I called:</p>
+
+<ul>
+    <li>Stupid bots</li>
+    <li>Smart bots</li>
+    <li>Cambridge Analytica</li>
+</ul>
+
+<p>So the stupid bots are really the easiest way of interfeer in the opinion which is randomly take a percentage of the population and make them believe in <strong>opinion 1</strong> if they haven’t already.</p>
+
+<p>The smart bots on the other hand only randomly select nodes from the population with <strong>opinion 2</strong> to make them turn to <strong>opinion 1</strong>.</p>
+
+<p>The Cambridge Analytica ones (I’m not saying that the operated this way, ‘though I think they kinda did) is a smarter way to select who to attack, and that  is… those who are vulnerable with easily influenced friends. So I randomly selected from the nodes with a \(\geq 70\)% of their friends and itself having <strong>opinion 1</strong> and perform a 2 site convincing on them. This task is not very easy, as the area is greater than the perimeter… meaning that if you randomly select a node with all their friends with <strong>opinion 2</strong> then nothing will happen, and it is a lot more likely for that to happen than to select one with 70% \(\geq p &lt; 100\)% and also a 2 site convincing will be very difficult to work with them.</p>
+
+<p>Some movies where we can see the behaviour of each bot army type are shown below. As the previous ones, they’re initialized in a 200X200 grid with a \(p=0.5\) of having <strong>opinion 1</strong>.</p>
+
+<p><img src="/assets/images/CA/1s05bots.gif" alt="stupid" height="500" width="500"></p>
+
+<p><img src="/assets/images/CA/1s05smartbots.gif" alt="smart" height="500" width="500"></p>
+
+<p><img src="/assets/images/CA/1s05cambridge.gif" alt="cambridge" height="500" width="500"></p>
+
+<p>The movies are fun, but it’s more interesting to look at the statistics. These were generated in the same way as the previous.</p>
+
+<p><img src="/assets/images/CA/1sitebotsznajd.png" alt="1bot" height="500" width="500"></p>
+
+<p><img src="/assets/images/CA/2sitebotsznajd.png" alt="2bot" height="500" width="500"></p>
+
+<p><img src="/assets/images/CA/3sitebotsznajd.png" alt="3bot" height="500" width="500"></p>
+
+<h3 id="take-away">Take away</h3>
+
+<p>This post is just a cartoon of how this kind of things happen, but do not put this in a broken bag (does that expression exists in english?). Meaning that we must be careful with whom we share and exchange opinions and also it is REALLY important to avoid sharing fake news, and one of the most important things in the whole world… <strong>RESPECT</strong>, not everybody has to agree with you. Disagreements don’t disrupt friendships, but the intolerance to them does.</p>
+
+<blockquote>
+  <p>Entre los individuos como entre las Naciones, el respeto al derecho ajeno es la paz.</p>
+  <div align="right">Benito Juárez.</div>
+</blockquote>
+
+
+  </article>
+
+  
+
+  
+</div>
+
+      
+    </div>
+
+    <!-- Footer -->
+    
+
+
+  <footer class="fixed-bottom" role="contentinfo">
+    <div class="container mt-0">
+      
+  ©Droits d'auteur
+  2025
+  Ollin
+  D.
+  Langle-Chimal. Propulsé par <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> avec le thème <a href="https://github.com/george-gca/multi-language-al-folio" rel="external nofollow noopener" target="_blank">multi-language-al-folio</a>. Hébergé par <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos de <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
+
+  
+  
+
+    </div>
+  </footer>
+
+
+
+    <!-- JavaScripts -->
+    <!-- jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<!-- Bootsrap & MDB scripts -->
+<script src="/assets/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script>
+
+
+  <!-- Masonry & imagesLoaded -->
+  <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script>
+  <script defer src="/assets/js/masonry.js?a0db7e5d5c70cc3252b3138b0c91dcaf" type="text/javascript"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Medium Zoom JS -->
+  <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script defer src="/assets/js/zoom.js?85ddb88934d28b74e78031fd54cf8308"></script>
+
+
+
+
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/no_defer.js?2781658a0a2b13ed609542042a859126"></script>
+<script defer src="/assets/js/common.js?e0514a05c5c95ac1a93a8dfd5249b92e"></script>
+<script defer src="/assets/js/copy_code.js?c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script>
+
+<!-- Jupyter Open External Links New Tab -->
+<script defer src="/assets/js/jupyter_new_tab.js?d9f17b6adc2311cbabd747f4538bb15f"></script>
+
+<!-- Badges -->
+
+  <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
+
+
+  <script async src="https://badge.dimensions.ai/badge.js"></script>
+
+
+
+  <!-- MathJax -->
+  <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script>
+  
+    <script src="/assets/js/mathjax-setup.js?a5bb4e6a542c546dd929b24b8b236dfd"></script>
+    <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script>
+  
+
+
+
+  <!-- Analytics -->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9FS4V8SGLR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'G-9FS4V8SGLR');
+  </script>
+  <script defer src="/assets/js/google-analytics-setup.js"></script>
+
+
+
+
+
+
+
+  <!-- Scrolling Progress Bar -->
+  <script defer src="/assets/js/progress-bar.js?2f30e0e6801ea8f5036fa66e1ab0a71a" type="text/javascript"></script>
+
+
+
+
+
+
+
+  <!-- Back to Top -->
+  <script src="/assets/js/vanilla-back-to-top.min.js?f40d453793ff4f64e238e420181a1d17"></script>
+  <script>
+    addBackToTop();
+  </script>
+
+
+
+  <!-- Search -->
+  <script type="module" src="/assets/js/search/ninja-keys.min.js?a3446f084dcaecc5f75aa1757d087dcf"></script>
+  <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Tapez pour commencer la recherche">
+    
+    <div class="modal-footer" slot="footer">
+      <span class="help">
+        <svg version="1.0" class="ninja-examplekey" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 1280 1280">
+          <path d="M1013 376c0 73.4-.4 113.3-1.1 120.2a159.9 159.9 0 0 1-90.2 127.3c-20 9.6-36.7 14-59.2 15.5-7.1.5-121.9.9-255 1h-242l95.5-95.5 95.5-95.5-38.3-38.2-38.2-38.3-160 160c-88 88-160 160.4-160 161 0 .6 72 73 160 161l160 160 38.2-38.3 38.3-38.2-95.5-95.5-95.5-95.5h251.1c252.9 0 259.8-.1 281.4-3.6 72.1-11.8 136.9-54.1 178.5-116.4 8.6-12.9 22.6-40.5 28-55.4 4.4-12 10.7-36.1 13.1-50.6 1.6-9.6 1.8-21 2.1-132.8l.4-122.2H1013v110z"></path>
+        </svg>
+        sélectionner
+      </span>
+      <span class="help">
+        <svg xmlns="http://www.w3.org/2000/svg" class="ninja-examplekey" viewbox="0 0 24 24">
+          <path d="M0 0h24v24H0V0z" fill="none"></path>
+          <path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"></path>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" class="ninja-examplekey" viewbox="0 0 24 24">
+          <path d="M0 0h24v24H0V0z" fill="none"></path>
+          <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"></path>
+        </svg>
+        naviguer
+      </span>
+      <span class="help">
+        <span class="ninja-examplekey esc">esc</span>
+        fermer
+      </span>
+      <span class="help">
+        <svg xmlns="http://www.w3.org/2000/svg" class="ninja-examplekey backspace" viewbox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M6.707 4.879A3 3 0 018.828 4H15a3 3 0 013 3v6a3 3 0 01-3 3H8.828a3 3 0 01-2.12-.879l-4.415-4.414a1 1 0 010-1.414l4.414-4.414zm4 2.414a1 1 0 00-1.414 1.414L10.586 10l-1.293 1.293a1 1 0 101.414 1.414L12 11.414l1.293 1.293a1 1 0 001.414-1.414L13.414 10l1.293-1.293a1 1 0 00-1.414-1.414L12 8.586l-1.293-1.293z" clip-rule="evenodd"></path>
+        </svg>
+        revenir au parent
+      </span>
+    </div>
+  </ninja-keys>
+  <script src="/assets/js/search-setup.js?6c304f7b1992d4b60f7a07956e52f04a"></script>
+  <script src="/fr-ca/assets/js/search-data.js"></script>
+  <script src="/assets/js/shortcut-key.js?6f508d74becd347268a7f822bca7309d"></script>
+
+
+
+
+  </body>
+</html>

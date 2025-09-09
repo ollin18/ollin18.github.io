@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="fr-ca">
+  <!-- Head -->
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <!-- Metadata, OpenGraph and Schema.org -->
+
+
+
+
+<!-- Standard metadata -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+
+
+<title>
+  
+    
+      Distanciamiento Social y Auto-aislamiento en épocas de COVID-19 | Ollin D. Langle-Chimal
+    
+  
+</title>
+<meta name="author" content="Ollin D. Langle-Chimal">
+<meta name="description" content="Using a SIS model to simulate the effect of social distancing and self-isolation in the spreading of COVID-19.">
+
+  <meta name="keywords" content="complex-systems, complex-networks, urban-science, economics">
+
+
+
+
+
+
+
+
+
+
+<!-- Bootstrap & MDB -->
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css?a4b3f509e79c54a512b890d73235ef04">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous">
+
+
+
+<!-- Fonts & Icons -->
+<link defer rel="stylesheet" href="/assets/css/academicons.min.css?f0b7046b84e425c55f3463ac249818f5">
+<link defer rel="stylesheet" href="/assets/css/scholar-icons.css?62b2ac103a88034e6882a5be5f3e2772">
+<link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap">
+
+<!-- Code Syntax Highlighting -->
+<link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light">
+
+
+
+<!-- Styles -->
+
+
+
+
+  <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
+
+<link rel="stylesheet" href="/assets/css/main.css?d41d8cd98f00b204e9800998ecf8427e">
+<link rel="canonical" href="http://localhost:4000/fr-ca/projects/es-mx/2020-03-13-SIS/">
+
+<!-- Dark Mode -->
+<script src="/assets/js/theme.js?a81d82887dd692e91686b43de4542f18"></script>
+
+  <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark">
+  <script>
+    initTheme();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  </head>
+
+  <!-- Body -->
+  <body class="fixed-top-nav ">
+    <!-- Header -->
+    <header>
+  <!-- Nav Bar -->
+  <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation">
+    <div class="container">
+      
+        <a class="navbar-brand title font-weight-lighter" href="/fr-ca/">
+          Ollin D. Langle-Chimal
+        </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          
+
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/fr-ca/">about
+              
+            </a>
+          </li>
+
+          <!-- Other pages -->
+          
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/fr-ca/blog/">blog
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/fr-ca/publications/">publications
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item active">
+                  <a class="nav-link" href="/fr-ca/projects/">projects
+                    
+                      <span class="sr-only">(current)</span>
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/fr-ca/repositories/">GitHub
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/fr-ca/cv/">cv
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/fr-ca/teaching/">teaching
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/fr-ca/people/">people
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                
+                <li class="nav-item dropdown ">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">submenus
+                    
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    
+                      
+                        <a class="dropdown-item " href="/fr-ca/books/">bookshelf</a>
+                      
+                    
+                      
+                        <div class="dropdown-divider"></div>
+                      
+                    
+                      
+                        <a class="dropdown-item " href="/fr-ca/blog/">blog</a>
+                      
+                    
+                  </div>
+                </li>
+              
+            
+          
+          
+            <!-- Search -->
+            <li class="nav-item">
+              <button id="search-toggle" title="Search" onclick="openSearchModal()">
+                <span class="nav-link">ctrl k <i class="ti ti-search"></i></span>
+              </button>
+            </li>
+          
+          <!-- Toogle language -->
+          
+            
+              <li class="nav-item dropdown ">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  FR-CA
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                  
+                  
+                    
+                      
+                      
+                        <a class="dropdown-item" href="/projects/es-mx/2020-03-13-SIS/">
+                          
+                            EN-US</a>
+                      
+                      
+                    
+                  
+                    
+                      
+                        <div class="dropdown-divider"></div>
+                      
+                      
+                        <a class="dropdown-item" href="/es-mx/projects/es-mx/2020-03-13-SIS/">
+                          
+                            ES-MX</a>
+                      
+                      
+                    
+                  
+                    
+                      
+                        <div class="dropdown-divider"></div>
+                      
+                      
+                        <a class="dropdown-item" href="/pt-br/projects/es-mx/2020-03-13-SIS/">
+                          
+                            PT-BR</a>
+                      
+                      
+                    
+                  
+                    
+                  
+                </div>
+              </li>
+            
+          
+          
+            <!-- Toogle theme mode -->
+            <li class="toggle-container">
+              <button id="light-toggle" title="Change theme">
+                <i class="ti ti-sun-moon" id="light-toggle-system"></i>
+                <i class="ti ti-moon-filled" id="light-toggle-dark"></i>
+                <i class="ti ti-sun-filled" id="light-toggle-light"></i>
+              </button>
+            </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+    <!-- Scrolling Progress Bar -->
+    <progress id="progress" value="0">
+      <div class="progress-container">
+        <span class="progress-bar"></span>
+      </div>
+    </progress>
+  
+</header>
+
+
+    <!-- Content -->
+    <div class="container mt-5" role="main">
+      
+        
+
+<div class="post">
+  <header class="post-header">
+    <h1 class="post-title">Distanciamiento Social y Auto-aislamiento en épocas de COVID-19</h1>
+    <p class="post-description">Using a SIS model to simulate the effect of social distancing and self-isolation in the spreading of COVID-19.</p>
+  </header>
+
+  <article>
+    <p><img src="/assets/images/covidSIS/opinion_cycle_2.gif" alt="lattice" style="width:280px;"></p>
+
+<h3>TLDR;</h3>
+<p>El auto-aislamiento es efectivo para controlar la propagación de una enfermedad viral. La alta movilidad a la que estamos acostumbrados implica el contacto o cercanía con un mayor número de personas conocidas y otras tantas aleatorias durante el periodo de translado, este mayor número de contactos y su naturaleza estocástica produce un gran impacto en la contención de una epidemia.</p>
+
+<p>La canción de este post:</p>
+<iframe src="https://open.spotify.com/embed/track/5r7uA7AxZi1tSBr8Kj4svH" width="300" height="100" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+<p>Esta entrada del blog está altamente inspirada por esta TED talk de Alanna Shaik</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Fqw-9yMV0sI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<p>También cabe destacar que para nada soy un epidemiólogo pero he tomado clases y colaborado con algunos de ellos y que son muy reconocidos en su área. Aquí les dejo sus cuentas de Twitter <a href="https://twitter.com/LHDnets" rel="external nofollow noopener" target="_blank">Laurent Hébert-Dufresne</a>, <a href="https://twitter.com/svscarpino" rel="external nofollow noopener" target="_blank">Samuel V. Scarpino</a>, <a href="https://twitter.com/vcolizza" rel="external nofollow noopener" target="_blank">Vittoria Colizza</a>, <a href="https://twitter.com/BMAlthouse" rel="external nofollow noopener" target="_blank">Ben Althouse</a> y en español <a href="https://twitter.com/gomezgardenes" rel="external nofollow noopener" target="_blank">Jesús Gomez-Gardeñes</a>, si tienen dudas grandes al respecto les sugiero leer lo que ellos escriben o contactarlos si tienen alguna duda científica.</p>
+
+<p>Cabe aclarar que todo lo que van a leer aquí son ejemplos, lo que llamamos “modelos de juguete”, pero sirven para entender las dinámicas de este tipo de sistemas. No escogí nada para que se viera más dramático ni hice algún cambio entre simulaciones, todas tienen los mismos parámetros.</p>
+
+<h2 id="qué-es-el-coronavirus-y-qué-es-el-covid-19">¿Qué es el Coronavirus? y ¿qué es el COVID-19?</h2>
+
+<p>Los Coronavirus es una familia de virus zoonóticos (se transmiten entre animales y humanos), se llaman así porque físicamente tienen un halo de proteinas en forma de corona. Existen distintos tipos de ellos y en los últimos años varios han tomado cierta relevancia como es el caso del MERS (Middle East Respiratory Syndrome), el SARS (Severe Acute Respiratory Syndrome) y actualmente el COVID-19 (Coronavirus Disease 2019). El origen de este último se rastreó hasta un mercado mojado en la ciudad de Wuhan en China (esto seguro ya lo sabías) y probablemente el contagio vino de un murciélago o un pangolín, todavía no se ha determinado pero los murciélagos parecen llevar la delantera dado que se encontró un tipo de coronavirus en ellos que comparte el <a href="https://www.nature.com/articles/s41586-020-2012-7" rel="external nofollow noopener" target="_blank">96% de su material genético con el encontrado en humanos</a>. Aprovechando el enlace anterior al artículo del genonma del coronavirus, es importante mencionar que varias revistas científicas que usualmente cobran por leer los artículos han puesto los relacionados con el COVID-19 en una ventana gratuita (estoy en contra de las revistas de paga, pero al menos…).</p>
+
+<h2 id="cuáles-son-los-síntomas">¿Cuáles son los síntomas?</h2>
+<p>El COVID-19 en particular tipicamente causa malestares respiratorios leves a moderados muy similares a los de una gripe, como lo son:</p>
+
+<ul>
+  <li>Tos</li>
+  <li>Fiebre</li>
+  <li>Falta de aliento</li>
+</ul>
+
+<p>Un gran problema es que los síntomas aparecen hasta más de dos semanas después de contraer el virus, mientras tanto aquellas personas que no presentan síntomas pero son portadoras potencialmente están contagiando a otros (se sigue evaluando este tema). La mayoría de las personas contagiadas se recuperan por su cuenta pero hay un número de personas en estado vulnerable como los adultos mayores, gente con obesidad, diabetes, enfermedades respiratorias, etc. a los que les causa complicaciones y deben ser atendidos en hospitales.</p>
+
+<p>A esta altura ya todos sabemos que la tasa de mortalidad incrementa con la edad de la persona (click en la imagen para leer el artículo de Vox)</p>
+
+<p><a href="https://www.vox.com/2020/3/12/21173783/coronavirus-death-age-covid-19-elderly-seniors" rel="external nofollow noopener" target="_blank"><img src="https://cdn.vox-cdn.com/thumbor/jttKYhporW2qkpZhceZR9sqJ3b8=/0x0:1804x910/920x0/filters:focal(0x0:1804x910):format(webp):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/19788829/estimate_case_fatality_hubei_age.jpg" alt="lattice" style="width:650px;"></a></p>
+
+<p>Esto se debe a las condiciones preexistentes que mencionaba antes, el sistema inmune suele verse disminuido con la edad.</p>
+
+<p>Como dije anteriormente, en la mayoría de los casos los síntomas son leves y menos del 5% son críticos</p>
+
+<p><a href="https://medium.com/@tomaspueyo/coronavirus-act-today-or-people-will-die-f4d3d9cd99ca" rel="external nofollow noopener" target="_blank"><img src="https://miro.medium.com/max/1830/1*-O84hhKDRHmgMVAslvgj-Q.png" alt="lattice" style="width:650px;"></a></p>
+
+<p>Así que hay que tener calma en estos momentos, no parece ser la pandemia que nos va aniquilar. Pero es <strong>Importantísimo</strong> tener medidas <em>profilácticas</em>:</p>
+
+<ul>
+  <li>Evitar el contacto con otros</li>
+  <li>Cubrirse al toser o estornudar (Con el codo, por favor)</li>
+  <li>No viajar cuando se esté enfermo</li>
+  <li>Lavarse bien las manos</li>
+  <li>Limpiar y desinfectar las cosas que tocamos regularmente (perillas, teléfono, mesa, compu, apagadores…)</li>
+</ul>
+
+<p>Los contagios se dan cuando inhalamos lo que otros tosen o estornudan y el virus dura vivo al rededor de 9 días en superficies. Así que cuando tocamos objetos infectados y luego llevamos las manos a la cara es posible que estemos contagiándonos.</p>
+
+<h2 id="yo-soy-una-persona-joven-y-sana-voy-a-seguir-mi-vida-normal-pues-no-estoy-en-riesgo">Yo soy una persona joven y sana, voy a seguir mi vida normal pues no estoy en riesgo</h2>
+
+<p>Puede ser que pienses de esta manera pero esto solo es un reflejo de tu falta de empatía. Es probable que para ti solo parezca un resfriado feo pero ¿con cuántas personas vulnerables convives?, más allá ¿con cuántas personas vulnerables conviven tú y las otras personas a tu al rededor?.</p>
+
+<p>Si muchas personas se contagian al mismo tiempo, los sistemas de salud se verán saturados y no podrá haber una respuesta eficiente para todos los casos, lo cual aumentaría la tasa de mortalidad. Por eso es importante actuar desde <strong>YA</strong>, es imperativo <em>aplanar la curva</em>.</p>
+
+<h2 id="cómo-que-aplanar-la-curva">¿Cómo que aplanar la curva?</h2>
+
+<p>Con <em>la curva</em> nos referimos al número de personas que requieren de atencion médica a lo largo del tiempo. Pensemos en una situación en la que el total de personas que van a requerir atención médica es fijo, por ejemplo, sin importar si se toman medidas 100 personas van a necesitar ser ingresadas al hospital en 10 días, pero si no existen acciones tempranas 80 de ellas lo necesitarán al segundo día mientras que con medidas de contención se alcanza un máximo de 20 al cuarto día. Puede que no suene importante porque de todos modos 100 personas van a necesitar atención médica, pero digamos que el hospital solo puede admitir a 50 personas a la vez, entonces en el primer escenario hay 30 personas vulnerables que no son atendidas y en el segundo se le puede dar atención a todos. Tal vez sea más facil entenderlo con la siguiente imagen.</p>
+
+<p><a href="https://flowingdata.com/2020/03/09/flatten-the-coronavirus-curve/" rel="external nofollow noopener" target="_blank"><img src="https://i2.wp.com/flowingdata.com/wp-content/uploads/2020/03/flatten-the-curve-smaller.gif" alt="lattice" style="width:650px;"></a></p>
+
+<p>Las líneas naranjas marcan la capacidad de tratamiento, la línea negra punteada dice el número de personas que requerirían atención si no se toman medidas de contención y el desplazamiento de la curva muestra la distribución de personas que requieren atención a lo largo del tiempo dependiendo del éxito de las medidas preventivas, la parte morada indica los casos no tratados y por ende de alta mortandad contra el área verde que son los casos tratados.</p>
+
+<h2 id="bueno-y-cómo-aplanamos-la-curva">Bueno, ¿y cómo aplanamos la curva?</h2>
+
+<p>Tal vez ya escuchamos el término <strong>R0</strong> en este contexto y sabemos que es un número entre 2 y 3 para el COVID-19 pero no sabemos bien lo que significa. En términos básicos nos dice que cada persona infectada va a contagiar en promedio a R0 número de personas. Es decir, si el R0 es de 3, cada persona infectada en promedio va a contagiar a otras tres. Para contener el esparcimiento debemos de llegar a un R0 menor a 1, es decir que en promedio una persona no contagie a más de una otra.</p>
+
+<p><strong>Distanciamiento social.</strong> Ya sé, suena horrible y no nos gusta (a algunos no nos molesta). Pero la mejor forma para contener esto es mantenerse aislado lo más posible, durante el tiempo necesario hasta que la enfermedad entre en recesión. No suena bien, pero es lo que tenemos. En México, por ejemplo, con la falta de medicamentos que ya tenemos, el desamparo a la gente con necesidad de atención médica, la eliminación del Seguro Popular sin la instrumentación de algún remplazo, definitivamente no nos podemos dar el lujo de probar hasta dónde aguanta nuestro sector salud.</p>
+
+<p>Evidencia empirica sugiere que la mejor manera de actuar es de una forma “bottom-up” es decir, que nosotros como sociedad nos organicemos para tomar medidas de distanciamiento social como trabajar desde casa, evitar ir a conciertos masivos (guiño guiño VL2020) en fin, todo lo que esté en nuestras manos para reducir nuestros contactos diarios. En contraste la forma “top-down” es cuando el gobierno toma medidas de manera mandatoria, poniendo a gente en cuarentena o cerrando carreteras, pero aunque suene a que son buenas medidas de contención puede ser que no lo sean, si una persona quiere evitar el riesgo de ser puesta en cuarentena, muy probablemente no avise que está enferma o si cerramos las vías de comunicación, la gente va a seguir viajando pero de una manera que dificulta el rastreo de rutas y puede generar nuevos brotes.</p>
+
+<h2 id="ok-ollin-ya-muéstrame-las-simulaciones-todo-eso-lo-leo-en-otro-lado">OK Ollin, ya muéstrame las simulaciones… todo eso lo leo en otro lado…</h2>
+
+<p>Está bien, pero primero hablemos del modelo epidemiológico más básico:</p>
+
+<h2 id="modelo-si-susceptible-infectado">Modelo SI: Susceptible-Infectado</h2>
+
+<p>Tal cual como el mismo nombre lo indica, es un modelo donde tenemos dos tipos de sujetos. Los susceptibles que son aquellos propensos a enfermarse y los infectados que son los que contraen alguna enfermedad. Algo así como el dicho: “Hay dos tipos de ciclistas, los que ya se cayeron y los que se van a caer”. Este modelo nos sirve para ver qué tan rápido una población se verá infectada por completo.</p>
+
+<p>Recordemos la imagen con la que abrí este blog</p>
+
+<p><img src="/assets/images/covidSIS/opinion_cycle_2.gif" alt="lattice" style="width:280px;"></p>
+
+<p>Con ella imaginemos que tenemos personas con los dos estados (susceptible e infectado) y que cada infectado puede contagiar a sus vecinos (pues están en contacto) con una cierta probabilidad. Algo así:</p>
+
+<p><img src="/assets/images/covidSIS/1site.gif" alt="sznajd" style="width:280px;"></p>
+
+<p>Entonces, digamos que tenemos una cierta población de 40,000 personas que viven en una retícula como la mostrada y no se mueven para nada. Es decir sus contactos siempre son con las mismas personas. Esta población de pronto tiene 4 casos de COVID-19 y cada infectado contagia a entre 1 y 3 de sus vecinos con una probabilidad de tan solo 1%. Veamos cuál sería la dinámica a lo largo de 1000 iteraciones:</p>
+
+<p><img src="/assets/images/covidSIS/simple_SI.gif" alt="1s05" height="500" width="1000"></p>
+
+<p>Podemos ver que la población infectada empieza a crecer y se forman grupos de infectados, aunque no hay crecimiento exponencial. Ahora pensemos en que así no son nuestros días regularmente. Por lo general al menos estamos en dos espacios distintos, puede ser casa y escuela o trabajo o gimnasio o lo que quieran. Entonces podemos hacer una simulación idéntica a la pasada pero en la que las mismas personas estén en dos puntos diferentes a lo largo del tiempo. Es decir, en la cuadrícula vamos a empezar en un lugar fijo, luego cada persona va a cambiar de lugar, por lo tanto va a tener diferentes vecinos y después va a regresar a su punto original. Con esto vamos a simular el estar en casa y luego en el trabajo y luego en casa y luego en el trabajo y así cada 150 iteraciones hasta completar las 1000.</p>
+
+<p><img src="/assets/images/covidSIS/two_sites_SI.gif" alt="1s05" height="500" width="1000"></p>
+
+<p>Ahora podemos ver que el número de infectados llegó casi a la totalidad en los mismos 1000 pasos que la simulación anterior. No se cambió nada en los parámetros, la única diferencia es que cada 150 pasos cambiamos de vecinos de manera intercalada, siempre regresando a los mismos puntos. Notamos que al rededor del paso 800 hay un punto de inflexión que es nuestro punto de saturación.</p>
+
+<p>Nos podemos ver más sofisticados aún y pensar que esos no son nuestros únicos contactos del día. Nosotros viajamos en metro, combi y/o camión y quién sabe quién me toque al lado o aún más, no sabemos quién ha tocado el barandal del que vamos agarrados desde hace 9 días a la fecha. Entonces tenemos un regimen de contactos aleatorios en nuestro día. Lo modelamos como posición fija 1, contactos aleatorios durante un periodo corto, posición fija 2, contactos aleatorios otra vez, regresamos a posición fija 1 y continuamos en forma de ciclo hasta completar los 1000 pasos.</p>
+
+<p><img src="/assets/images/covidSIS/double_commute_SI.gif" alt="1s05" height="500" width="1000"></p>
+
+<p>Otra vez, no cambiamos nada más que los contactos aleatorios y ahora nuestro punto de saturación se movió cerca del paso 700. Es decir, con la misma probabilidad de infección la diferencia entre los resultados de continuar con nuestros contactos personales normales y tomar medidas preventivas como el distanciamiento social influyen enormemente en qué tan rápido se esparce la infección y por lo mismo depende mucho de nosotros el aplanar la curva.</p>
+
+<h2 id="ollin-esto-no-es-nada-realista-además-la-gente-se-recupera-no-se-queda-enferma-como-en-el-sida">Ollin, esto no es nada realista. Además la gente se recupera, no se queda enferma como en el SIDA.</h2>
+
+<p>Bueno, eso ya lo sé… por eso les dije que eran modelos de juguete pero nos sirven muchísimo para entender como la dinámica de esta enfermedad se ve afectada por nuestra propia dinámica humana.</p>
+
+<h2 id="modelo-sis-susceptible-infectado-susceptible">Modelo SIS: Susceptible-Infectado-Susceptible</h2>
+
+<p>Este modelo es ligeramente más complicado pues toma en cuenta que la gente se recupera con cierta probabilidad. Existen otros como el SIR o SIRS donde el otro estado (R) se refiere a los recuperados, es decir, se entra a un punto en donde al recuperarse de la enfermedad no puede volver a ser infectado nunca o durante un tiempo (como varicela o la gripe), existen casos de reincidencia de COVID-19 en un periodo muy corto de tiempo por lo cual me limité a hacer las simulaciones del SIS.</p>
+
+<p>Todos los parámetros son compartidos con los modelos anteriores, pero ahora se tiene una probabilidad de recuperación del 0.1% en cada paso, parece poco pero cumulativamente a lo largo del tiempo es bastante alta. Empecemos con el modelo estático.</p>
+
+<p><img src="/assets/images/covidSIS/simple_SIS.gif" alt="1s05" height="500" width="1000"></p>
+
+<p>Como era de esperarse es bastante similar al SI pero el número de infectados es aún menor.</p>
+
+<p>Ahora veamos qué pasa si los agentes se pueden encontrar en dos distintos sitios.</p>
+
+<p><img src="/assets/images/covidSIS/two_sites_SISerratas.gif" alt="1s05" height="500" width="1000"></p>
+
+<p>En este nuevo modelo sí encontramos muy distintos comportamientos entre el SI y el SIS, como podemos ver, el contagio llega a la fase exponencial más tarde y es menos pronunciada que en el SI. Este es un resultado muy interesante porque nos dice que el hecho de tener tan solo dos interacciones distintas se incurre en un cambio de fase. Ahora veamos qué ocurre cuando entramos en contacto con personas aleatoriamente durante un periodo corto de tiempo. Aunque es importante notar que llegamos al punto de saturación hasta casi el final de las iteraciones.</p>
+
+<p><img src="/assets/images/covidSIS/double_commute_SIS.gif" alt="1s05" height="500" width="1000"></p>
+
+<p>En este modelo el efecto que tiene la recuperación es prácticamente nulo para la forma de la curva, solo evitamos que la población total se encuentre infectada al mismo tiempo. Es importantísimo notar que en contrario con lo que sucede en el modelo anterior, aquí llegamos muy rápido al punto de saturación, es decir, la velocidad a la que se propaga la enfermedad es mucho más alta. Esto sorprende más si tomamos en cuenta el efecto que tuvo introducir la tasa de recuperación para el modelo donde nos encontramos solo en dos lugares (como si nos teletransportáramos). Dichos resultado sugiere que hay un cierto valor crítico para el cual hay un cambio de fase (tal cual como en el modelo Ising), pero esa exploración la dejaremos para después porque va más allá del alcance de lo que quiero transmitir.</p>
+
+<h2 id="modelo-sir-susceptible-infectado-recuperado">Modelo SIR: Susceptible-Infectado-Recuperado</h2>
+<h3 id="ollin-hablaste-de-aplanar-la-curva-pero-en-estos-modelos-no-aparece-eso">Ollin, hablaste de aplanar la curva pero en estos modelos no aparece eso</h3>
+
+<p>Bueno, para eso tenemos que tomar en cuenta el hecho de que la gente se recupera y pues en general hay un tiempo en el que los recuperados son menos susceptibles que los que nunca han sido infectados y esto es multifactorial, puede ser porque siguen mayores medidas de precaución o porque su sistema inmune ya sabe como controlar ese virus. Entonces, podemos crear un modelo en el que después de que la gente se infecta, se recupera y no vuelve a ser susceptible.</p>
+
+<p>Para el caso estático</p>
+
+<p><img src="/assets/images/covidSIS/simple_SIRslow.gif" alt="1s05" height="500" width="1000"></p>
+
+<p>Para ver un ejemplo más dramático y donde sí veamos realmente una curva con máximo,  aumentemos la tasa de contagio a 10% y la recuperación a 1%.</p>
+
+<p><img src="/assets/images/covidSIS/simple_SIRslow.gif" alt="1s05" height="500" width="1000"></p>
+
+<p>Estas tasas solo las usaremos para este ejemplo, pero veamos lo que sucede con las originales cuando cambiamos de lugares.</p>
+
+<p><img src="/assets/images/covidSIS/two_sites_SIRslow.gif" alt="1s05" height="500" width="1000"></p>
+
+<p>Notemos que la fase exponencial entra cerca de la iteración 600 hasta llegar al punto de saturación cerca de la 900 con un valor máximo ligeramente arriba de los 30,000 infectados.</p>
+
+<p>Pero, ¿qué ocurre si tenemos contactos aleatorios en esta situación?</p>
+
+<p><img src="/assets/images/covidSIS/double_commute_SIRslow.gif" alt="1s05" height="500" width="1000"></p>
+
+<p>El caso es realmente muy parecido al modelo anterior, la diferencia más grande es que existe un (ligeramente) mayor número de infectados. Pero la gran moraleja en esta historia se encuentra al ver la comparación de las curvas donde no hay movimiento y donde sí lo hay. Incluso teniendo una enfermedad 10 veces más contagiosa no llegamos a tener más de 10,000 casos si nos mantenemos relativamente aislados, además que la distribución es mucho menos sesgada, es decir no se concentra hacia un lado en el tiempo. Esto nos permite una mejor atención médica para todos los casos que con los modelos donde hay un mayor número de contactos entre individuos.</p>
+
+<h2 id="en-conclusión">En conclusión</h2>
+
+<p>El resumen aquí es muy sencillo, no hay que tomar a la ligera las medidas de contención de la pandemia. Entre más pronto actuemos es mejor, no entren en pánico pero por el bien de las personas que nos rodean sean precavidos y tomen las medidas de seguridad necesarias. Si les es posible trabajar desde casa, háganlo. Eviten lugares donde tengan que estar a menos de dos metros entre personas (ya sé que es difícil pues el transporte público no funciona así). Desinfecten todo lo que tocan regularmente y lávense las manos. El distanciamiento social es la mejor arma que tenemos actualmente, esperemos que se desarrollen vacunas pronto pero por el momento sean empáticos y manténganse alerta. No vayan al hospital directamente si sospechan que están infectados, la mayoría de los paises ya cuentan con <a href="https://cnnespanol.cnn.com/2020/03/06/conoce-donde-puedes-encontrar-ayuda-en-tu-pais-para-presuntos-casos-de-coronavirus/" rel="external nofollow noopener" target="_blank">líneas de atención</a>.</p>
+
+<p>Revisen de nuevo las simulaciones que les presenté y vean la gran diferencia que puede hacer el hecho de minimizar los contactos. Recuerden que este es un ejercicio de empatía y que aunque nosotros no nos veamos gravemente afectados muchas otras personas en situaciones precarias pueden sufrir mucho. Por el momento quiéranse de lejitos. Sean buenos entre ustedes.</p>
+
+<p>Si lees esto y hay más cosas que quieras agregar, por favor escríbe. También si pueden y quieren dejar comentarios lo pueden hacer aquí abajo, recuerden que no soy un experto pero me interesa el tema.</p>
+
+<h3 id="cuídense-aplanemos-esa-curva">Cuídense, aplanemos esa curva.</h3>
+
+  </article>
+
+  
+
+  
+</div>
+
+      
+    </div>
+
+    <!-- Footer -->
+    
+
+
+  <footer class="fixed-bottom" role="contentinfo">
+    <div class="container mt-0">
+      
+  ©Droits d'auteur
+  2025
+  Ollin
+  D.
+  Langle-Chimal. Propulsé par <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> avec le thème <a href="https://github.com/george-gca/multi-language-al-folio" rel="external nofollow noopener" target="_blank">multi-language-al-folio</a>. Hébergé par <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos de <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
+
+  
+  
+
+    </div>
+  </footer>
+
+
+
+    <!-- JavaScripts -->
+    <!-- jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<!-- Bootsrap & MDB scripts -->
+<script src="/assets/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script>
+
+
+  <!-- Masonry & imagesLoaded -->
+  <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script>
+  <script defer src="/assets/js/masonry.js?a0db7e5d5c70cc3252b3138b0c91dcaf" type="text/javascript"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Medium Zoom JS -->
+  <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script defer src="/assets/js/zoom.js?85ddb88934d28b74e78031fd54cf8308"></script>
+
+
+
+
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/no_defer.js?2781658a0a2b13ed609542042a859126"></script>
+<script defer src="/assets/js/common.js?e0514a05c5c95ac1a93a8dfd5249b92e"></script>
+<script defer src="/assets/js/copy_code.js?c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script>
+
+<!-- Jupyter Open External Links New Tab -->
+<script defer src="/assets/js/jupyter_new_tab.js?d9f17b6adc2311cbabd747f4538bb15f"></script>
+
+<!-- Badges -->
+
+  <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
+
+
+  <script async src="https://badge.dimensions.ai/badge.js"></script>
+
+
+
+  <!-- MathJax -->
+  <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script>
+  
+    <script src="/assets/js/mathjax-setup.js?a5bb4e6a542c546dd929b24b8b236dfd"></script>
+    <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script>
+  
+
+
+
+  <!-- Analytics -->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9FS4V8SGLR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'G-9FS4V8SGLR');
+  </script>
+  <script defer src="/assets/js/google-analytics-setup.js"></script>
+
+
+
+
+
+
+
+  <!-- Scrolling Progress Bar -->
+  <script defer src="/assets/js/progress-bar.js?2f30e0e6801ea8f5036fa66e1ab0a71a" type="text/javascript"></script>
+
+
+
+
+
+
+
+  <!-- Back to Top -->
+  <script src="/assets/js/vanilla-back-to-top.min.js?f40d453793ff4f64e238e420181a1d17"></script>
+  <script>
+    addBackToTop();
+  </script>
+
+
+
+  <!-- Search -->
+  <script type="module" src="/assets/js/search/ninja-keys.min.js?a3446f084dcaecc5f75aa1757d087dcf"></script>
+  <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Tapez pour commencer la recherche">
+    
+    <div class="modal-footer" slot="footer">
+      <span class="help">
+        <svg version="1.0" class="ninja-examplekey" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 1280 1280">
+          <path d="M1013 376c0 73.4-.4 113.3-1.1 120.2a159.9 159.9 0 0 1-90.2 127.3c-20 9.6-36.7 14-59.2 15.5-7.1.5-121.9.9-255 1h-242l95.5-95.5 95.5-95.5-38.3-38.2-38.2-38.3-160 160c-88 88-160 160.4-160 161 0 .6 72 73 160 161l160 160 38.2-38.3 38.3-38.2-95.5-95.5-95.5-95.5h251.1c252.9 0 259.8-.1 281.4-3.6 72.1-11.8 136.9-54.1 178.5-116.4 8.6-12.9 22.6-40.5 28-55.4 4.4-12 10.7-36.1 13.1-50.6 1.6-9.6 1.8-21 2.1-132.8l.4-122.2H1013v110z"></path>
+        </svg>
+        sélectionner
+      </span>
+      <span class="help">
+        <svg xmlns="http://www.w3.org/2000/svg" class="ninja-examplekey" viewbox="0 0 24 24">
+          <path d="M0 0h24v24H0V0z" fill="none"></path>
+          <path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"></path>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" class="ninja-examplekey" viewbox="0 0 24 24">
+          <path d="M0 0h24v24H0V0z" fill="none"></path>
+          <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"></path>
+        </svg>
+        naviguer
+      </span>
+      <span class="help">
+        <span class="ninja-examplekey esc">esc</span>
+        fermer
+      </span>
+      <span class="help">
+        <svg xmlns="http://www.w3.org/2000/svg" class="ninja-examplekey backspace" viewbox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M6.707 4.879A3 3 0 018.828 4H15a3 3 0 013 3v6a3 3 0 01-3 3H8.828a3 3 0 01-2.12-.879l-4.415-4.414a1 1 0 010-1.414l4.414-4.414zm4 2.414a1 1 0 00-1.414 1.414L10.586 10l-1.293 1.293a1 1 0 101.414 1.414L12 11.414l1.293 1.293a1 1 0 001.414-1.414L13.414 10l1.293-1.293a1 1 0 00-1.414-1.414L12 8.586l-1.293-1.293z" clip-rule="evenodd"></path>
+        </svg>
+        revenir au parent
+      </span>
+    </div>
+  </ninja-keys>
+  <script src="/assets/js/search-setup.js?6c304f7b1992d4b60f7a07956e52f04a"></script>
+  <script src="/fr-ca/assets/js/search-data.js"></script>
+  <script src="/assets/js/shortcut-key.js?6f508d74becd347268a7f822bca7309d"></script>
+
+
+
+
+  </body>
+</html>
