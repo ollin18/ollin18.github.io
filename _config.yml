@@ -36,6 +36,9 @@ logo: /assets/images/logo.png # path of site logo, e.g. "/assets/images/logo.png
 
 # Build settings
 markdown: kramdown
+kramdown:
+  input: GFM
+  math_engine: mathjax
 theme: jekyll-theme-basically-basic
 plugins:
   - jekyll-feed
@@ -46,6 +49,7 @@ plugins:
 feed:
   path: atom.xml
 
+site.mathjax: true
 # Pagination - https://jekyllrb.com/docs/pagination/
 paginate: 10
 paginate_path: /page:num/
