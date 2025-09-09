@@ -1,0 +1,12 @@
+github_users:
+  - ollin18
+
+repo_description_lines_max: 2
+
+github_repos:
+  - ollin18/Node2Vec.jl
+  - ollin18/ComplexSystems.jl
+  - ollin18/gc-lbs
+  - ollin18/planea
+  - ollin18/toolkit_for_gps_mobility_data_analysis
+  - ollin18/dotfiles
