@@ -11,7 +11,7 @@ tags:
 last_modified_at: 2025-09-08T18:45:00-07:00
 ---
 
-<iframe style="width:110%;height:700px;border:none;overflow:hidden;" src="/assets/images/workreach/p5js/index.html"></iframe>
+<iframe style="width:110%;height:600px;border:none;overflow:hidden;" src="/assets/images/workreach/p5js/index.html"></iframe>
 
 Cities don’t offer the same jobs to everyone. Commuters weigh **how far a job is**, **how good the job is**, and **their own constraints** (like informality at home) when deciding where to work. In our new paper, we introduce **WorkReach**, a discrete-choice framework that blends **distance**, **Economic Complexity (ECI)** at the destination, and **informality** at the origin to explain—and quantify—those trade-offs across **Mexico City, Rio de Janeiro, Los Angeles, and the Bay Area**. :contentReference[oaicite:0]{index=0}
 
