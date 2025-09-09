@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body>
+<p><img src="/assets/images/fractals/lsystem.gif" alt="heart"></p>
+
+<p>The song in my mind while doing this was:</p>
+<iframe src="https://open.spotify.com/embed/track/64b4H2swBOouj8J0AZ4buE" width="300" height="100" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+<p>TLDR;</p>
+
+<p>You promised fractals! take me to the fractals! a.k.a. assignment answers</p>
+
+<p><a href="#weed-1">The one on Flake’s 6.5</a></p>
+
+<p><a href="#building-your-fractal">DIY</a></p>
+
+<p><a href="#cool-stuff">Cool fractals</a></p>
+
+<p><a href="#dla">DLA</a></p>
+
+<p>This was an assingment from my Modeling Complex Systems course but
+as I got such a beautiful plots I decided to go for a blog post showing
+the results from there.</p>
+
+<p>The first thing that I want to talk about is that my main result from
+that class is going to be a <img src="https://pbs.twimg.com/profile_images/3331406046/647b7cf75cb5662b96901bc521968e94_400x400.png" alt="julia" style="width:20px;">
+julia package (which is hosted right here <a href="https://github.com/ollin18/ComplexSystems.jl" rel="external nofollow noopener" target="_blank"><img src="https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png" alt="github" style="width:30px;"></a>), it’s in very early stages so it’ll be changing rapidly (stay tuned); PR, issues and feedback are welcomed and encouraged.</p>
+
+<h1 id="l-systems">L-systems</h1>
+
+<p>So the first part of the assignment was to fix a L-systems  code  written in Matlab, but is well known that in order to fix a Matlab code the first thing you have to do is to write in another language (free and open source), so that’s where I decided to build my implementation in Julia from scratch. I didn’t like the object oriented direction that was taken in the original one and decided to go for a <em>dictionary</em> way.</p>
+
+<p>First of all, for those who don’t already know what an L-system (which stands for Lindenmayer system) is an iterative rewriting system which consist in certain rules. These rules are pattern matching ones, so in every iteration you have to look for a certain pattern and replace it with a given rule.</p>
+
+<blockquote>
+  <p>Example:</p>
+
+  <p>We have the following string: <strong>FGFGFFF</strong></p>
+
+  <p>And a rule <strong>F -&gt; FG</strong></p>
+</blockquote>
+
+<p>Then:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Iteration</td>
+      <td>Resulting String</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>FGFGFFF</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>FGGFGGFGFGFG</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>FGGFGGGFGGFGGFGG</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>And so on.</p>
+
+<p>So the first problem was to reproduce a figure from Flake’s book <em>The Computational Beauty of Nature</em> with our shiny new software. But first we want to see if we get the same result from the Matlab’s example code (which I think was hosted <a href="https://courses.cit.cornell.edu/bionb441/LSystem/index.html" rel="external nofollow noopener" target="_blank">here</a>).</p>
+
+<p>The set of rules was:</p>
+
+<p><strong>F -&gt; FF</strong></p>
+
+<p><strong>G -&gt; F[+G][-G]F[+G][-G]FG</strong></p>
+
+<p>We have to know that <strong>[ ]</strong> means that the rules given inside the brakets are only good inside them, so when we hit <strong>]</strong> we’ll return the parameters to the ones that we had before entering them, and the <strong>+ -</strong> signs mean a change in the angle of movement. So, we need a starting point a starting angle and a change rate $\Delta$ for that angle. The starting position is called <em>axiom</em> and its a string seed. In this case we have <em>axiom = G</em> and $\Delta$ = 27.5°.</p>
+
+<p>The resulting figure after 2 iterations is
+<img src="/assets/images/fractals/example.png" alt="example"></p>
+
+<p>Now we want to reproduce the figure that we’ve been told to do. It has the following parameters:</p>
+<h3 id="weed-1">Weed 1</h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Rules</td>
+      <td>$\Delta$</td>
+      <td>Axiom</td>
+    </tr>
+    <tr>
+      <td>F -&gt; F[-F]F[+F]F</td>
+      <td>25</td>
+      <td>F</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/assets/images/fractals/flake65.png" alt="weed"></p>
+
+<p>I don’t have the original image right here, but I can tell you that it is the same 😜</p>
+
+<h3 id="building-your-fractal">Building your fractal</h3>
+
+<p>Sometimes we need to change the angle more than once, so we can add a number preceding the <strong>+ -</strong> signs to tell the (as it’s known) turtle, to change direction multiple times, i.e. if we have $\Delta$ = 10°, then <strong>4+</strong> will change the angle 40° counterclockwise (the same way we normaly measure angles). So that leaves us with the second question of the assignment which was to implement that and try to reproduce a cool figure we came up with.</p>
+
+<p>As I’m a romantic I will try to do a fractal or pseudo-fractal version of this</p>
+
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Love_Heart_SVG.svg/968px-Love_Heart_SVG.svg.png" alt="heart" style="width:200px;"></p>
+
+<p>And I’ll be doing it with the following set of parameters</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Rules</td>
+      <td>$\Delta$</td>
+      <td>Axiom</td>
+    </tr>
+    <tr>
+      <td>F -&gt; FF[+F][-F]</td>
+      <td>45°</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <td>+ -&gt; +F[+2F][-2F]</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>- -&gt; -F[-3F][+3F]</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>It is a very basic set of rules, but what I wanted to do was avoiding branches to touch (at least the small ones).</p>
+
+<p>The final result</p>
+
+<p><img src="/assets/images/fractals/lsystem.gif" alt="heart"></p>
+
+<p>This was achieved by 1-4 iterations of those rules, but we can also see how it grows (on a 3 iteration process)</p>
+
+<p><img src="/assets/images/fractals/fast_build.gif" alt="build"></p>
+
+<p>Here are another cool examples of what can be done</p>
+
+<h4 id="cool-stuff">Cool stuff</h4>
+
+<p><img src="/assets/images/fractals/sierpinski.gif" alt="sierpinski" style="width:200px;">
+<img src="/assets/images/fractals/penrose.gif" alt="penrose" style="width:200px;">
+<img src="/assets/images/fractals/spikes.gif" alt="spikes" style="width:200px;"></p>
+
+<h1 id="diffusion-limited-aggregation">Diffusion-Limited Aggregation</h1>
+<h3 id="dla">DLA</h3>
+
+<p>So for this I did use a some kind of object oriented algorithm, but it is very simple. To speed up things I took advantege of Julia’s speed and try to make the code as modular as possible to get the must out of the JIT compiler. And as it turned out, it runs pretty fast actually.</p>
+
+<p>I used 1000 random walkers in a 10x10 box and make them stop moving if they touched a non-moving walker, and I put a first one of those in the middle of the box. What I got was this cool looking thing</p>
+
+<p><img src="/assets/images/fractals/initial.png" alt="dla"></p>
+
+<h3 id="box-counting-algorithm">Box-counting algorithm</h3>
+
+<p>The last question was to measure Minkowski’s dimension in the figure we got. The algorithm is very simple, you need to grid the space with boxes of the same size and count how many are needed to cover all of the figure. Then such dimension will be</p>
+
+\[D = \lim_{a \rightarrow \infty} \frac{\ln(N)}{\ln(\frac{1}{a})}\]
+
+<p>where a is the box size and N the number of boxes needed.</p>
+
+<p>To make this possible I use the power of GEOS which is the sotfware that powers PostGIS and GeoPandas. I build a grid of boxes with filled properties and check wether those are empty or not.</p>
+
+<p>A figure of the dimension as function of box size</p>
+
+<p><img src="/assets/images/fractals/dimension.png" alt="dla"></p>
+
+<p>The smallest a I used was 0.01 and got a dimension of 1.437</p>
+
+<p>From that we could say that it has fractal structure. But we should test for smaller box sizes.</p>
+
+</body></html>

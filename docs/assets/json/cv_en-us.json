@@ -1,0 +1,396 @@
+{
+  "basics": {
+    "name": "Ollin D. Langle-Chimal",
+    "label": "Postdoctoral Researcher in Computational Social Science",
+    "email": "ollin[at]berkeley.edu",
+    "website": "https://www.ollinlangle.com",
+    "summary": "Postdoctoral researcher specializing in computational social science, human mobility patterns, and data science for humanitarian response. PhD in Complex Systems and Data Science with extensive experience in machine learning, network analysis, and development economics. Passionate about using data science to address social and environmental challenges.",
+    "location": {
+      "address": "401a Wurster Hall",
+      "postalCode": "94720",
+      "city": "Berkeley",
+      "countryCode": "US",
+      "region": "California"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "ollin18",
+        "url": "https://github.com/ollin18"
+      },
+      {
+        "network": "ORCID",
+        "username": "0000-0002-8772-1171",
+        "url": "https://orcid.org/0000-0002-8772-1171"
+      }
+    ]
+  },
+  "work": [
+    {
+      "company": "University of California Berkeley",
+      "position": "Postdoctoral Researcher",
+      "website": "https://www.berkeley.edu",
+      "startDate": "2024-06-01",
+      "summary": "Research on mobility trends, employment choice modeling, and economic complexity in urban systems",
+      "highlights": [
+        "Research on mobility trends by employment status in Low and Medium income countries",
+        "Research on employment choice as a Random Utility Model based on commuting patterns",
+        "Research on economic complexity at the sub-city level using urban flows",
+        "Fine-grain estimation of the informal labor force using surveys and census"
+      ]
+    },
+    {
+      "company": "THINKMD",
+      "position": "Data Scientist",
+      "website": "https://thinkmd.org",
+      "startDate": "2022-09-01",
+      "endDate": "2024-09-01",
+      "summary": "Development of disease surveillance tools and machine learning for clinical assessments",
+      "highlights": [
+        "Development of disease and symptoms surveillance tools",
+        "Development of machine learning based clinical logic for disease assessments",
+        "Inference and anomaly detection using electronic health records in low and middle income countries",
+        "Data engineering and quality control"
+      ]
+    },
+    {
+      "company": "The World Bank",
+      "position": "Data Scientist - STC",
+      "website": "https://www.worldbank.org",
+      "startDate": "2020-12-01",
+      "endDate": "2023-08-01",
+      "summary": "Geospatial analysis and mobility pattern research during COVID-19",
+      "highlights": [
+        "Geospatial analysis and dashboard design of GPS data and expenditure",
+        "Understanding gaps in mobility reduction and economical activity patterns",
+        "Analysis of different socioeconomic groups during the pandemic"
+      ]
+    },
+    {
+      "company": "University of Vermont, Neurobotics Lab",
+      "position": "Graduate Research Assistant",
+      "website": "https://www.uvm.edu",
+      "startDate": "2018-08-01",
+      "endDate": "2022-08-01",
+      "summary": "PhD research on human behavior modeling and decision making analysis",
+      "highlights": [
+        "Gamification for decision making analysis",
+        "Analysis and modeling of human behavior under events of distress",
+        "Text classification for expressed needs during humanitarian crises",
+        "Analysis of temporal correlations in human migration patterns"
+      ]
+    },
+    {
+      "company": "Ministry of Social Development (SEDESOL)",
+      "position": "Senior Data Scientist",
+      "website": "https://www.gob.mx/sedesol",
+      "startDate": "2017-08-01",
+      "endDate": "2018-08-01",
+      "summary": "Machine Learning for public policy and social program analysis",
+      "highlights": [
+        "Income estimation using machine learning",
+        "Automated analysis and detection of misreporting in surveys",
+        "Development of tools for detection of irregularities in social programs",
+        "Built unified PostgreSQL database for all social programs",
+        "Developed R package for database access"
+      ]
+    },
+    {
+      "company": "Presage Research",
+      "position": "Senior Data Scientist",
+      "startDate": "2017-08-01",
+      "endDate": "2018-08-01",
+      "summary": "Machine Learning for reputation management and social media analysis",
+      "highlights": [
+        "Built reputation management tool for social media",
+        "Deep learning for oil leak detection",
+        "Natural Language Processing for social media monitoring"
+      ]
+    },
+    {
+      "company": "Stevens Institute of Technology",
+      "position": "Summer Research Intern",
+      "website": "https://www.stevens.edu",
+      "startDate": "2017-06-05",
+      "endDate": "2017-08-05",
+      "summary": "Complex Systems research on urban perception and social media analysis",
+      "highlights": [
+        "Social media mining and analysis",
+        "Built geospatial database for urban research",
+        "Analysis of urban perception through social media",
+        "Correlation analysis between caloric intake and social media usage"
+      ]
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "SACNAS (Society for Advancement of Chicanos/Hispanics and Native Americans in Science)",
+      "position": "Founding Member & Social Media Manager",
+      "website": "https://www.sacnas.org",
+      "startDate": "2018-08-01",
+      "summary": "UVM chapter leadership and advocacy for underrepresented scientists"
+    },
+    {
+      "organization": "Mechanism Design for Social Good (MD4SG)",
+      "position": "Working Group Member",
+      "website": "https://www.md4sg.com",
+      "startDate": "2020-01-01",
+      "summary": "Latin America and the Caribbean Working Group"
+    },
+    {
+      "organization": "National Institute of Genomic Medicine (INMEGEN)",
+      "position": "Visiting Student Researcher",
+      "website": "https://www.inmegen.gob.mx",
+      "startDate": "2015-08-01",
+      "endDate": "2017-06-01",
+      "summary": "Research on optimal percolation and community detection in genomic networks"
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Vermont",
+      "area": "Complex Systems and Data Science",
+      "studyType": "PhD",
+      "startDate": "2018-08-01",
+      "endDate": "2023-07-01",
+      "gpa": "",
+      "summary": "Advisor: Nicholas Cheney. Gund Institute Graduate Fellow. Thesis: Data Science and Mathematical Modeling for Humanitarian Response"
+    },
+    {
+      "institution": "Instituto Tecnológico Autónomo de México (ITAM)",
+      "area": "Data Science",
+      "studyType": "Master",
+      "startDate": "2016-08-01",
+      "endDate": "2018-05-01",
+      "gpa": "3.67",
+      "summary": "Advisor: Carlos Fernando Esponda Darlington. Thesis: Non-backtracking spectral algorithm for community detection on weighted networks. Graduated with Honors."
+    },
+    {
+      "institution": "Universidad Nacional Autónoma de México (UNAM)",
+      "area": "Physics",
+      "studyType": "Bachelor",
+      "startDate": "2006-08-01",
+      "endDate": "2016-05-01",
+      "gpa": "3.34",
+      "summary": "Advisor: Jesús Espinal Enriquez. Thesis: Optimal percolation on complex networks."
+    }
+  ],
+  "awards": [
+    {
+      "title": "Best Poster Award",
+      "date": "2024-01-01",
+      "awarder": "NetMob Conference",
+      "summary": "The disparate impact of COVID-19 on mobility patterns in developing countries"
+    },
+    {
+      "title": "GCP Credits Award",
+      "date": "2023-01-01",
+      "awarder": "Google",
+      "summary": "$4000 USD worth in GCP credits for research on human mobility"
+    },
+    {
+      "title": "Best Chapter Award",
+      "date": "2022-01-01",
+      "awarder": "Society for the Advancement of Chicanos/Hispanics and Native Americans in Science (SACNAS)",
+      "summary": "Recognition for leadership in UVM chapter"
+    },
+    {
+      "title": "Angela Batista Award",
+      "date": "2021-01-01",
+      "awarder": "University of Vermont",
+      "summary": "For students of color who have demonstrated commitment to social justice and change through anti-racist work"
+    },
+    {
+      "title": "Ex-ITAM Research Prize",
+      "date": "2018-01-01",
+      "awarder": "ITAM",
+      "summary": "Best Research Thesis for MSc in Data Science"
+    },
+    {
+      "title": "SoFiA 2016",
+      "date": "2016-11-07",
+      "awarder": "Latin American School and Workshop on Data Analysis",
+      "summary": "Full scholarship for Mathematical Modelling of Social Sciences"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Socioeconomic disparities in mobility behavior during the COVID-19 pandemic in developing countries",
+      "publisher": "EPJ Data Science",
+      "releaseDate": "2025-01-01",
+      "summary": "First author publication on mobility patterns during COVID-19"
+    },
+    {
+      "name": "Improving Real-Time Malaria Diagnosis on Site: Transforming Malaria Detection with Machine Learning",
+      "publisher": "In review",
+      "releaseDate": "2024-01-01",
+      "summary": "Machine learning approaches for malaria detection in clinical settings"
+    },
+    {
+      "name": "Unmet needs and behaviour during the Ebola response in Sierra Leone",
+      "publisher": "The Lancet Planetary Health",
+      "releaseDate": "2020-02-01",
+      "summary": "Co-author on retrospective analysis of community feedback during Ebola outbreak"
+    },
+    {
+      "name": "Using experimental gaming simulations to elicit risk mitigation behavioral strategies",
+      "publisher": "PloS one",
+      "releaseDate": "2020-03-01",
+      "summary": "Co-author on experimental gaming for agricultural disease management"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Programming Languages",
+      "level": "Expert",
+      "keywords": [
+        "Julia",
+        "Python",
+        "R",
+        "JavaScript",
+        "SQL",
+        "Bash"
+      ]
+    },
+    {
+      "name": "Data Science & Machine Learning",
+      "level": "Expert",
+      "keywords": [
+        "Complex Networks",
+        "Natural Language Processing",
+        "Geospatial Analysis",
+        "Time Series Analysis",
+        "Statistical Modeling",
+        "Deep Learning"
+      ]
+    },
+    {
+      "name": "Tools & Frameworks",
+      "level": "Advanced",
+      "keywords": [
+        "Docker",
+        "Git",
+        "AWS",
+        "GCP",
+        "Spark",
+        "Neo4J",
+        "PostgreSQL",
+        "D3.js",
+        "React"
+      ]
+    }
+  ],
+  "languages": [
+    {
+      "language": "Spanish",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "English",
+      "fluency": "Full professional proficiency"
+    },
+    {
+      "language": "French",
+      "fluency": "Beginner"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Research",
+      "keywords": [
+        "Computational Social Science",
+        "Human Mobility",
+        "Development Economics",
+        "Network Science",
+        "Humanitarian Technology"
+      ]
+    },
+    {
+      "name": "Photography",
+      "keywords": [
+        "Urban",
+        "Action",
+        "Dance"
+      ]
+    },
+    {
+      "name": "Sports",
+      "keywords": [
+        "Soccer",
+        "Running",
+        "Cycling",
+        "Mountaineering",
+        "Climbing"
+      ]
+    },
+    {
+      "name": "Music",
+      "keywords": [
+        "Drums",
+        "Percussions",
+        "Classical Guitar"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "PolaRoam",
+      "description": "Open framework for incremental human mobility analysis",
+      "highlights": [
+        "Principal developer",
+        "Python-based framework",
+        "2024"
+      ],
+      "keywords": [
+        "Python",
+        "Mobility Analysis",
+        "Open Source"
+      ],
+      "startDate": "2024-01-01",
+      "url": "https://github.com/ollin18/PolaRoam",
+      "type": "application"
+    },
+    {
+      "name": "wbgps",
+      "description": "Distributed framework for human mobility analysis for World Bank",
+      "highlights": [
+        "Principal developer",
+        "Python-based framework",
+        "2021"
+      ],
+      "keywords": [
+        "Python",
+        "World Bank",
+        "GPS Analysis"
+      ],
+      "startDate": "2021-01-01",
+      "type": "application"
+    },
+    {
+      "name": "NetABM.jl",
+      "description": "Network Agent Based Modeling framework for epidemiological and opinion dynamics",
+      "highlights": [
+        "Principal developer",
+        "Julia package",
+        "2020"
+      ],
+      "keywords": [
+        "Julia",
+        "Agent-Based Modeling",
+        "Epidemiology"
+      ],
+      "startDate": "2020-01-01",
+      "type": "library"
+    }
+  ],
+  "references": [
+    {
+      "name": "Nicholas Cheney",
+      "reference": "PhD advisor and research mentor at University of Vermont. Expert in complex systems and computational approaches to understanding behavior."
+    },
+    {
+      "name": "Marta C. Gonzalez",
+      "reference": "Current postdoctoral advisor at UC Berkeley. Leading researcher in human mobility and urban systems."
+    }
+  ]
+}

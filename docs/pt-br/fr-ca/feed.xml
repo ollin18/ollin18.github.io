@@ -1,0 +1,944 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="http://localhost:4000/fr-ca/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/fr-ca/" rel="alternate" type="text/html" /><updated>2025-09-09T12:07:28-07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Ollin D. Langle-Chimal</title><entry><title type="html">WorkReach: How Distance, Job Quality, and Informality Shape Where We Work</title><link href="http://localhost:4000/fr-ca/blog/2025/workreach/" rel="alternate" type="text/html" title="WorkReach: How Distance, Job Quality, and Informality Shape Where We Work" /><published>2025-08-15T00:00:00-07:00</published><updated>2025-09-08T18:45:00-07:00</updated><id>http://localhost:4000/blog/2025/workreach</id><content type="html" xml:base="http://localhost:4000/blog/2025/workreach/"><![CDATA[<iframe style="width:110%;height:600px;border:none;overflow:hidden;" src="/assets/images/workreach/p5js/index.html"></iframe>
+
+<p>Cities don’t offer the same jobs to everyone. Commuters weigh <strong>how far a job is</strong>, <strong>how good the job is</strong>, and <strong>their own constraints</strong> (like informality at home) when deciding where to work. In our new paper, we introduce <strong>WorkReach</strong>, a discrete-choice framework that blends <strong>distance</strong>, <strong>Economic Complexity (ECI)</strong> at the destination, and <strong>informality</strong> at the origin to explain—and quantify—those trade-offs across <strong>Mexico City, Rio de Janeiro, Los Angeles, and the Bay Area</strong>. :contentReference[oaicite:0]{index=0}</p>
+
+<hr />
+
+<h2 id="whats-different-here">What’s different here</h2>
+
+<p>Most flow models (gravity, radiation) are great at prediction but say little about <strong>why</strong> people choose specific work locations. <strong>WorkReach</strong> is built for <strong>interpretability</strong>:</p>
+
+<ul>
+  <li>A <strong>utility function</strong> captures the decision of working at location <em>j</em> from home <em>i</em>.</li>
+  <li>A <strong>transition weight</strong> (a logistic in distance) lets behavior shift from a <strong>“convenience-first”</strong> regime (nearby jobs) to an <strong>“opportunity-first”</strong> regime (farther, higher-quality jobs).</li>
+  <li>We estimate <strong>city-specific parameters</strong> you can read directly: how much extra distance people will tolerate for higher ECI, and how origin <strong>informality</strong> changes that willingness.</li>
+</ul>
+
+<p><img src="/assets/images/workreach/concept_model.png" alt="Conceptual diagram of WorkReach utility and distance transition" style="width:720px;" /></p>
+
+<hr />
+
+<h2 id="data-cities-and-measures">Data, cities, and measures</h2>
+
+<p>We pair <strong>anonymized mobility/commuting flows</strong> with <strong>employment registries</strong> and <strong>census-based informality</strong> to compute:</p>
+<ul>
+  <li><strong>ECI</strong> (sub-city): diversity and sophistication of local economic activity.</li>
+  <li><strong>Informality</strong> (home areas): proxies based on social protection/registration data adapted to each country.</li>
+  <li><strong>Flows</strong>: observed or synthetic (U.S.) home→work trips mapped to consistent spatial units.</li>
+</ul>
+
+<p><img src="/assets/images/workreach/eci_informality_maps.png" alt="Choropleths of ECI and informality across the four cities" style="width:720px;" /></p>
+
+<p><em>What stands out:</em> Latin American metros show stronger <strong>spatial segregation</strong> (higher informality farther from high-ECI cores), while the U.S. metros are more mixed.</p>
+
+<hr />
+
+<h2 id="key-findings">Key findings</h2>
+
+<h3 id="1-distancecomplexity-gradient">1) Distance–complexity gradient</h3>
+<p>Everywhere, people prefer <strong>short commutes</strong>—but they will go <strong>farther</strong> for <strong>higher-ECI</strong> jobs. The <strong>marginal substitution</strong> between distance and ECI is largest in <strong>Mexico City</strong>, smallest in <strong>Los Angeles</strong>, meaning MC workers accept the biggest distance penalties to reach complex opportunities.</p>
+
+<p><img src="/assets/images/workreach/msr_elasticities.png" alt="Marginal substitution rates and elasticities for ECI vs distance and informality vs distance" style="width:720px;" /></p>
+
+<h3 id="2-informality-flips-by-region">2) Informality flips by region</h3>
+<ul>
+  <li><strong>Mexico City &amp; Rio</strong>: Higher <strong>origin informality</strong> <em>increases</em> willingness to travel farther <strong>if</strong> the destination has high ECI (chasing better opportunities).</li>
+  <li><strong>Bay Area &amp; Los Angeles</strong>: Higher origin informality <em>reduces</em> willingness to take long trips to high-ECI destinations (constraints dominate).</li>
+</ul>
+
+<h3 id="3-a-behavioral-threshold-in-distance">3) A behavioral “threshold” in distance</h3>
+<p>The estimated <strong>distance threshold (τ)</strong> marks when commuters switch from <strong>nearby-first</strong> to <strong>opportunity-first</strong> mode. It’s <strong>larger</strong> in <strong>Mexico City/Rio</strong> (longer convenience regime) and <strong>very small/sharp</strong> in <strong>U.S.</strong> metros (opportunities matter earlier as distance grows).</p>
+
+<hr />
+
+<h2 id="how-well-does-it-predict">How well does it predict?</h2>
+
+<p>Despite prioritizing interpretability, <strong>WorkReach</strong> matches <strong>benchmark</strong> gravity/radiation models in <strong>CPC</strong> and <strong>correlation</strong>—and in the <strong>Bay Area</strong>, it takes the top CPC. The payoff is that we can read <em>why</em> choices look the way they do—not just that they do.</p>
+
+<p><img src="/assets/images/workreach/model_fit.png" alt="Observed vs predicted flows, WorkReach vs baselines" style="width:720px;" /></p>
+
+<hr />
+
+<h2 id="accessibility-distance-isnt-the-whole-story">Accessibility: distance isn’t the whole story</h2>
+
+<p>We compute two complementary metrics:</p>
+
+<p>1) <strong>Distance-weighted accessibility</strong> (closer flows count more)
+2) <strong>Consumer-surplus accessibility</strong> (a logsum from discrete choice): the <strong>expected max utility</strong> across all job options, integrating distance, destination ECI, and origin informality.</p>
+
+<p><strong>Result:</strong> Consumer-surplus accessibility is <strong>consistently lower</strong> for <strong>high-informality</strong> origins in <strong>all four cities</strong>, even where simple distance metrics look favorable. Quality and constraints reshape who truly benefits from the urban job market.</p>
+
+<p><img src="/assets/images/workreach/accessibility_boxplots.png" alt="Accessibility boxplots by informality group, distance-weighted vs consumer-surplus" style="width:720px;" />
+<img src="/assets/images/workreach/accessibility_maps.png" alt="Accessibility maps (z-scores) and a combined PCA index" style="width:720px;" /></p>
+
+<hr />
+
+<h2 id="why-this-matters-for-policy">Why this matters for policy</h2>
+
+<ul>
+  <li><strong>Target connections where they unlock quality</strong>: Improve access from high-informality origins to <strong>high-ECI</strong> destinations (Latin America), and reduce <strong>non-distance barriers</strong> for informal workers in U.S. metros.</li>
+  <li><strong>Invest where the trade-off is steep</strong>: Places with high ECI but poor consumer-surplus for vulnerable groups are prime for <strong>transit improvements</strong>; areas with good physical access but low ECI call for <strong>local economic development</strong>.</li>
+  <li><strong>Measure the right accessibility</strong>: Pair <strong>distance metrics</strong> with <strong>utility-based</strong> measures to avoid overestimating access where job <em>quality</em> is out of reach.</li>
+</ul>
+
+<hr />
+
+<p><em>Paper:</em> “WorkReach: Modeling Urban Work Location Choices Through Economic Complexity, Informality, and Mobility Data.” (Mexico City, Rio de Janeiro, Los Angeles, Bay Area). :contentReference[oaicite:1]{index=1}</p>
+
+<hr />]]></content><author><name></name></author><category term="complex_systems" /><category term="mobility" /><category term="employment" /><category term="economic_complexity" /><category term="informality" /><category term="accessibility" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Socioeconomic Disparities in Mobility During COVID-19</title><link href="http://localhost:4000/fr-ca/blog/2025/disparities/" rel="alternate" type="text/html" title="Socioeconomic Disparities in Mobility During COVID-19" /><published>2025-01-08T00:00:00-08:00</published><updated>2025-09-08T18:33:37-07:00</updated><id>http://localhost:4000/blog/2025/disparities</id><content type="html" xml:base="http://localhost:4000/blog/2025/disparities/"><![CDATA[<iframe style="width:110%;height:600px;border:none;overflow:hidden;" src="/assets/images/disparities_covid/mobility-country.html"></iframe>
+
+<p>When the COVID-19 pandemic arrived in 2020, people across the world drastically changed their daily movements. But not everyone could change in the same way. In developing countries, where large parts of the population rely on informal jobs and long commutes, staying at home was often not an option.</p>
+
+<p>In our paper published in <em>EPJ Data Science</em>, we analyzed anonymized GPS data from <strong>281 million users across six middle-income countries</strong>—Brazil, Colombia, Mexico, South Africa, Indonesia, and the Philippines—between March and December 2020. By combining mobility data with census-based wealth indices, we uncovered stark inequalities in how different socioeconomic groups responded to the pandemic.</p>
+
+<hr />
+
+<h2 id="self-isolation-at-home">Self-Isolation at Home</h2>
+
+<p>Staying home was one of the first lines of defense against the virus. Yet, not all groups could afford it.</p>
+
+<ul>
+  <li>People living in <strong>high-wealth neighborhoods</strong> were <strong>252% more likely</strong> to self-isolate compared to the pre-pandemic baseline.</li>
+  <li>In contrast, those in <strong>low-wealth neighborhoods</strong> saw only a <strong>141% increase</strong>.</li>
+</ul>
+
+<p>That’s a <strong>111 percentage-point gap</strong>, visible consistently across all six countries.</p>
+
+<p><img src="/assets/images/disparities_covid/self_isolation.png" alt="Change in self-isolation rates by wealth group" style="width:500px;" /></p>
+
+<p>The ability to work from home, access to digital infrastructure, and greater financial security all made it easier for wealthier households to comply with restrictions, while poorer groups remained exposed.</p>
+
+<hr />
+
+<h2 id="relocation-to-rural-areas">Relocation to Rural Areas</h2>
+
+<p>Another striking inequality emerged in <strong>urban flight</strong>.</p>
+
+<ul>
+  <li>Users from high-wealth neighborhoods were <strong>49 percentage points more likely</strong> to relocate to rural areas than their low-wealth counterparts.</li>
+  <li>This pattern was most pronounced in South Africa, with an 80-point gap.</li>
+</ul>
+
+<p><img src="/assets/images/disparities_covid/relocation.png" alt="Urban-to-rural relocation flows by wealth group" style="width:500px;" /></p>
+
+<p>Wealthier groups could escape dense urban centers, while poorer groups had fewer options, remaining in the most affected areas.</p>
+
+<hr />
+
+<h2 id="commuting-and-economic-stress">Commuting and Economic Stress</h2>
+
+<p>Commuting patterns revealed perhaps the clearest link between mobility and inequality.</p>
+
+<ul>
+  <li>High-wealth users stopped commuting at a rate <strong>30 percentage points higher</strong> than low-wealth users.</li>
+  <li>Among low-wealth residents, those who worked in <strong>high-wealth neighborhoods</strong> were <strong>37 percentage points more likely</strong> to stop commuting than those working in low-wealth areas.</li>
+</ul>
+
+<p><img src="/assets/images/disparities_covid/commuting.png" alt="Commuting reductions by home and workplace wealth" style="width:500px;" /></p>
+
+<p>This meant that workers in vulnerable areas not only faced job insecurity but were also disproportionately hit when public transport was shut down, as they often had the longest commutes.</p>
+
+<hr />
+
+<h2 id="the-role-of-policy">The Role of Policy</h2>
+
+<p>Most containment policies—school closures, workplace restrictions, and transport shutdowns—were implemented country-wide. But their effects were <strong>unequal</strong>.</p>
+
+<ul>
+  <li><strong>Public transport closures</strong> particularly hurt low-wealth commuters traveling to high-wealth neighborhoods.</li>
+  <li>In contrast, wealthier residents were more responsive to case incidence, adjusting behavior as infections rose.</li>
+</ul>
+
+<p><img src="/assets/images/disparities_covid/policy_effects.png" alt="Impact of policy restrictions on commuting" style="width:500px;" /></p>
+
+<p>This highlights how blanket policies can deepen existing inequalities if not designed with vulnerable groups in mind.</p>
+
+<hr />
+
+<h2 id="lessons-learned">Lessons Learned</h2>
+
+<p>Our findings show that:</p>
+
+<ol>
+  <li><strong>Mobility inequality persisted throughout 2020</strong>—even as restrictions eased, wealth gaps in self-isolation, relocation, and commuting remained.</li>
+  <li><strong>Workers from low-wealth neighborhoods commuting to high-wealth areas bore the greatest burden</strong>, losing jobs or being cut off from transport.</li>
+  <li><strong>Mobile data can help</strong> identify these disparities in real time, offering a way to design place-based policies when individual-level information isn’t available.</li>
+</ol>
+
+<hr />
+
+<p>The pandemic forced everyone to change how they moved, but it did not do so equally. By using large-scale GPS data across continents, we show that <strong>mobility inequality is a critical dimension of vulnerability in crises</strong>. Future responses must take these disparities into account, ensuring that the burden of protecting public health does not fall most heavily on those least able to bear it.</p>]]></content><author><name></name></author><category term="complex_systems" /><category term="mobility covid-19 inequality gps developing-countries" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Google Gemini updates: Flash 1.5, Gemma 2 and Project Astra</title><link href="http://localhost:4000/fr-ca/blog/2024/google-gemini-updates-flash-15-gemma-2-and-project-astra/" rel="alternate" type="text/html" title="Google Gemini updates: Flash 1.5, Gemma 2 and Project Astra" /><published>2024-05-14T00:00:00-07:00</published><updated>2024-05-14T00:00:00-07:00</updated><id>http://localhost:4000/blog/2024/google-gemini-updates-flash-15-gemma-2-and-project-astra</id><content type="html" xml:base="http://localhost:4000/blog/2024/google-gemini-updates-flash-15-gemma-2-and-project-astra/"><![CDATA[<p>May 14, 2024
+          We’re introducing a series of updates across the Gemini family of models, including the new 1.5 Flash, our lightweight model for speed and efficiency, and Project Astra, our vision for the future of AI assistants.
+        In December, we launched our first natively multimodal model Gemini 1.0 in three sizes: Ultra, Pro and Nano. Just a few months later we released 1.5 Pro, with enhanced performance and a breakthrough long context window of 1 million tokens.Developers and enterprise customers have been putting 1.5 Pro to use in incredible ways and finding its long context window, multimodal reasoning capabilities and impressive overall performance incredibly useful.We know from user feedback that some applications need lower latency and a lower cost to serve. This inspired us to keep innovating, so today, we’re introducing Gemini 1.5 Flash: a model that’s lighter-weight than 1.5 Pro, and designed to be fast and efficient to serve at scale.Both 1.5 Pro and 1.5 Flash are available in public preview with a 1 million token context window in Google AI Studio and Vertex AI. And now, 1.5 Pro is also available with a 2 million token context window via waitlist to developers using the API and to Google Cloud customers.We’re also introducing updates across the Gemini family of models, announcing our next generation of open models, Gemma 2, and sharing progress on the future of AI assistants, with Project Astra.Context lengths of leading foundation models compared with Gemini 1.5’s 2 million token capability1.5 Flash is the newest addition to the Gemini model family and the fastest Gemini model served in the API. It’s optimized for high-volume, high-frequency tasks at scale, is more cost-efficient to serve and features our breakthrough long context window.While it’s a lighter weight model than 1.5 Pro, it’s highly capable of multimodal reasoning across vast amounts of information and delivers impressive quality for its size.The new Gemini 1.5 Flash model is optimized for speed and efficiency, is highly capable of multimodal reasoning and features our breakthrough long context window.1.5 Flash excels at summarization, chat applications, image and video captioning, data extraction from long documents and tables, and more. This is because it’s been trained by 1.5 Pro through a process called “distillation,” where the most essential knowledge and skills from a larger model are transferred to a smaller, more efficient model.Read more about 1.5 Flash in our updated Gemini 1.5 technical report, on the Gemini technology page, and learn about 1.5 Flash’s availability and pricing.Over the last few months, we’ve significantly improved 1.5 Pro, our best model for general performance across a wide range of tasks.Beyond extending its context window to 2 million tokens, we’ve enhanced its code generation, logical reasoning and planning, multi-turn conversation, and audio and image understanding through data and algorithmic advances. We see strong improvements on public and internal benchmarks for each of these tasks.1.5 Pro can now follow increasingly complex and nuanced instructions, including ones that specify product-level behavior involving role, format and style. We’ve improved control over the model’s responses for specific use cases, like crafting the persona and response style of a chat agent or automating workflows through multiple function calls. And we’ve enabled users to steer model behavior by setting system instructions.We added audio understanding in the Gemini API and Google AI Studio, so 1.5 Pro can now reason across image and audio for videos uploaded in Google AI Studio. And we’re now integrating 1.5 Pro into Google products, including Gemini Advanced and in Workspace apps.Read more about 1.5 Pro in our updated Gemini 1.5 technical report and on the Gemini technology page.Gemini Nano is expanding beyond text-only inputs to include images as well. Starting with Pixel, applications using Gemini Nano with Multimodality will be able to understand the world the way people do — not just through text, but also through sight, sound and spoken language.Read more about Gemini 1.0 Nano on Android.Today, we’re also sharing a series of updates to Gemma, our family of open models built from the same research and technology used to create the Gemini models.We’re announcing Gemma 2, our next generation of open models for responsible AI innovation. Gemma 2 has a new architecture designed for breakthrough performance and efficiency, and will be available in new sizes.The Gemma family is also expanding with PaliGemma, our first vision-language model inspired by PaLI-3. And we’ve upgraded our Responsible Generative AI Toolkit with LLM Comparator for evaluating the quality of model responses.Read more on the Developer blog.As part of Google DeepMind’s mission to build AI responsibly to benefit humanity, we’ve always wanted to develop universal AI agents that can be helpful in everyday life. That’s why today, we’re sharing our progress in building the future of AI assistants with Project Astra (advanced seeing and talking responsive agent).To be truly useful, an agent needs to understand and respond to the complex and dynamic world just like people do — and take in and remember what it sees and hears to understand context and take action. It also needs to be proactive, teachable and personal, so users can talk to it naturally and without lag or delay.While we’ve made incredible progress developing AI systems that can understand multimodal information, getting response time down to something conversational is a difficult engineering challenge. Over the past few years, we’ve been working to improve how our models perceive, reason and converse to make the pace and quality of interaction feel more natural.Building on Gemini, we’ve developed prototype agents that can process information faster by continuously encoding video frames, combining the video and speech input into a timeline of events, and caching this information for efficient recall.By leveraging our leading speech models, we also enhanced how they sound, giving the agents a wider range of intonations. These agents can better understand the context they’re being used in, and respond quickly, in conversation.With technology like this, it’s easy to envision a future where people could have an expert AI assistant by their side, through a phone or glasses. And some of these capabilities are coming to Google products, like the Gemini app and web experience, later this year.We’ve made incredible progress so far with our family of Gemini models, and we’re always striving to advance the state-of-the-art even further. By investing in a relentless production line of innovation, we’re able to explore new ideas at the frontier, while also unlocking the possibility of new and exciting Gemini use cases.Learn more about Gemini and its capabilities.
+            Your information will be used in accordance with
+            Google’s privacy policy.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      Done. Just one step more.
+    
+      Check your inbox to confirm your subscription.
+    You are already subscribed to our newsletter.
+    You can also subscribe with a
+    different email address
+    
+    .
+    
+  Let’s stay in touch. Get the latest news from Google in your inbox.
+          Follow Us
+</code></pre></div></div>]]></content><author><name></name></author><summary type="html"><![CDATA[We’re sharing updates across our Gemini family of models and a glimpse of Project Astra, our vision for the future of AI assistants.]]></summary></entry><entry><title type="html">Displaying External Posts on Your al-folio Blog</title><link href="http://localhost:4000/fr-ca/blog/2022/displaying-external-posts-on-your-al-folio-blog/" rel="alternate" type="text/html" title="Displaying External Posts on Your al-folio Blog" /><published>2022-04-23T16:20:09-07:00</published><updated>2022-04-23T16:20:09-07:00</updated><id>http://localhost:4000/blog/2022/displaying-external-posts-on-your-al-folio-blog</id><content type="html" xml:base="http://localhost:4000/blog/2022/displaying-external-posts-on-your-al-folio-blog/"><![CDATA[<h3>External Posts on Your al-folio Blog</h3>
+<p>If you prefer publishing blog posts on medium.com or other external sources, starting version v0.5.0, <a href="https://github.com/alshedivat/al-folio">al-folio</a> lets you to display your external posts in the blog feed of your website! 🎉🎉</p>
+<p>Configuring external sources of super simple. After upgrading to v0.5.0, just add the following section to your _config.yml:</p>
+<pre>external_sources:<br />  - name: medium.com  # name of the source (arbitrary string)<br />    rss_url: <a href="https://medium.com/@al-folio/feed">https://medium.com/@&lt;your-medium-username&gt;/feed</a></pre>
+<p>The example above adds your medium.com blog post feed as an external source. But you can add arbitrary RSS feeds as sources.</p>
+<p>Any questions or suggestions? 👉 Start <a href="https://github.com/alshedivat/al-folio/discussions">a discussion on GitHub</a>!</p>
+<p><img src="https://medium.com/_/stat?event=post.clientViewed&amp;referrerSource=full_rss&amp;postId=b60a1d241a0a" width="1" height="1" alt="" /></p>]]></content><author><name></name></author></entry><entry><title type="html">Distanciamiento Social y Auto-aislamiento en épocas de COVID-19</title><link href="http://localhost:4000/fr-ca/blog/2020/SIS/" rel="alternate" type="text/html" title="Distanciamiento Social y Auto-aislamiento en épocas de COVID-19" /><published>2020-03-13T00:00:00-07:00</published><updated>2020-03-13T18:33:37-07:00</updated><id>http://localhost:4000/blog/2020/SIS</id><content type="html" xml:base="http://localhost:4000/blog/2020/SIS/"><![CDATA[<p><img src="/assets/images/covidSIS/opinion_cycle_2.gif" alt="lattice" style="width:280px;" /></p>
+
+<h3>TLDR;</h3>
+<p>El auto-aislamiento es efectivo para controlar la propagación de una enfermedad viral. La alta movilidad a la que estamos acostumbrados implica el contacto o cercanía con un mayor número de personas conocidas y otras tantas aleatorias durante el periodo de translado, este mayor número de contactos y su naturaleza estocástica produce un gran impacto en la contención de una epidemia.</p>
+
+<p>La canción de este post:</p>
+<iframe src="https://open.spotify.com/embed/track/5r7uA7AxZi1tSBr8Kj4svH" width="300" height="100" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+<p>Esta entrada del blog está altamente inspirada por esta TED talk de Alanna Shaik</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Fqw-9yMV0sI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<p>También cabe destacar que para nada soy un epidemiólogo pero he tomado clases y colaborado con algunos de ellos y que son muy reconocidos en su área. Aquí les dejo sus cuentas de Twitter <a href="https://twitter.com/LHDnets">Laurent Hébert-Dufresne</a>, <a href="https://twitter.com/svscarpino">Samuel V. Scarpino</a>, <a href="https://twitter.com/vcolizza">Vittoria Colizza</a>, <a href="https://twitter.com/BMAlthouse">Ben Althouse</a> y en español <a href="https://twitter.com/gomezgardenes">Jesús Gomez-Gardeñes</a>, si tienen dudas grandes al respecto les sugiero leer lo que ellos escriben o contactarlos si tienen alguna duda científica.</p>
+
+<p>Cabe aclarar que todo lo que van a leer aquí son ejemplos, lo que llamamos “modelos de juguete”, pero sirven para entender las dinámicas de este tipo de sistemas. No escogí nada para que se viera más dramático ni hice algún cambio entre simulaciones, todas tienen los mismos parámetros.</p>
+
+<h2 id="qué-es-el-coronavirus-y-qué-es-el-covid-19">¿Qué es el Coronavirus? y ¿qué es el COVID-19?</h2>
+
+<p>Los Coronavirus es una familia de virus zoonóticos (se transmiten entre animales y humanos), se llaman así porque físicamente tienen un halo de proteinas en forma de corona. Existen distintos tipos de ellos y en los últimos años varios han tomado cierta relevancia como es el caso del MERS (Middle East Respiratory Syndrome), el SARS (Severe Acute Respiratory Syndrome) y actualmente el COVID-19 (Coronavirus Disease 2019). El origen de este último se rastreó hasta un mercado mojado en la ciudad de Wuhan en China (esto seguro ya lo sabías) y probablemente el contagio vino de un murciélago o un pangolín, todavía no se ha determinado pero los murciélagos parecen llevar la delantera dado que se encontró un tipo de coronavirus en ellos que comparte el <a href="https://www.nature.com/articles/s41586-020-2012-7">96% de su material genético con el encontrado en humanos</a>. Aprovechando el enlace anterior al artículo del genonma del coronavirus, es importante mencionar que varias revistas científicas que usualmente cobran por leer los artículos han puesto los relacionados con el COVID-19 en una ventana gratuita (estoy en contra de las revistas de paga, pero al menos…).</p>
+
+<h2 id="cuáles-son-los-síntomas">¿Cuáles son los síntomas?</h2>
+<p>El COVID-19 en particular tipicamente causa malestares respiratorios leves a moderados muy similares a los de una gripe, como lo son:</p>
+
+<ul>
+  <li>Tos</li>
+  <li>Fiebre</li>
+  <li>Falta de aliento</li>
+</ul>
+
+<p>Un gran problema es que los síntomas aparecen hasta más de dos semanas después de contraer el virus, mientras tanto aquellas personas que no presentan síntomas pero son portadoras potencialmente están contagiando a otros (se sigue evaluando este tema). La mayoría de las personas contagiadas se recuperan por su cuenta pero hay un número de personas en estado vulnerable como los adultos mayores, gente con obesidad, diabetes, enfermedades respiratorias, etc. a los que les causa complicaciones y deben ser atendidos en hospitales.</p>
+
+<p>A esta altura ya todos sabemos que la tasa de mortalidad incrementa con la edad de la persona (click en la imagen para leer el artículo de Vox)</p>
+
+<p><a href="https://www.vox.com/2020/3/12/21173783/coronavirus-death-age-covid-19-elderly-seniors"><img src="https://cdn.vox-cdn.com/thumbor/jttKYhporW2qkpZhceZR9sqJ3b8=/0x0:1804x910/920x0/filters:focal(0x0:1804x910):format(webp):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/19788829/estimate_case_fatality_hubei_age.jpg" alt="lattice" style="width:650px;" /></a></p>
+
+<p>Esto se debe a las condiciones preexistentes que mencionaba antes, el sistema inmune suele verse disminuido con la edad.</p>
+
+<p>Como dije anteriormente, en la mayoría de los casos los síntomas son leves y menos del 5% son críticos</p>
+
+<p><a href="https://medium.com/@tomaspueyo/coronavirus-act-today-or-people-will-die-f4d3d9cd99ca"><img src="https://miro.medium.com/max/1830/1*-O84hhKDRHmgMVAslvgj-Q.png" alt="lattice" style="width:650px;" /></a></p>
+
+<p>Así que hay que tener calma en estos momentos, no parece ser la pandemia que nos va aniquilar. Pero es <strong>Importantísimo</strong> tener medidas <em>profilácticas</em>:</p>
+
+<ul>
+  <li>Evitar el contacto con otros</li>
+  <li>Cubrirse al toser o estornudar (Con el codo, por favor)</li>
+  <li>No viajar cuando se esté enfermo</li>
+  <li>Lavarse bien las manos</li>
+  <li>Limpiar y desinfectar las cosas que tocamos regularmente (perillas, teléfono, mesa, compu, apagadores…)</li>
+</ul>
+
+<p>Los contagios se dan cuando inhalamos lo que otros tosen o estornudan y el virus dura vivo al rededor de 9 días en superficies. Así que cuando tocamos objetos infectados y luego llevamos las manos a la cara es posible que estemos contagiándonos.</p>
+
+<h2 id="yo-soy-una-persona-joven-y-sana-voy-a-seguir-mi-vida-normal-pues-no-estoy-en-riesgo">Yo soy una persona joven y sana, voy a seguir mi vida normal pues no estoy en riesgo</h2>
+
+<p>Puede ser que pienses de esta manera pero esto solo es un reflejo de tu falta de empatía. Es probable que para ti solo parezca un resfriado feo pero ¿con cuántas personas vulnerables convives?, más allá ¿con cuántas personas vulnerables conviven tú y las otras personas a tu al rededor?.</p>
+
+<p>Si muchas personas se contagian al mismo tiempo, los sistemas de salud se verán saturados y no podrá haber una respuesta eficiente para todos los casos, lo cual aumentaría la tasa de mortalidad. Por eso es importante actuar desde <strong>YA</strong>, es imperativo <em>aplanar la curva</em>.</p>
+
+<h2 id="cómo-que-aplanar-la-curva">¿Cómo que aplanar la curva?</h2>
+
+<p>Con <em>la curva</em> nos referimos al número de personas que requieren de atencion médica a lo largo del tiempo. Pensemos en una situación en la que el total de personas que van a requerir atención médica es fijo, por ejemplo, sin importar si se toman medidas 100 personas van a necesitar ser ingresadas al hospital en 10 días, pero si no existen acciones tempranas 80 de ellas lo necesitarán al segundo día mientras que con medidas de contención se alcanza un máximo de 20 al cuarto día. Puede que no suene importante porque de todos modos 100 personas van a necesitar atención médica, pero digamos que el hospital solo puede admitir a 50 personas a la vez, entonces en el primer escenario hay 30 personas vulnerables que no son atendidas y en el segundo se le puede dar atención a todos. Tal vez sea más facil entenderlo con la siguiente imagen.</p>
+
+<p><a href="https://flowingdata.com/2020/03/09/flatten-the-coronavirus-curve/"><img src="https://i2.wp.com/flowingdata.com/wp-content/uploads/2020/03/flatten-the-curve-smaller.gif" alt="lattice" style="width:650px;" /></a></p>
+
+<p>Las líneas naranjas marcan la capacidad de tratamiento, la línea negra punteada dice el número de personas que requerirían atención si no se toman medidas de contención y el desplazamiento de la curva muestra la distribución de personas que requieren atención a lo largo del tiempo dependiendo del éxito de las medidas preventivas, la parte morada indica los casos no tratados y por ende de alta mortandad contra el área verde que son los casos tratados.</p>
+
+<h2 id="bueno-y-cómo-aplanamos-la-curva">Bueno, ¿y cómo aplanamos la curva?</h2>
+
+<p>Tal vez ya escuchamos el término <strong>R0</strong> en este contexto y sabemos que es un número entre 2 y 3 para el COVID-19 pero no sabemos bien lo que significa. En términos básicos nos dice que cada persona infectada va a contagiar en promedio a R0 número de personas. Es decir, si el R0 es de 3, cada persona infectada en promedio va a contagiar a otras tres. Para contener el esparcimiento debemos de llegar a un R0 menor a 1, es decir que en promedio una persona no contagie a más de una otra.</p>
+
+<p><strong>Distanciamiento social.</strong> Ya sé, suena horrible y no nos gusta (a algunos no nos molesta). Pero la mejor forma para contener esto es mantenerse aislado lo más posible, durante el tiempo necesario hasta que la enfermedad entre en recesión. No suena bien, pero es lo que tenemos. En México, por ejemplo, con la falta de medicamentos que ya tenemos, el desamparo a la gente con necesidad de atención médica, la eliminación del Seguro Popular sin la instrumentación de algún remplazo, definitivamente no nos podemos dar el lujo de probar hasta dónde aguanta nuestro sector salud.</p>
+
+<p>Evidencia empirica sugiere que la mejor manera de actuar es de una forma “bottom-up” es decir, que nosotros como sociedad nos organicemos para tomar medidas de distanciamiento social como trabajar desde casa, evitar ir a conciertos masivos (guiño guiño VL2020) en fin, todo lo que esté en nuestras manos para reducir nuestros contactos diarios. En contraste la forma “top-down” es cuando el gobierno toma medidas de manera mandatoria, poniendo a gente en cuarentena o cerrando carreteras, pero aunque suene a que son buenas medidas de contención puede ser que no lo sean, si una persona quiere evitar el riesgo de ser puesta en cuarentena, muy probablemente no avise que está enferma o si cerramos las vías de comunicación, la gente va a seguir viajando pero de una manera que dificulta el rastreo de rutas y puede generar nuevos brotes.</p>
+
+<h2 id="ok-ollin-ya-muéstrame-las-simulaciones-todo-eso-lo-leo-en-otro-lado">OK Ollin, ya muéstrame las simulaciones… todo eso lo leo en otro lado…</h2>
+
+<p>Está bien, pero primero hablemos del modelo epidemiológico más básico:</p>
+
+<h2 id="modelo-si-susceptible-infectado">Modelo SI: Susceptible-Infectado</h2>
+
+<p>Tal cual como el mismo nombre lo indica, es un modelo donde tenemos dos tipos de sujetos. Los susceptibles que son aquellos propensos a enfermarse y los infectados que son los que contraen alguna enfermedad. Algo así como el dicho: “Hay dos tipos de ciclistas, los que ya se cayeron y los que se van a caer”. Este modelo nos sirve para ver qué tan rápido una población se verá infectada por completo.</p>
+
+<p>Recordemos la imagen con la que abrí este blog</p>
+
+<p><img src="/assets/images/covidSIS/opinion_cycle_2.gif" alt="lattice" style="width:280px;" /></p>
+
+<p>Con ella imaginemos que tenemos personas con los dos estados (susceptible e infectado) y que cada infectado puede contagiar a sus vecinos (pues están en contacto) con una cierta probabilidad. Algo así:</p>
+
+<p><img src="/assets/images/covidSIS/1site.gif" alt="sznajd" style="width:280px;" /></p>
+
+<p>Entonces, digamos que tenemos una cierta población de 40,000 personas que viven en una retícula como la mostrada y no se mueven para nada. Es decir sus contactos siempre son con las mismas personas. Esta población de pronto tiene 4 casos de COVID-19 y cada infectado contagia a entre 1 y 3 de sus vecinos con una probabilidad de tan solo 1%. Veamos cuál sería la dinámica a lo largo de 1000 iteraciones:</p>
+
+<p><img src="/assets/images/covidSIS/simple_SI.gif" alt="1s05" height="500" width="1000" /></p>
+
+<p>Podemos ver que la población infectada empieza a crecer y se forman grupos de infectados, aunque no hay crecimiento exponencial. Ahora pensemos en que así no son nuestros días regularmente. Por lo general al menos estamos en dos espacios distintos, puede ser casa y escuela o trabajo o gimnasio o lo que quieran. Entonces podemos hacer una simulación idéntica a la pasada pero en la que las mismas personas estén en dos puntos diferentes a lo largo del tiempo. Es decir, en la cuadrícula vamos a empezar en un lugar fijo, luego cada persona va a cambiar de lugar, por lo tanto va a tener diferentes vecinos y después va a regresar a su punto original. Con esto vamos a simular el estar en casa y luego en el trabajo y luego en casa y luego en el trabajo y así cada 150 iteraciones hasta completar las 1000.</p>
+
+<p><img src="/assets/images/covidSIS/two_sites_SI.gif" alt="1s05" height="500" width="1000" /></p>
+
+<p>Ahora podemos ver que el número de infectados llegó casi a la totalidad en los mismos 1000 pasos que la simulación anterior. No se cambió nada en los parámetros, la única diferencia es que cada 150 pasos cambiamos de vecinos de manera intercalada, siempre regresando a los mismos puntos. Notamos que al rededor del paso 800 hay un punto de inflexión que es nuestro punto de saturación.</p>
+
+<p>Nos podemos ver más sofisticados aún y pensar que esos no son nuestros únicos contactos del día. Nosotros viajamos en metro, combi y/o camión y quién sabe quién me toque al lado o aún más, no sabemos quién ha tocado el barandal del que vamos agarrados desde hace 9 días a la fecha. Entonces tenemos un regimen de contactos aleatorios en nuestro día. Lo modelamos como posición fija 1, contactos aleatorios durante un periodo corto, posición fija 2, contactos aleatorios otra vez, regresamos a posición fija 1 y continuamos en forma de ciclo hasta completar los 1000 pasos.</p>
+
+<p><img src="/assets/images/covidSIS/double_commute_SI.gif" alt="1s05" height="500" width="1000" /></p>
+
+<p>Otra vez, no cambiamos nada más que los contactos aleatorios y ahora nuestro punto de saturación se movió cerca del paso 700. Es decir, con la misma probabilidad de infección la diferencia entre los resultados de continuar con nuestros contactos personales normales y tomar medidas preventivas como el distanciamiento social influyen enormemente en qué tan rápido se esparce la infección y por lo mismo depende mucho de nosotros el aplanar la curva.</p>
+
+<h2 id="ollin-esto-no-es-nada-realista-además-la-gente-se-recupera-no-se-queda-enferma-como-en-el-sida">Ollin, esto no es nada realista. Además la gente se recupera, no se queda enferma como en el SIDA.</h2>
+
+<p>Bueno, eso ya lo sé… por eso les dije que eran modelos de juguete pero nos sirven muchísimo para entender como la dinámica de esta enfermedad se ve afectada por nuestra propia dinámica humana.</p>
+
+<h2 id="modelo-sis-susceptible-infectado-susceptible">Modelo SIS: Susceptible-Infectado-Susceptible</h2>
+
+<p>Este modelo es ligeramente más complicado pues toma en cuenta que la gente se recupera con cierta probabilidad. Existen otros como el SIR o SIRS donde el otro estado (R) se refiere a los recuperados, es decir, se entra a un punto en donde al recuperarse de la enfermedad no puede volver a ser infectado nunca o durante un tiempo (como varicela o la gripe), existen casos de reincidencia de COVID-19 en un periodo muy corto de tiempo por lo cual me limité a hacer las simulaciones del SIS.</p>
+
+<p>Todos los parámetros son compartidos con los modelos anteriores, pero ahora se tiene una probabilidad de recuperación del 0.1% en cada paso, parece poco pero cumulativamente a lo largo del tiempo es bastante alta. Empecemos con el modelo estático.</p>
+
+<p><img src="/assets/images/covidSIS/simple_SIS.gif" alt="1s05" height="500" width="1000" /></p>
+
+<p>Como era de esperarse es bastante similar al SI pero el número de infectados es aún menor.</p>
+
+<p>Ahora veamos qué pasa si los agentes se pueden encontrar en dos distintos sitios.</p>
+
+<p><img src="/assets/images/covidSIS/two_sites_SISerratas.gif" alt="1s05" height="500" width="1000" /></p>
+
+<p>En este nuevo modelo sí encontramos muy distintos comportamientos entre el SI y el SIS, como podemos ver, el contagio llega a la fase exponencial más tarde y es menos pronunciada que en el SI. Este es un resultado muy interesante porque nos dice que el hecho de tener tan solo dos interacciones distintas se incurre en un cambio de fase. Ahora veamos qué ocurre cuando entramos en contacto con personas aleatoriamente durante un periodo corto de tiempo. Aunque es importante notar que llegamos al punto de saturación hasta casi el final de las iteraciones.</p>
+
+<p><img src="/assets/images/covidSIS/double_commute_SIS.gif" alt="1s05" height="500" width="1000" /></p>
+
+<p>En este modelo el efecto que tiene la recuperación es prácticamente nulo para la forma de la curva, solo evitamos que la población total se encuentre infectada al mismo tiempo. Es importantísimo notar que en contrario con lo que sucede en el modelo anterior, aquí llegamos muy rápido al punto de saturación, es decir, la velocidad a la que se propaga la enfermedad es mucho más alta. Esto sorprende más si tomamos en cuenta el efecto que tuvo introducir la tasa de recuperación para el modelo donde nos encontramos solo en dos lugares (como si nos teletransportáramos). Dichos resultado sugiere que hay un cierto valor crítico para el cual hay un cambio de fase (tal cual como en el modelo Ising), pero esa exploración la dejaremos para después porque va más allá del alcance de lo que quiero transmitir.</p>
+
+<h2 id="modelo-sir-susceptible-infectado-recuperado">Modelo SIR: Susceptible-Infectado-Recuperado</h2>
+<h3 id="ollin-hablaste-de-aplanar-la-curva-pero-en-estos-modelos-no-aparece-eso">Ollin, hablaste de aplanar la curva pero en estos modelos no aparece eso</h3>
+
+<p>Bueno, para eso tenemos que tomar en cuenta el hecho de que la gente se recupera y pues en general hay un tiempo en el que los recuperados son menos susceptibles que los que nunca han sido infectados y esto es multifactorial, puede ser porque siguen mayores medidas de precaución o porque su sistema inmune ya sabe como controlar ese virus. Entonces, podemos crear un modelo en el que después de que la gente se infecta, se recupera y no vuelve a ser susceptible.</p>
+
+<p>Para el caso estático</p>
+
+<p><img src="/assets/images/covidSIS/simple_SIRslow.gif" alt="1s05" height="500" width="1000" /></p>
+
+<p>Para ver un ejemplo más dramático y donde sí veamos realmente una curva con máximo,  aumentemos la tasa de contagio a 10% y la recuperación a 1%.</p>
+
+<p><img src="/assets/images/covidSIS/simple_SIR.gif" alt="1s05" height="500" width="1000" /></p>
+
+<p>Estas tasas solo las usaremos para este ejemplo, pero veamos lo que sucede con las originales cuando cambiamos de lugares.</p>
+
+<p><img src="/assets/images/covidSIS/two_sites_SIRslow.gif" alt="1s05" height="500" width="1000" /></p>
+
+<p>Notemos que la fase exponencial entra cerca de la iteración 600 hasta llegar al punto de saturación cerca de la 900 con un valor máximo ligeramente arriba de los 30,000 infectados.</p>
+
+<p>Pero, ¿qué ocurre si tenemos contactos aleatorios en esta situación?</p>
+
+<p><img src="/assets/images/covidSIS/double_commute_SIRslow.gif" alt="1s05" height="500" width="1000" /></p>
+
+<p>El caso es realmente muy parecido al modelo anterior, la diferencia más grande es que existe un (ligeramente) mayor número de infectados. Pero la gran moraleja en esta historia se encuentra al ver la comparación de las curvas donde no hay movimiento y donde sí lo hay. Incluso teniendo una enfermedad 10 veces más contagiosa no llegamos a tener más de 10,000 casos si nos mantenemos relativamente aislados, además que la distribución es mucho menos sesgada, es decir no se concentra hacia un lado en el tiempo. Esto nos permite una mejor atención médica para todos los casos que con los modelos donde hay un mayor número de contactos entre individuos.</p>
+
+<h2 id="en-conclusión">En conclusión</h2>
+
+<p>El resumen aquí es muy sencillo, no hay que tomar a la ligera las medidas de contención de la pandemia. Entre más pronto actuemos es mejor, no entren en pánico pero por el bien de las personas que nos rodean sean precavidos y tomen las medidas de seguridad necesarias. Si les es posible trabajar desde casa, háganlo. Eviten lugares donde tengan que estar a menos de dos metros entre personas (ya sé que es difícil pues el transporte público no funciona así). Desinfecten todo lo que tocan regularmente y lávense las manos. El distanciamiento social es la mejor arma que tenemos actualmente, esperemos que se desarrollen vacunas pronto pero por el momento sean empáticos y manténganse alerta. No vayan al hospital directamente si sospechan que están infectados, la mayoría de los paises ya cuentan con <a href="https://cnnespanol.cnn.com/2020/03/06/conoce-donde-puedes-encontrar-ayuda-en-tu-pais-para-presuntos-casos-de-coronavirus/">líneas de atención</a>.</p>
+
+<p>Revisen de nuevo las simulaciones que les presenté y vean la gran diferencia que puede hacer el hecho de minimizar los contactos. Recuerden que este es un ejercicio de empatía y que aunque nosotros no nos veamos gravemente afectados muchas otras personas en situaciones precarias pueden sufrir mucho. Por el momento quiéranse de lejitos. Sean buenos entre ustedes.</p>
+
+<p>Si lees esto y hay más cosas que quieras agregar, por favor escríbe. También si pueden y quieren dejar comentarios lo pueden hacer aquí abajo, recuerden que no soy un experto pero me interesa el tema.</p>
+
+<h3 id="cuídense-aplanemos-esa-curva">Cuídense, aplanemos esa curva.</h3>]]></content><author><name></name></author><category term="complex_sytems" /><category term="cellular automata complex systems econophysics sznajd" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Listening to Communities During the Ebola Crisis</title><link href="http://localhost:4000/fr-ca/blog/2020/ebola/" rel="alternate" type="text/html" title="Listening to Communities During the Ebola Crisis" /><published>2020-02-07T00:00:00-08:00</published><updated>2020-09-08T18:33:37-07:00</updated><id>http://localhost:4000/blog/2020/ebola</id><content type="html" xml:base="http://localhost:4000/blog/2020/ebola/"><![CDATA[<p>Select a date, location, or topic to explore the data interactively:</p>
+<iframe style="width:110%;height:600px;border:none;overflow:hidden;" src="/assets/images/unmet/roberta_large_sentence_embeddings_6_topics.html"></iframe>
+
+<p>The 2014–2015 Ebola outbreak in West Africa was not only a health crisis—it was also a crisis of trust, survival, and unmet needs. International response strategies, designed from earlier smaller outbreaks, often clashed with local realities in Sierra Leone. Families hid the sick, burials were resisted, and communities distrusted authorities.</p>
+
+<p>What changed the course of the epidemic wasn’t just medical intervention, but <strong>listening to communities</strong>. Nearly 12,000 community visits were carried out by local mobilizers under the <strong>Social Mobilization Action Consortium (SMAC)</strong>. Instead of broadcasting top-down rules, mobilizers created dialogues, documenting what people feared, what they lacked, and how they wanted to act.</p>
+
+<p>In our paper published in <em>The Lancet Planetary Health</em>, we analyzed this unique dataset of community feedback to understand how unmet needs shaped behaviors during the epidemic.</p>
+
+<hr />
+
+<h2 id="needs-and-behaviors">Needs and Behaviors</h2>
+
+<p>We categorized community concerns into a framework of human needs:</p>
+
+<ul>
+  <li><strong>Basic needs</strong>: food, water, shelter</li>
+  <li><strong>Safety and security</strong>: fear of ambulances, chlorine spraying, teenage pregnancy, school closures</li>
+  <li><strong>Social support</strong>: trust and cooperation within the community</li>
+  <li><strong>Respect and pride</strong>: fairness, dignity, treatment of survivors</li>
+  <li><strong>Autonomy</strong>: freedom to decide, ability to act</li>
+  <li><strong>Capacity</strong>: tools, training, information to respond</li>
+</ul>
+
+<p>What emerged was clear: <strong>unsatisfied needs led to lower adoption of life-saving practices.</strong></p>
+
+<ul>
+  <li>Communities lacking <strong>capacity</strong> (like buckets, chlorine, training) reported 24% fewer safe burials and 34% fewer referrals to treatment within 24h.</li>
+  <li>Unsatisfied <strong>security needs</strong> were tied to fewer safe burials and referrals.</li>
+  <li>Even unmet <strong>basic needs</strong> like food shortages reduced treatment referrals.</li>
+</ul>
+
+<p><img src="/assets/images/unmet/needs_classification.png" alt="Needs classification diagram" style="width:500px;" /></p>
+
+<p>By contrast, when communities reported <strong>satisfaction of needs</strong>—through autonomy, respect, or collective action—safe behaviors became more common.</p>
+
+<hr />
+
+<h2 id="engagement-that-works">Engagement That Works</h2>
+
+<p>A crucial difference was observed between <strong>triggering visits</strong> (the first mobilizer meetings) and <strong>follow-up visits</strong>:</p>
+
+<ul>
+  <li><strong>Triggering visits</strong> often surfaced frustrations and unmet needs.</li>
+  <li><strong>Follow-up visits</strong> were associated with more satisfied needs and significantly more safe burials and treatment referrals.</li>
+</ul>
+
+<p>This shows the value of <strong>locally owned solutions</strong>. Communities didn’t just comply—they designed their own action plans, monitored progress, and adapted strategies. Mobilizers acted as connectors, not enforcers.</p>
+
+<p><img src="/assets/images/unmet/trends_needs.png" alt="Temporal trends in unmet vs satisfied needs" style="width:500px;" /></p>
+
+<p>This aligns with self-determination theory: people are more motivated to change when they feel ownership, respect, and collective agency.</p>
+
+<hr />
+
+<h2 id="maps-and-patterns">Maps and Patterns</h2>
+
+<p>Our analysis revealed strong spatial and temporal patterns in needs. For example:</p>
+
+<ul>
+  <li><strong>Unsatisfied autonomy and capacity</strong> peaked early in the outbreak.</li>
+  <li><strong>Basic needs</strong> (like food and water) were consistently expressed throughout.</li>
+  <li><strong>Satisfied needs</strong> emerged later, after resources and follow-ups were established.</li>
+</ul>
+
+<p><img src="/assets/images/unmet/spatial_trends.png" alt="Spatiotemporal maps of needs" style="width:500px;" /></p>
+
+<p>Urban areas like Freetown showed more satisfied needs than rural regions, reflecting inequalities in access to resources and support.</p>
+
+<hr />
+
+<h2 id="lessons-for-future-outbreaks">Lessons for Future Outbreaks</h2>
+
+<p>The key lessons from Sierra Leone’s Ebola crisis are:</p>
+
+<ol>
+  <li><strong>Unmet needs undermine response</strong> – food insecurity, fear, and lack of respect reduce adoption of safe behaviors.</li>
+  <li><strong>Community ownership matters</strong> – follow-up visits and local action plans were associated with greater behavior change.</li>
+  <li><strong>Real-time feedback is possible</strong> – our machine learning approach to classify thousands of community reports shows that monitoring needs can guide rapid response.</li>
+</ol>
+
+<p><img src="/assets/images/unmet/behavior_associations.png" alt="Associations between unmet needs and behaviors" style="width:500px;" /></p>
+
+<p>Future responses should treat communities as equal partners. Listening to concerns and enabling local solutions is not a “soft” addition to outbreak response—it is central to stopping transmission and building resilience.</p>
+
+<hr />
+
+<p>This work demonstrates that <strong>outbreaks are not only biological events but also deeply social ones</strong>. By paying attention to unmet needs, we can design responses that not only save lives but also strengthen trust, dignity, and collective capacity.</p>]]></content><author><name></name></author><category term="complex_systems" /><category term="ebola outbreak needs resilience community-engagement" /><summary type="html"><![CDATA[Select a date, location, or topic to explore the data interactively:]]></summary></entry><entry><title type="html">19S - Mexico’s Resilience in an Earthquake Event</title><link href="http://localhost:4000/fr-ca/blog/2019/Earthquake/" rel="alternate" type="text/html" title="19S - Mexico’s Resilience in an Earthquake Event" /><published>2019-10-06T00:00:00-07:00</published><updated>2019-10-06T18:33:37-07:00</updated><id>http://localhost:4000/blog/2019/Earthquake</id><content type="html" xml:base="http://localhost:4000/blog/2019/Earthquake/"><![CDATA[<p><img src="/assets/images/bike_figure.png" alt="bike figure" /></p>
+
+<p>Natural disasters represent a major disruptive event for a city’s homeostasis, driving its collective behavior patterns to change. While they are in all cases with regretful consequences, they are also motors for the emergence of cooperation and non-central coordination which directly impacts their resilience. In recent years social media data has been used to assess damage by natural disasters as well a a central part of social coordination. Here we present a study of the latest major earthquake in Mexico City (September 19 2017) using data from multiple sources in order to gain insights in the immediate effects and the collective memory, finding that physical resilience (mobility patterns) is higher than the emotional (social media) by returning to average mobility patterns within two weeks while still on the collective memory for almost a year.</p>
+
+<p>The official damages data set collected by The Federal Government through it’s Open Data Agency contains records of damaged and collapsed buildings as well as the civil response given by shelter allocation with information of the 74 of them across Mexico City. With that information we built a map of Mexico City divided by Voronoi polygons that represent the area where a particular shelter is the closest, and measure how the shelter’s density, given by the inverse of each cell area, scales with the population and damaged buildings densities in order to asses how optimally the self-organized distribution of shelters occurred, finding that the density of shelters scales proportionately with the population density as a power law with an Adjusted R-squared value of 0.57 and p-value of 1.54e-14. This scaling suggest that the shelter allocation was properly performed according to <a href="https://www.pnas.org/content/106/34/14236">this great paper by Jaegon Um, et al.</a> as it had a simmilar scaling to commercial facilities which are often displayed in an optimal position.</p>
+
+<p>In order to get those results we need to map the distribution of the shelters and find the geographical distribution where each one is the closest, then we find the AGEB’s (Área Geoestadística Básica/Basic Geostatistical Area) population that falls within the shelter centered Voronoi cell and assume a heterogenous distribution along the AGEB to count the percentage of people that would be living in the intersection of both areas. Having that is only a matter of looking at the ratio of the resulting population and the area of each Voronoi.</p>
+
+<p><img src="https://olangle.w3.uvm.edu/random/temblor/voronoi_density_prop.png" alt="act" style="width:500px;" /></p>
+
+<p>Above we have the resulting diagram where the damaged (yellow) and collapsed (red) buildings are also displayed. Again, each cell represents the are where a certain shelter is the closest. Then we can look at the scaling of the densities (shelter vs population)</p>
+
+<p><img src="https://olangle.w3.uvm.edu/random/temblor/density_scaling_prop.png" alt="act" style="width:500px;" /></p>
+
+<p>In order to measure the homeostasis of the city I took a look into the mobility given by a bike sharing service (Ecobici) usage patterns which distribution is very biased to certain medium high social class neighberhoods but as we can see in the following image is also where a large amount of damage happenend</p>
+
+<p><img src="https://olangle.w3.uvm.edu/random/temblor/voronoi_eco_damages_log_adjacent.png" alt="act" style="width:500px;" /></p>
+
+<p>The green dots represents each Ecobici station where bikes should be taken and returned and in this case the Voronoi cells are the are where a certain damaged building is closest.
+The very first thing to do is to look into the adoption of the service since it was first established. We can take a look at the monthly usage where we can see that it has fastly grown except for a small amount of time near the year of 2012 (elections time).</p>
+
+<p><img src="https://olangle.w3.uvm.edu/random/temblor/eco_monthly_usage.png" alt="act" style="width:500px;" /></p>
+
+<p>But that picture doesn’t give enough information to understand how the mobility patterns changed, we need more… maybe looking at specific weekdays</p>
+
+<p><img src="https://olangle.w3.uvm.edu/random/temblor/eco_daily_usage.png" alt="act" style="width:500px;" /></p>
+
+<p>This image really starts to grasp some information such as the fact that the service is being used near to 3 times more during the week days than on the weekends, and you can think that this might be because people uses this to get to their schools and jobs rather than just spreading time. Then we can ask ourselves how would a regular week usage look like, and the closest regular week to the earthquake would be the previous one (we want it to be as close as possible because we want to see how the patterns changed due the earthquake and no external reasons such as new or closed stations, more bikes, etc.).</p>
+
+<p><img src="https://olangle.w3.uvm.edu/random/temblor/eco_prev_week.png" alt="act" style="width:500px;" /></p>
+
+<p>This plot really starts to get interesting as there are clearly three peaks each day where we have a larger usage, a wild guess could be that they belong to the times where people travel to work, then to lunch and when they come back home. There is an issue using this week and that is the fact that the largest celebration in Mexico happened at that time, Independence Day (September 15-16) which means either people got to skip the office/school that day or got an early release and that’s why the Friday’s usage is so different to the other days, with only two peaks. Ok, but then… how does a day look like?</p>
+
+<p><img src="https://olangle.w3.uvm.edu/random/temblor/eco_prev_hour_usage.png" alt="act" style="width:500px;" /></p>
+
+<p>This is the representation of all the hourly travels made during the previous month and a half, this is all August and until September 18th but only for week days. This shows that there’s a time between midnight and 5 a.m. where there’s no service provided and after that it starts to being used with a large amount of travels between 7 and 9 a.m., then again at (Mexican) lunch time around 14-15 hours where also schools end the day, with a large new peak starting at 18 hours. It’s not super clear but the latest peak is the largest one of all three (is clearer if we compare the bars on the sides) and that might be because of a larger number of users returning home by bike or that leaving hours are more shared than arrivals.</p>
+
+<p>What happened on the Earthquake’s week was a large number of drops in usage, some people didn’t have to go to work, schools were closed as well as several streets in those places.</p>
+
+<p><img src="https://olangle.w3.uvm.edu/random/temblor/eco_earthquake_hour_usage.png" alt="act" style="width:500px;" /></p>
+
+<p>Now we see that there was some usage between midnight and 5 a.m. because the Ecobici service extended the operation hours to a full 24hrs in order to facilitate help where needed for two weeks. The usage was clearly not very normal. Which becomes more evident by looking at the hourly usage of that week.</p>
+
+<p><img src="https://olangle.w3.uvm.edu/random/temblor/eco_earthquake_week.png" alt="act" style="width:500px;" /></p>
+
+<p>As we can see, Monday was normal but something along 13:14 hrs on Tuesday happend that collapsed the system. Wednesday has a shape more similar to the weekends while on Thursday and Friday we can see that a begining of normal patters were happening but with a much smaller amount of travels. But there has to be a better way to understand and measure the pattern’s change! so what I did was to build a network (what a surprise!) with all the stations and nodes and the number of travels between them as weighted edges, then using a 6 week window previous to the earthquake as a baseline we compute (and normalize) a \(\tau\) Kendall rank correlation coefficient for the edges ranked by their weights between the given baseline and each day’s travel patterns after the earthquake which will be our measure of homeostasis. As Mondays are not the same as Fridays, the baseline and the comparison are for individual weekdays.</p>
+
+<p>The resulting homeostasis measure is</p>
+
+\[H = 1 - \tau\]
+
+<p><img src="https://olangle.w3.uvm.edu/random/temblor/homeostasis_tag.png" alt="act" style="width:500px;" /></p>
+
+<p>It’s to notice that the earthquake day and the posterior ones have a larger dent in their homeostasis that important hollidays such as <em>Día de Muertos</em> and <em>Día de la Revolución</em> and that somehow it reaches a steady state after only two weeks of the event.</p>
+
+<p>I’m also interested in the morals and social resilience after the event and that’s why I ventured myself into Twitter’s world to asses collective memory by collecting a set of seed hashtags (#FuerzaMexico, #PrayForMexico, #AquiSeNecesita, #AquiNecesitamos, #AquiYaNoNecesitamos, #Verificado19S, #SismoCDMX and #TenemosSismo) and then look at the number of mentions, finding that the event lasted in the collective memory with a consistent decay until the presidential elections and the World Cup, where it lost sight.</p>
+
+<p><img src="https://olangle.w3.uvm.edu/random/temblor/new_users_tag_long.png" alt="act" style="width:500px;" /></p>
+
+<p>This last plot is very revealing as it shows a sublinear decay of mentions and new adoptions of tweeting about the earthquake until the 2018 World Cup where the attention was focused in a whole different thing. The first peak around February 2018 was a small earthaquake at late hours that got everybody scared, then a little bit mentions were regained around the presidential elections and a large amount of Tweets were written at the first year anniversary.</p>
+
+<p>On a log-log scale, the effect is more dramatical</p>
+
+<p><img src="https://olangle.w3.uvm.edu/random/temblor/forget_tag.png" alt="act" style="width:500px;" /></p>
+
+<p>The collective memory was linearly decreasing until the first 100 days where it plateau’d for 150 days until the World Cup where the decay was super linear. But collective and personal memory are really related, so I wanted to see the number of different days that individual users were tweeting about it, and the span of time between their first and last one.</p>
+
+<p><img src="https://olangle.w3.uvm.edu/random/temblor/days_days_range.png" alt="act" style="width:500px;" /></p>
+
+<p>On a log-log scale we see a linear decay on the count vs rank a la Zipf distribution except for the very first places where we can also see a very odd behaviour in the span of days tweeting about it as they tweeted something related everyday, after manual inspection I saw that those were bots and new accounts. On the more interesting part of users, we can see a bimodal distribution on the days range which tells us that the people who tweeted less also did it more sparsely, then there is a regime where people tweeted a buch of days about it but only for the first days and then another large amount of people wrote a lot for several days.</p>
+
+<p>All of this let us see that the need of going to work doesn’t necessarely means that we’re psychologically fine in these types of events, as it was held in the collective memory for almost a year until other very different type of events came along while in two weeks we were forced to being doing our regular things. In the case of the shelter allocation, we can use this type of information in order to incentivize specific locations and relocate bikes at the stations where we can forecast a larger need of taking them or free space to new bikes to arrive.</p>]]></content><author><name></name></author><category term="complex_sytems" /><category term="resilience mobility disaster earthquake" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Analysis of a Temporal Asylum Seekers Network</title><link href="http://localhost:4000/fr-ca/blog/2019/Asylum/" rel="alternate" type="text/html" title="Analysis of a Temporal Asylum Seekers Network" /><published>2019-08-18T00:00:00-07:00</published><updated>2019-08-09T18:33:37-07:00</updated><id>http://localhost:4000/blog/2019/Asylum</id><content type="html" xml:base="http://localhost:4000/blog/2019/Asylum/"><![CDATA[<iframe style="width:110%;height:600px;border:none;overflow:hidden;" src="/assets/images/sims/migrationp5/index.html"></iframe>
+
+<p>The song in my mind while doing this was:</p>
+<iframe src="https://open.spotify.com/embed/track/7pBoi7yWCPzn3UjeMsGKg6" width="300" height="100" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+<h3>TLDR;</h3>
+<p>If you are here because you want to use the database then you only need to do the following:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/migrationets/migration.git
+
+make dockerbuild
+
+make getdata
+
+make neo4j
+</code></pre></div></div>
+
+<p>Requirements: docker, git, docker-machine</p>
+
+<hr />
+
+<p>Forced migration or displacement has become one of the main social phenomena in the World due the sudden growth of the numbers of people fleeing they’re home towns to pursue better life conditions or even because of the large threatens for their lifes. Is for that reason than we should be focusing not only in modeling the migration patterns but also to understand what are the real causes of this.
+This blog post seeks to study asylum petitions in a network perspective but beyond it has the intention of share a curated dataset which could and should be used and fed by other students and researchers in orther to have the most complete tool possible to understand and try to propose any type of actions to solve this growing phenomena from it’s roots.</p>
+
+<h2 id="temporal-networks">Temporal Networks</h2>
+
+<p>A great variety of systems can be modeled by the interactions of the agents that comprise them in a network perspective with the aims of understand, predict and optimise their behaviour. In cost cases not all edges or nodes are active during the whole time of the study of such network (though they’re often treated as such), social examples of this can be face-to-face interactions between individuals, classmates during a day in school or passes in a soccer match. Like network topology, the temporal structure of edge activation can affect dynamics of systems interacting throughout the network. <a href="https://petterhol.me/">Petter Holme</a> has amazing work in the study of these types of networks with beautiful examples such as the following:</p>
+
+<p>Imagine a person in they’re regular life, then they could be at different places</p>
+
+<p><img src="/assets/images/asylum/int-act.jpg" alt="act" style="width:380px;" /></p>
+
+<p>thing that happens a different times</p>
+
+<p><img src="/assets/images/asylum/int-time.jpg" alt="time" style="width:380px;" /></p>
+
+<p>and like that we can think about the underlying networks that this person is part of in a day as a unique entity with a temporal property</p>
+
+<p><img src="/assets/images/asylum/int-net.jpg" alt="net" style="width:380px;" /></p>
+
+<p>When working on temporal networks usually the edge weights are defined in  function of interactions in a slice of time and assign a cumulative weight according to the number of times such interaction was seen during that tie. This approach usually returns a very dense network, thus is common to define a threshold for the weights where we keep the edges which values falls above it.</p>
+
+<p><img src="/assets/images/asylum/temp-slice.jpg" alt="slice" style="width:380px;" /></p>
+
+<p><img src="/assets/images/asylum/temp-thres.jpg" alt="threshold" style="width:380px;" /></p>
+
+<h2 id="temporal-correlation-coefficient-for-directed-networks">Temporal Correlation Coefficient for Directed Networks</h2>
+
+<p>When dealing with temporal networks it’s important to measure the overall likelihood for an edge (ingoing and/or outgoing) to persist between two consecutive time slices. First we need to define a quantity called <em>topological overlap</em> which denotes the preserved proportion of edges of node <em>i</em> from time <em>t</em> to time <em>t+1</em></p>
+
+\[C_i(t_m,t_{m+1})=\frac{\sum_j a_{ij}(tm)\cdot a_{ij}(t_{m+1})}{\sqrt{\left[\sum_ja_{ij}(t_m)\right]\left[\sum_ja_{ij}(t_{m+1})\right]}}\]
+
+<p>Secondly, we define the ingoing and outgoing temporal correlation coefficients \cite{corr} as</p>
+
+\[C_{m}^{in}=\frac{1}{\max\left[A^{in}(t_m),A^{in}(t_{m+1})\right]}\sum\limits_{i=1}^{N}C_i^{in}(t_m,t_{m+1})\]
+
+\[C_{m}^{out}=\frac{1}{\max\left[A^{out}(t_m),A^{out}(t_{m+1})\right]}\sum\limits_{i=1}^{N}C_i^{out}(t_m,t_{m+1)}\]
+
+<p>where \(A(t)\) denotes the active nodes of the network at time \(t\). A node is called “active” at time \(t\) if there exists a node \(j\neq i\) where there’s an edge between \(i\) and \(j\).</p>
+
+<p>Then we calculate the average topological overlap of the nodes for all possible time slices as follows</p>
+
+\[C_i^{in}=\frac{1}{M-1}\sum\limits_{m=1}^{M-1}C_i^{in}(t_m,t_{m+1})\]
+
+<p>and</p>
+
+\[C_i^{out}=\frac{1}{M-1}\sum\limits_{m=1}^{M-1}C_i^{out}(t_m,t_{m+1}).\]
+
+<p>Finally, we can think of the overall temporal correlation coefficient $C$ of the network as</p>
+
+\[C = \frac{1}{M-1}\sum\limits_{m=1}^{M-1}C_m\]
+
+<p>for either the ingoing or the outgoing measures. This is the average measure for the average topological overlap for each node which encompasses information of the whole network during the total amount of time.</p>
+
+<h2 id="asylum-seekers-refugees-and-migrants">Asylum-seekers, Refugees and Migrants</h2>
+
+<p>While the problem of refugees is a global concern the specific actions to be taken have to be decide by local governments, so the laws concerning refugee or asylum-seeker status can vary from country to country. The process of Refugee Status Determination (RSD) is usually performed by the local government in collaboration with the UNHCR.</p>
+
+<p>The term “refugee” means any person who is outside any country of such person’s nationality and who is unable or unwilling to return to because of persecution or a well-founded fear of persecution on account of race, religion, nationality, membership in a particular social group, or political opinion. An asylum seeker is a person who has sought protection as a refugee, but whose claim for refugee status has not yet been assessed.</p>
+
+<p>However, individuals become refugees as soon as they meet the aforementioned criteria, the RSD process is therefore only needed to provide legal recognition of their status.</p>
+
+<p>After being granted “refugee status” individuals can be subject to resettlement, which is the transfer of refugees from the country in which they have sought refuge to another State that has agreed to admit them. The refugees will usually be granted asylum or some other form of long-term resident rights and, in many cases, will have the opportunity to become citizens.
+Those individuals that instead leave their country for personal or financial/economic reasons and not to flee from prosecution are called migrants and constitute the bulk of the human flow between countries.
+In addition to these flows there are also those of “Stateless people” (i.e. does not have the legal bond of nationality with any State).</p>
+
+<p>The UNHCR (United Nations High Commissioner for Refugees) is a United Nations programme in charge of protecting refugees and those who are forcibly displaced as well as stateless people. One of its primary efforts is to assist in the process of voluntary repatriation and integration into the community of a third country. It’s important to note that the greatest contribution to forced displacements comes from internal displacement but the granularity of the data is too coarse and doesn’t allow a deeper analysis in this area.</p>
+
+<p>The datasets provided by the UNHCR are very extensive and gathers information about demographics, demographics, city of relocation, number of applications per ingoing and outgoing country, rejections, pending requests by year and determinations. The data is aggregated by country and date and to protect privacy movements of fewer than 4 individuals are aggregated so that it’s impossible to track a personal petition.</p>
+
+<h2 id="the-network">The Network</h2>
+
+<p>From the datasets that are freely available from the UNHCR and World Bank we can create a database with the information we think is relevant, as so we have shared the following data pipeline in the <a href="https://github.com/migrationets/migration.git">Github</a> repo that’s shown on the top of this entry.</p>
+
+<p><img src="/assets/images/asylum/datapipeline.png" alt="heatmap" style="width:700px;" /></p>
+
+<p>Which gives access to a clean database in Neo4j as it is graph oriented. There we have ID’s for 247 Countries or regions, with their geographical centroids, populations (1960-2016) and GDP (1960-2016) and the information between those Countries is the number of current refugees, asylum seekers, returned, internally displaced people (numbers from the UNHCR which are not very complete), aggregated demographics by gender and age, resettlers, pending petitions and applications, all of these in a yearly and monthly basis.</p>
+
+<p>If we take the number of asylum petitions between every pair of Countries from 2000 to 2017 we can construct the following incidence matrix:</p>
+
+<p><img src="/assets/images/asylum/heat-asylum.gif" alt="heatmap" style="width:700px;" /></p>
+
+<p>There we can clearly see that the growth of petitions has grown exponentially since 2015, but we might also be interested in the top \(n\) highest edge weights and we could draw the network over a map for better understanding.</p>
+
+<p><img src="/assets/images/asylum/dynamic_map.gif" alt="dynmap" style="width:700px;" /></p>
+
+<p>But what we actually want to see is the correlation between the edges at every time step, which could be at yearly basis</p>
+
+<p><img src="/assets/images/asylum/stacked_all_to_2000.png" alt="dynmap" style="width:700px;" /></p>
+
+<p>And we can take a look to the topological overlap of the indegree edges by year and Country</p>
+
+<p><img src="/assets/images/asylum/topological_overlap_in_nodist.png" width="700" /></p>
+
+<p>As well as for the outdegree</p>
+
+<p><img src="/assets/images/asylum/topological_overlap_out_nodist.png" width="700" /></p>
+
+<p>To finally look at the mean topological overlap for the Countries along the 17 years</p>
+
+<p><img src="/assets/images/asylum/mean_topological_overlap_nodist.png" width="700" /></p>
+
+<p>Where it is easy to see that the overlap is much greater for the outdegree than the indegree which means that in this century the set of Countries from where people is trying to leave is more steady than the set of Countries where they’re trying to get in. This could be because of rejection reasons in the past, conflicts between nations, bad reception from citizens or other reasons that would be good to look at.</p>
+
+<p>This is an ongoing work and will continue to post results about it in the future where all the information available is taken into account. Currently you can visit our <a href="https://migrationets.github.io/MigrationFlows/">website</a> where other tools such as the asylum compass is available.</p>]]></content><author><name></name></author><category term="complex_sytems" /><category term="asylum seekers unhcr migration global" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">A Cellular Automata Sznajd Model</title><link href="http://localhost:4000/fr-ca/blog/2018/CA/" rel="alternate" type="text/html" title="A Cellular Automata Sznajd Model" /><published>2018-10-25T00:00:00-07:00</published><updated>2018-10-10T18:33:37-07:00</updated><id>http://localhost:4000/blog/2018/CA</id><content type="html" xml:base="http://localhost:4000/blog/2018/CA/"><![CDATA[<p><img src="/assets/images/CA/2site.gif" alt="sznajd" style="width:280px;" /></p>
+
+<h3>TLDR;</h3>
+<p><a href="https://www.ollinlangle.com/slides/reveal/sznajd.html">If you’re here for the presentation slides</a></p>
+
+<p>The song in my mind while doing this was:</p>
+<iframe src="https://open.spotify.com/embed/track/5kW0bDUyXMCnR7UCrusFGp" width="300" height="100" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+<p>This post is inspired by a talk from <a href="https://www.santafe.edu/people/profile/mirta-galesic">Mirta Galesic</a> which
+I had the chance to catch at the <a href="https://www.vermontcomplexsystems.org/events/science-of-stories/">Symposium on the Science of Stories</a>
+which was actually a very refreshing one, as it yelled multidiscipline right from the speakers bios.</p>
+
+<p>Anyway, this particular talk was about communicating complex data to the public as it has been shown that people are often more receptive to
+narratives than to raw data (not everybody’s trained to understand statistics) but how we present this such narratives is crucial to make
+our statement spread. She stated that people in general don’t care about what scientist say in order to form an opinion but rather the likelihood
+of having one or another posture in a a certain topics is conditioned by the one from our closest friends. A particular example she gave was about
+vaccinations; no mather how many papers or interviews to scientist there are about how we should vaccinate, people won’t hear if they have made their
+minds into something, is just when the ones that sorround them differ when they’ll probably change their minds (sounds like a shame based opinion
+dynamics).</p>
+
+<p>Then, to hear about that from her made me rethink a model that I had already played with but in networks… the <a href="https://en.wikipedia.org/wiki/Sznajd_model">Sznajd</a>. This model is a econophysics one that (believe it or not 😜) is based on the <a href="https://en.wikipedia.org/wiki/Ising_model">Ising model</a>.
+This <em>Sznajd</em> model is also known as the <strong>united we stand, divided we fall</strong> model, this is because it’s build on the premise that your opionion is
+based on the opinion of those who are really close to you.</p>
+
+<h3 id="1-site--convincing">1 site  convincing</h3>
+
+<p>The most basic set of rules for this is the <em>1 site convincing</em>, which is really simple. First imagine that you are on a regular square lattice
+<img src="/assets/images/CA/opinion_cycle_2.gif" alt="sznajd" style="width:180px;" />
+<u>or any type of topology of your like</u>, but let’s go with the square lattice one for ease. Now we start the lattice with a random distribution of  two opinion, so each one of  the nodes can get <strong>opinion 1</strong> with probability <em>p</em> or <strong>opinion 2</strong> with probability <em>1-p</em>. Then, we randomly choose a subset of nodes and make all their neighboors agree with it.</p>
+
+<p><img src="/assets/images/CA/1site.gif" alt="sznajd" style="width:280px;" /></p>
+
+<p>So if we fix some values, like <em>p=0.5</em> and <em>n=0.1</em> the number of randomly selected nodes, we could get a video like this one</p>
+
+<p><img src="/assets/images/CA/1s05.gif" alt="1s05" height="250" width="500" /></p>
+
+<h3 id="2-site-convincing">2 site convincing</h3>
+
+<p>To make it more interesting (or realistic) we could say that there’s no way that I’m going to change my whole ideology based on what a random close friend of mine thinks, so what the  2 site convincing rules says is that in order to change your friends opinion you not only need to be selected but randomly select one of your friends, and then if this one friend agrees with you then you both get to make all your friends have the same opinion that you.</p>
+
+<p>Changing opinions</p>
+
+<p><img src="/assets/images/CA/2site.gif" alt="sznajd" style="width:280px;" /></p>
+
+<hr />
+
+<p>Not changing opinions</p>
+
+<p><img src="/assets/images/CA/2siten.gif" alt="sznajd" style="width:280px;" /></p>
+
+<p>Again, with the same fixed values we get</p>
+
+<p><img src="/assets/images/CA/2s05.gif" alt="2s05" height="500" width="500" /></p>
+
+<h3 id="3-site-convincing">3 site convincing</h3>
+
+<p>The third and last one is similar to the <a href="#2-site-convincing">2 site convincing</a>, but now you select 2 random friends and both have to agree with you so you can change  your whole neighborhood opinion.</p>
+
+<p>Changing opinions</p>
+
+<p><img src="/assets/images/CA/3sites.gif" alt="sznajd1" style="width:280px;" /></p>
+
+<hr />
+
+<p>Not changing opinions</p>
+
+<p><img src="/assets/images/CA/3siten1.gif" alt="3sznajd1n" style="width:280px;" /></p>
+
+<hr />
+
+<p>Also not changing opinions</p>
+
+<p><img src="/assets/images/CA/3siten2.gif" alt="3sznajd2n" style="width:280px;" /></p>
+
+<p>Again, with the same fixed values we get</p>
+
+<p><img src="/assets/images/CA/2s05.gif" alt="2s05" height="500" width="500" /></p>
+
+<h3 id="statistics">Statistics!</h3>
+
+<s><p style="font-size: 50%">Isn't that what we're all here for?</p></s>
+
+<p>Just the 3 movies from above don’t tell us to much about the behavior  of the overall system, so we need no map the probability <em>p</em> from 0 to 1, so I chose a 0.1 spaced interval to do that and ran everything 30 times and average the results.</p>
+
+<p><img src="/assets/images/CA/sznajd.png" alt="szna" height="500" width="500" /></p>
+
+<p>From that figure  we can see that the <a href="#1-site-convincing">1 site convincing</a> is a linear function of the initial probability, but the <a href="#2-site-convincing">2 site convincing</a> and the <a href="#3-site-convincing">3 site convincing</a> are way more interesting, showing us that just like the Ising model this is a phase transition problem. From the looks of it it would be interesting to map (which I didn’t do) all the <em>n sites convincing</em> posibilities to see if there’s a threshold for this 2nd order phase transition to become a 1st order one.</p>
+
+<p>But instead of going through that what I wanted to see was if it would be possible to replicate how do bots or influencers can affect the overall final average opinion.</p>
+
+<h2 id="bots">Bots!</h2>
+
+<p>I decided to go for 3 different types of bots which I called:</p>
+
+<ul>
+    <li>Stupid bots</li>
+    <li>Smart bots</li>
+    <li>Cambridge Analytica</li>
+</ul>
+
+<p>So the stupid bots are really the easiest way of interfeer in the opinion which is randomly take a percentage of the population and make them believe in <strong>opinion 1</strong> if they haven’t already.</p>
+
+<p>The smart bots on the other hand only randomly select nodes from the population with <strong>opinion 2</strong> to make them turn to <strong>opinion 1</strong>.</p>
+
+<p>The Cambridge Analytica ones (I’m not saying that the operated this way, ‘though I think they kinda did) is a smarter way to select who to attack, and that  is… those who are vulnerable with easily influenced friends. So I randomly selected from the nodes with a \(\geq 70\)% of their friends and itself having <strong>opinion 1</strong> and perform a 2 site convincing on them. This task is not very easy, as the area is greater than the perimeter… meaning that if you randomly select a node with all their friends with <strong>opinion 2</strong> then nothing will happen, and it is a lot more likely for that to happen than to select one with 70% \(\geq p &lt; 100\)% and also a 2 site convincing will be very difficult to work with them.</p>
+
+<p>Some movies where we can see the behaviour of each bot army type are shown below. As the previous ones, they’re initialized in a 200X200 grid with a \(p=0.5\) of having <strong>opinion 1</strong>.</p>
+
+<p><img src="/assets/images/CA/1s05bots.gif" alt="stupid" height="500" width="500" /></p>
+
+<p><img src="/assets/images/CA/1s05smartbots.gif" alt="smart" height="500" width="500" /></p>
+
+<p><img src="/assets/images/CA/1s05cambridge.gif" alt="cambridge" height="500" width="500" /></p>
+
+<p>The movies are fun, but it’s more interesting to look at the statistics. These were generated in the same way as the previous.</p>
+
+<p><img src="/assets/images/CA/1sitebotsznajd.png" alt="1bot" height="500" width="500" /></p>
+
+<p><img src="/assets/images/CA/2sitebotsznajd.png" alt="2bot" height="500" width="500" /></p>
+
+<p><img src="/assets/images/CA/3sitebotsznajd.png" alt="3bot" height="500" width="500" /></p>
+
+<h3 id="take-away">Take away</h3>
+
+<p>This post is just a cartoon of how this kind of things happen, but do not put this in a broken bag (does that expression exists in english?). Meaning that we must be careful with whom we share and exchange opinions and also it is REALLY important to avoid sharing fake news, and one of the most important things in the whole world… <strong>RESPECT</strong>, not everybody has to agree with you. Disagreements don’t disrupt friendships, but the intolerance to them does.</p>
+
+<blockquote>
+  <p>Entre los individuos como entre las Naciones, el respeto al derecho ajeno es la paz.</p>
+  <div align="right">Benito Juárez.</div>
+</blockquote>]]></content><author><name></name></author><category term="complex_sytems" /><category term="cellular automata complex systems econophysics sznajd" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Fractals from random walkers</title><link href="http://localhost:4000/fr-ca/blog/2018/fractals/" rel="alternate" type="text/html" title="Fractals from random walkers" /><published>2018-10-10T00:00:00-07:00</published><updated>2018-10-10T18:33:37-07:00</updated><id>http://localhost:4000/blog/2018/fractals</id><content type="html" xml:base="http://localhost:4000/blog/2018/fractals/"><![CDATA[<p><img src="/assets/images/fractals/lsystem.gif" alt="heart" /></p>
+
+<p>The song in my mind while doing this was:</p>
+<iframe src="https://open.spotify.com/embed/track/64b4H2swBOouj8J0AZ4buE" width="300" height="100" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+<p>TLDR;</p>
+
+<p>You promised fractals! take me to the fractals! a.k.a. assignment answers</p>
+
+<p><a href="#weed-1">The one on Flake’s 6.5</a></p>
+
+<p><a href="#building-your-fractal">DIY</a></p>
+
+<p><a href="#cool-stuff">Cool fractals</a></p>
+
+<p><a href="#dla">DLA</a></p>
+
+<p>This was an assingment from my Modeling Complex Systems course but
+as I got such a beautiful plots I decided to go for a blog post showing
+the results from there.</p>
+
+<p>The first thing that I want to talk about is that my main result from
+that class is going to be a <img src="https://pbs.twimg.com/profile_images/3331406046/647b7cf75cb5662b96901bc521968e94_400x400.png" alt="julia" style="width:20px;" />
+julia package (which is hosted right here <a href="https://github.com/ollin18/ComplexSystems.jl"><img src="https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png" alt="github" style="width:30px;" /></a>), it’s in very early stages so it’ll be changing rapidly (stay tuned); PR, issues and feedback are welcomed and encouraged.</p>
+
+<h1 id="l-systems">L-systems</h1>
+
+<p>So the first part of the assignment was to fix a L-systems  code  written in Matlab, but is well known that in order to fix a Matlab code the first thing you have to do is to write in another language (free and open source), so that’s where I decided to build my implementation in Julia from scratch. I didn’t like the object oriented direction that was taken in the original one and decided to go for a <em>dictionary</em> way.</p>
+
+<p>First of all, for those who don’t already know what an L-system (which stands for Lindenmayer system) is an iterative rewriting system which consist in certain rules. These rules are pattern matching ones, so in every iteration you have to look for a certain pattern and replace it with a given rule.</p>
+
+<blockquote>
+  <p>Example:</p>
+
+  <p>We have the following string: <strong>FGFGFFF</strong></p>
+
+  <p>And a rule <strong>F -&gt; FG</strong></p>
+</blockquote>
+
+<p>Then:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Iteration</td>
+      <td>Resulting String</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>FGFGFFF</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>FGGFGGFGFGFG</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>FGGFGGGFGGFGGFGG</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>And so on.</p>
+
+<p>So the first problem was to reproduce a figure from Flake’s book <em>The Computational Beauty of Nature</em> with our shiny new software. But first we want to see if we get the same result from the Matlab’s example code (which I think was hosted <a href="https://courses.cit.cornell.edu/bionb441/LSystem/index.html">here</a>).</p>
+
+<p>The set of rules was:</p>
+
+<p><strong>F -&gt; FF</strong></p>
+
+<p><strong>G -&gt; F[+G][-G]F[+G][-G]FG</strong></p>
+
+<p>We have to know that <strong>[ ]</strong> means that the rules given inside the brakets are only good inside them, so when we hit <strong>]</strong> we’ll return the parameters to the ones that we had before entering them, and the <strong>+ -</strong> signs mean a change in the angle of movement. So, we need a starting point a starting angle and a change rate $\Delta$ for that angle. The starting position is called <em>axiom</em> and its a string seed. In this case we have <em>axiom = G</em> and $\Delta$ = 27.5°.</p>
+
+<p>The resulting figure after 2 iterations is
+<img src="/assets/images/fractals/example.png" alt="example" /></p>
+
+<p>Now we want to reproduce the figure that we’ve been told to do. It has the following parameters:</p>
+<h3 id="weed-1">Weed 1</h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Rules</td>
+      <td>$\Delta$</td>
+      <td>Axiom</td>
+    </tr>
+    <tr>
+      <td>F -&gt; F[-F]F[+F]F</td>
+      <td>25</td>
+      <td>F</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/assets/images/fractals/flake65.png" alt="weed" /></p>
+
+<p>I don’t have the original image right here, but I can tell you that it is the same 😜</p>
+
+<h3 id="building-your-fractal">Building your fractal</h3>
+
+<p>Sometimes we need to change the angle more than once, so we can add a number preceding the <strong>+ -</strong> signs to tell the (as it’s known) turtle, to change direction multiple times, i.e. if we have $\Delta$ = 10°, then <strong>4+</strong> will change the angle 40° counterclockwise (the same way we normaly measure angles). So that leaves us with the second question of the assignment which was to implement that and try to reproduce a cool figure we came up with.</p>
+
+<p>As I’m a romantic I will try to do a fractal or pseudo-fractal version of this</p>
+
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Love_Heart_SVG.svg/968px-Love_Heart_SVG.svg.png" alt="heart" style="width:200px;" /></p>
+
+<p>And I’ll be doing it with the following set of parameters</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Rules</td>
+      <td>$\Delta$</td>
+      <td>Axiom</td>
+    </tr>
+    <tr>
+      <td>F -&gt; FF[+F][-F]</td>
+      <td>45°</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <td>+ -&gt; +F[+2F][-2F]</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>- -&gt; -F[-3F][+3F]</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>It is a very basic set of rules, but what I wanted to do was avoiding branches to touch (at least the small ones).</p>
+
+<p>The final result</p>
+
+<p><img src="/assets/images/fractals/lsystem.gif" alt="heart" /></p>
+
+<p>This was achieved by 1-4 iterations of those rules, but we can also see how it grows (on a 3 iteration process)</p>
+
+<p><img src="/assets/images/fractals/fast_build.gif" alt="build" /></p>
+
+<p>Here are another cool examples of what can be done</p>
+
+<h4 id="cool-stuff">Cool stuff</h4>
+
+<p><img src="/assets/images/fractals/sierpinski.gif" alt="sierpinski" style="width:200px;" />
+<img src="/assets/images/fractals/penrose.gif" alt="penrose" style="width:200px;" />
+<img src="/assets/images/fractals/spikes.gif" alt="spikes" style="width:200px;" /></p>
+
+<h1 id="diffusion-limited-aggregation">Diffusion-Limited Aggregation</h1>
+<h3 id="dla">DLA</h3>
+
+<p>So for this I did use a some kind of object oriented algorithm, but it is very simple. To speed up things I took advantege of Julia’s speed and try to make the code as modular as possible to get the must out of the JIT compiler. And as it turned out, it runs pretty fast actually.</p>
+
+<p>I used 1000 random walkers in a 10x10 box and make them stop moving if they touched a non-moving walker, and I put a first one of those in the middle of the box. What I got was this cool looking thing</p>
+
+<p><img src="/assets/images/fractals/initial.png" alt="dla" /></p>
+
+<h3 id="box-counting-algorithm">Box-counting algorithm</h3>
+
+<p>The last question was to measure Minkowski’s dimension in the figure we got. The algorithm is very simple, you need to grid the space with boxes of the same size and count how many are needed to cover all of the figure. Then such dimension will be</p>
+
+\[D = \lim_{a \rightarrow \infty} \frac{\ln(N)}{\ln(\frac{1}{a})}\]
+
+<p>where a is the box size and N the number of boxes needed.</p>
+
+<p>To make this possible I use the power of GEOS which is the sotfware that powers PostGIS and GeoPandas. I build a grid of boxes with filled properties and check wether those are empty or not.</p>
+
+<p>A figure of the dimension as function of box size</p>
+
+<p><img src="/assets/images/fractals/dimension.png" alt="dla" /></p>
+
+<p>The smallest a I used was 0.01 and got a dimension of 1.437</p>
+
+<p>From that we could say that it has fractal structure. But we should test for smaller box sizes.</p>]]></content><author><name></name></author><category term="Random_Walkers" /><category term="random walkers l-systems lda" /><summary type="html"><![CDATA[]]></summary></entry></feed>

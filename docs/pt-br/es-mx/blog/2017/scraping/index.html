@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body>
+<h1 id="scraping-useful-information-from-the-mexican-senate">Scraping useful information from the Mexican Senate</h1>
+
+<p>On August 2017 the Mexican Senate was awarder for fulfill it’s transparency obligations.
+This mostly has to be with the fact that a great deal of information is
+publish every day at the <a href="https://www.senado.gob.mx" rel="external nofollow noopener" target="_blank">Senate’s website</a>.</p>
+
+<p>Well, yes… the information is massive but impossible to handle for must of the users as it
+doesn’t show any important statistics and the useful data is very sparse through the website.
+That’s where our scraping skills comes to save the day! If we collect the information in maneageble
+formats then we can rearange it to gain some insights.</p>
+
+<p>The first thing that we need to do to successfully scrap a website is to visit and study it in
+order to discover what things would we want to see. In this case we’re going to separate the information
+in certain principal topics:</p>
+<ul>
+  <li>Senators
+    <ul>
+      <li>Name</li>
+      <li>State (entity)</li>
+      <li>Party</li>
+      <li>Alternate</li>
+    </ul>
+  </li>
+  <li>Attendance
+    <ul>
+      <li>Present</li>
+      <li>Absent</li>
+      <li>Justified Absence</li>
+      <li>Absent on Official Comission</li>
+    </ul>
+  </li>
+  <li>Comissions
+    <ul>
+      <li>96 comission</li>
+    </ul>
+  </li>
+  <li>Votes
+    <ul>
+      <li>PRO</li>
+      <li>CON</li>
+      <li>Abstention</li>
+      <li>Absent</li>
+    </ul>
+  </li>
+  <li>Edicts (bills)</li>
+</ul>
+
+<p>JuliaLang is what we’re going to do use for this task with some help from 3 wonderful packages.</p>
+<ul>
+  <li>Requests</li>
+  <li>Gumbo</li>
+  <li>Cascadia</li>
+</ul>
+
+<p>Requests: To download the code from a website.
+Gumbo: A HTML parser.
+Cascadia: A CSS selector.</p>
+
+<p>Then the pipeline we’ll follow is: Download the raw file text -&gt; parse in into HTML -&gt; use the HTML tree-like structure
+to download the information we need.</p>
+
+<p>In order to use the built-in Julia’s parallelization capabilities I wrote everything as a function so the <em>map</em> function would
+be available. You can look at all these functions <a href="https://github.com/ollin18/The_Mexican_Senate/blob/master/Scraping/scraping_functions.jl" rel="external nofollow noopener" target="_blank">right here</a>.</p>
+
+<p>Now let’s take for example how we would scrap the Senators info (name, entity, party and alternate). Which is <a href="https://github.com/ollin18/The_Mexican_Senate/blob/master/Scraping/get_names_and_reps.jl" rel="external nofollow noopener" target="_blank">this file</a>.</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="c">#!/usr/bin/env julia</span>
+
+<span class="nd">@everywhere</span> <span class="n">alternates</span> <span class="o">=</span> <span class="mi">640</span><span class="o">:</span><span class="mi">767</span>
+
+<span class="nd">@everywhere</span> <span class="k">using</span> <span class="n">Requests</span>
+<span class="nd">@everywhere</span> <span class="k">using</span> <span class="n">Cascadia</span>
+
+<span class="nd">@everywhere</span> <span class="n">include</span><span class="x">(</span><span class="s">"scraping_functions.jl"</span><span class="x">)</span>
+
+<span class="n">pmap</span><span class="x">(</span><span class="n">senators_and_alternates</span><span class="x">,</span><span class="n">alternates</span><span class="x">)</span></code></pre></figure>
+
+<p>The first to take notice is the 640:767 range. This is the alternates’ id in the website, and we’re going to use
+these ones insted of the titular’s because there’s no link to the alternates from the original Senator’s site but
+there is the other way around.
+Then, as we’re using multiple workers (parallelization) we have to import every function and package to every one
+of them and that’s the macro <code class="language-plaintext highlighter-rouge">@everywhere</code> for. And <code class="language-plaintext highlighter-rouge">pmap</code> is a parallel map for the <code class="language-plaintext highlighter-rouge">senators_and_alternates</code>
+function in the <em>alternates</em> array.</p>
+
+<p>But what’s on the <code class="language-plaintext highlighter-rouge">senators_and_alternates</code> function?</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="k">function</span><span class="nf"> senators_and_alternates</span><span class="x">(</span><span class="n">id</span><span class="o">::</span><span class="kt">Int64</span><span class="x">)</span>
+    <span class="n">tit_id</span><span class="x">,</span> <span class="n">name</span><span class="x">,</span> <span class="n">party</span><span class="x">,</span> <span class="n">state</span><span class="x">,</span> <span class="n">comissions</span><span class="x">,</span> <span class="n">alt_id</span><span class="x">,</span> <span class="n">alternate</span> <span class="o">=</span> <span class="n">names_and_representations</span><span class="x">(</span><span class="n">id</span><span class="x">)</span>
+    <span class="n">println</span><span class="x">(</span><span class="n">tit_id</span><span class="x">,</span> <span class="s">"|"</span><span class="x">,</span> <span class="n">name</span><span class="x">,</span> <span class="s">"|"</span><span class="x">,</span> <span class="n">party</span><span class="x">,</span> <span class="s">"|"</span><span class="x">,</span> <span class="n">state</span><span class="x">,</span> <span class="s">"|"</span><span class="x">,</span> <span class="n">alt_id</span><span class="x">,</span> <span class="s">"|"</span><span class="x">,</span> <span class="n">alternate</span><span class="x">)</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Which prints a <em>pipe</em> separated CSV to the STDOUT but it’s calling another another function that takes the id as
+argument and returns multiple fields as result from that particular id.</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="k">function</span><span class="nf"> names_and_representations</span><span class="x">(</span><span class="n">id</span><span class="o">::</span><span class="kt">Int64</span><span class="x">)</span>
+    <span class="n">tit_id</span><span class="x">,</span> <span class="n">alt_id</span><span class="x">,</span> <span class="n">alt_name</span><span class="x">,</span> <span class="n">alt_com</span> <span class="o">=</span> <span class="n">alternate_info</span><span class="x">(</span><span class="n">id</span><span class="x">)</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">get_info</span><span class="x">(</span><span class="n">tit_id</span><span class="x">)</span>
+    <span class="n">qs</span> <span class="o">=</span> <span class="n">matchall</span><span class="x">(</span><span class="n">Selector</span><span class="x">(</span><span class="s">"div table strong"</span><span class="x">),</span><span class="n">h</span><span class="o">.</span><span class="n">root</span><span class="x">)</span>
+    <span class="n">pty</span> <span class="o">=</span> <span class="n">matchall</span><span class="x">(</span><span class="n">Selector</span><span class="x">(</span><span class="s">"div table tr td table img"</span><span class="x">),</span><span class="n">h</span><span class="o">.</span><span class="n">root</span><span class="x">)</span>
+    <span class="n">alt</span> <span class="o">=</span> <span class="n">matchall</span><span class="x">(</span><span class="n">Selector</span><span class="x">(</span><span class="s">"div span b"</span><span class="x">),</span><span class="n">h</span><span class="o">.</span><span class="n">root</span><span class="x">)</span>
+    <span class="n">com</span> <span class="o">=</span> <span class="n">matchall</span><span class="x">(</span><span class="n">Selector</span><span class="x">(</span><span class="s">"div ul li a[href^='index.php?watch=9&amp;sm=100&amp;id']"</span><span class="x">),</span><span class="n">h</span><span class="o">.</span><span class="n">root</span><span class="x">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">giveme_names</span><span class="x">(</span><span class="n">qs</span><span class="x">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">giveme_states</span><span class="x">(</span><span class="n">qs</span><span class="x">)</span>
+    <span class="n">party</span> <span class="o">=</span> <span class="n">giveme_party</span><span class="x">(</span><span class="n">pty</span><span class="x">)</span>
+    <span class="n">alternate</span> <span class="o">=</span> <span class="n">giveme_alternate</span><span class="x">(</span><span class="n">alt</span><span class="x">)</span>
+    <span class="k">if</span> <span class="n">giveme_comissions</span><span class="x">(</span><span class="n">com</span><span class="x">)</span> <span class="o">!=</span> <span class="nb">nothing</span>
+	<span class="n">comissions</span> <span class="o">=</span> <span class="n">giveme_comissions</span><span class="x">(</span><span class="n">com</span><span class="x">)</span>
+    <span class="k">else</span>
+	<span class="n">comissions</span> <span class="o">=</span> <span class="n">alt_com</span>
+    <span class="k">end</span>
+    <span class="n">tit_id</span><span class="x">,</span> <span class="n">name</span><span class="x">,</span> <span class="n">party</span><span class="x">,</span> <span class="n">state</span><span class="x">,</span> <span class="n">comissions</span><span class="x">,</span> <span class="n">alt_id</span><span class="x">,</span> <span class="n">alternate</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Now here’s where the scraping for the Senators happens! but as I said before, it’s using data
+from the alternate’s webpage. But here we can see the use of the Selector and matches from
+the Cascadia package, taking advantage from the tree-like structure of the HTML document as stated before.</p>
+
+<p>Finally, lets take a look into the <code class="language-plaintext highlighter-rouge">get_info</code> function.</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><span class="k">function</span><span class="nf"> get_info</span><span class="x">(</span><span class="n">id</span><span class="o">::</span><span class="kt">Int64</span><span class="x">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">get</span><span class="x">(</span><span class="s">"https://www.senado.gob.mx/index.php?watch=8&amp;id=</span><span class="si">$</span><span class="s">id"</span><span class="x">)</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">parsehtml</span><span class="x">(</span><span class="kt">String</span><span class="x">(</span><span class="n">copy</span><span class="x">(</span><span class="n">r</span><span class="o">.</span><span class="n">data</span><span class="x">)))</span>
+    <span class="n">h</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>This is a very important function because is the one that downloads the files from the website. The argument
+it takes is the Senator or alternate’s id and downloads that specific site via the Requests package and
+then parse it into HTML using Gumbo.</p>
+
+<p>Now that we have understood how this works we need to run the scraper telling the computer how many workers do we want,
+for that we can write a simple bash script.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#! /usr/bin/env bash</span>
+
+<span class="nv">procs</span><span class="o">=</span><span class="sb">`</span><span class="nb">grep</span> <span class="nt">-c</span> ^processor /proc/cpuinfo<span class="sb">`</span>
+
+julia <span class="nt">-p</span> <span class="nv">$procs</span> get_names_and_reps.jl | egrep <span class="nt">-o</span> <span class="s2">"[0-9]{3}.*"</span></code></pre></figure>
+
+<p>What it does is to look how many procs does your computer have and use them all to scrap the Senate! but we need
+to clean the output a little bit because we don’t want to know which worker did what so that’s what the <code class="language-plaintext highlighter-rouge">egrep</code>
+is for.</p>
+
+<p>Well that’s all you need to know to scrap the Mexican Senate’s website! If you want the info but don’t want to write
+code you can always use mine which is <a href="https://github.com/ollin18/The_Mexican_Senate/tree/master/Scraping" rel="external nofollow noopener" target="_blank">right in this repo</a>.</p>
+</body></html>

@@ -1,0 +1,1 @@
+Beautiful soul. The most introverted dog in the world. Loved kissing you and other dogs. Used to bark when someone entered his home, but in the streets everything else was invisible to his eyes. Fruit and vegetable lover.

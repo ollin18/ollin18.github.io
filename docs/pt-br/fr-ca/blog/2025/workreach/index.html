@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body>
+<iframe style="width:110%;height:600px;border:none;overflow:hidden;" src="/assets/images/workreach/p5js/index.html"></iframe>
+
+<p>Cities don’t offer the same jobs to everyone. Commuters weigh <strong>how far a job is</strong>, <strong>how good the job is</strong>, and <strong>their own constraints</strong> (like informality at home) when deciding where to work. In our new paper, we introduce <strong>WorkReach</strong>, a discrete-choice framework that blends <strong>distance</strong>, <strong>Economic Complexity (ECI)</strong> at the destination, and <strong>informality</strong> at the origin to explain—and quantify—those trade-offs across <strong>Mexico City, Rio de Janeiro, Los Angeles, and the Bay Area</strong>. :contentReference[oaicite:0]{index=0}</p>
+
+<hr>
+
+<h2 id="whats-different-here">What’s different here</h2>
+
+<p>Most flow models (gravity, radiation) are great at prediction but say little about <strong>why</strong> people choose specific work locations. <strong>WorkReach</strong> is built for <strong>interpretability</strong>:</p>
+
+<ul>
+  <li>A <strong>utility function</strong> captures the decision of working at location <em>j</em> from home <em>i</em>.</li>
+  <li>A <strong>transition weight</strong> (a logistic in distance) lets behavior shift from a <strong>“convenience-first”</strong> regime (nearby jobs) to an <strong>“opportunity-first”</strong> regime (farther, higher-quality jobs).</li>
+  <li>We estimate <strong>city-specific parameters</strong> you can read directly: how much extra distance people will tolerate for higher ECI, and how origin <strong>informality</strong> changes that willingness.</li>
+</ul>
+
+<p><img src="/assets/images/workreach/concept_model.png" alt="Conceptual diagram of WorkReach utility and distance transition" style="width:720px;"></p>
+
+<hr>
+
+<h2 id="data-cities-and-measures">Data, cities, and measures</h2>
+
+<p>We pair <strong>anonymized mobility/commuting flows</strong> with <strong>employment registries</strong> and <strong>census-based informality</strong> to compute:</p>
+<ul>
+  <li>
+<strong>ECI</strong> (sub-city): diversity and sophistication of local economic activity.</li>
+  <li>
+<strong>Informality</strong> (home areas): proxies based on social protection/registration data adapted to each country.</li>
+  <li>
+<strong>Flows</strong>: observed or synthetic (U.S.) home→work trips mapped to consistent spatial units.</li>
+</ul>
+
+<p><img src="/assets/images/workreach/eci_informality_maps.png" alt="Choropleths of ECI and informality across the four cities" style="width:720px;"></p>
+
+<p><em>What stands out:</em> Latin American metros show stronger <strong>spatial segregation</strong> (higher informality farther from high-ECI cores), while the U.S. metros are more mixed.</p>
+
+<hr>
+
+<h2 id="key-findings">Key findings</h2>
+
+<h3 id="1-distancecomplexity-gradient">1) Distance–complexity gradient</h3>
+<p>Everywhere, people prefer <strong>short commutes</strong>—but they will go <strong>farther</strong> for <strong>higher-ECI</strong> jobs. The <strong>marginal substitution</strong> between distance and ECI is largest in <strong>Mexico City</strong>, smallest in <strong>Los Angeles</strong>, meaning MC workers accept the biggest distance penalties to reach complex opportunities.</p>
+
+<p><img src="/assets/images/workreach/msr_elasticities.png" alt="Marginal substitution rates and elasticities for ECI vs distance and informality vs distance" style="width:720px;"></p>
+
+<h3 id="2-informality-flips-by-region">2) Informality flips by region</h3>
+<ul>
+  <li>
+<strong>Mexico City &amp; Rio</strong>: Higher <strong>origin informality</strong> <em>increases</em> willingness to travel farther <strong>if</strong> the destination has high ECI (chasing better opportunities).</li>
+  <li>
+<strong>Bay Area &amp; Los Angeles</strong>: Higher origin informality <em>reduces</em> willingness to take long trips to high-ECI destinations (constraints dominate).</li>
+</ul>
+
+<h3 id="3-a-behavioral-threshold-in-distance">3) A behavioral “threshold” in distance</h3>
+<p>The estimated <strong>distance threshold (τ)</strong> marks when commuters switch from <strong>nearby-first</strong> to <strong>opportunity-first</strong> mode. It’s <strong>larger</strong> in <strong>Mexico City/Rio</strong> (longer convenience regime) and <strong>very small/sharp</strong> in <strong>U.S.</strong> metros (opportunities matter earlier as distance grows).</p>
+
+<hr>
+
+<h2 id="how-well-does-it-predict">How well does it predict?</h2>
+
+<p>Despite prioritizing interpretability, <strong>WorkReach</strong> matches <strong>benchmark</strong> gravity/radiation models in <strong>CPC</strong> and <strong>correlation</strong>—and in the <strong>Bay Area</strong>, it takes the top CPC. The payoff is that we can read <em>why</em> choices look the way they do—not just that they do.</p>
+
+<p><img src="/assets/images/workreach/model_fit.png" alt="Observed vs predicted flows, WorkReach vs baselines" style="width:720px;"></p>
+
+<hr>
+
+<h2 id="accessibility-distance-isnt-the-whole-story">Accessibility: distance isn’t the whole story</h2>
+
+<p>We compute two complementary metrics:</p>
+
+<p>1) <strong>Distance-weighted accessibility</strong> (closer flows count more)
+2) <strong>Consumer-surplus accessibility</strong> (a logsum from discrete choice): the <strong>expected max utility</strong> across all job options, integrating distance, destination ECI, and origin informality.</p>
+
+<p><strong>Result:</strong> Consumer-surplus accessibility is <strong>consistently lower</strong> for <strong>high-informality</strong> origins in <strong>all four cities</strong>, even where simple distance metrics look favorable. Quality and constraints reshape who truly benefits from the urban job market.</p>
+
+<p><img src="/assets/images/workreach/accessibility_boxplots.png" alt="Accessibility boxplots by informality group, distance-weighted vs consumer-surplus" style="width:720px;">
+<img src="/assets/images/workreach/accessibility_maps.png" alt="Accessibility maps (z-scores) and a combined PCA index" style="width:720px;"></p>
+
+<hr>
+
+<h2 id="why-this-matters-for-policy">Why this matters for policy</h2>
+
+<ul>
+  <li>
+<strong>Target connections where they unlock quality</strong>: Improve access from high-informality origins to <strong>high-ECI</strong> destinations (Latin America), and reduce <strong>non-distance barriers</strong> for informal workers in U.S. metros.</li>
+  <li>
+<strong>Invest where the trade-off is steep</strong>: Places with high ECI but poor consumer-surplus for vulnerable groups are prime for <strong>transit improvements</strong>; areas with good physical access but low ECI call for <strong>local economic development</strong>.</li>
+  <li>
+<strong>Measure the right accessibility</strong>: Pair <strong>distance metrics</strong> with <strong>utility-based</strong> measures to avoid overestimating access where job <em>quality</em> is out of reach.</li>
+</ul>
+
+<hr>
+
+<p><em>Paper:</em> “WorkReach: Modeling Urban Work Location Choices Through Economic Complexity, Informality, and Mobility Data.” (Mexico City, Rio de Janeiro, Los Angeles, Bay Area). :contentReference[oaicite:1]{index=1}</p>
+
+<hr>
+</body></html>
