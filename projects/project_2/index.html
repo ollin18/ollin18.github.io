@@ -1,0 +1,287 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><meta name="generator" content="Gatsby 5.14.6"/><meta data-react-helmet="true" name="description" content="Using Julia to scrape useful information from the Mexican Senate&#x27;s website."/><meta data-react-helmet="true" name="keywords" content="complex-systems, urban-science, economics, mobility, computational-social-science"/><meta data-react-helmet="true" property="og:title" content="Scraping the Mexican Senate"/><meta data-react-helmet="true" property="og:description" content="Using Julia to scrape useful information from the Mexican Senate&#x27;s website."/><meta data-react-helmet="true" property="og:type" content="website"/><meta data-react-helmet="true" property="og:url" content="https://ollin18.github.io/projects/project_2"/><meta data-react-helmet="true" property="og:image" content="https://ollin18.github.io/og-image.png"/><meta data-react-helmet="true" property="og:image:alt" content="Scraping the Mexican Senate"/><meta data-react-helmet="true" property="og:locale" content="en_us"/><meta data-react-helmet="true" name="twitter:card" content="summary_large_image"/><meta data-react-helmet="true" name="twitter:creator" content="Ollin D. Langle-Chimal"/><meta data-react-helmet="true" name="twitter:title" content="Scraping the Mexican Senate"/><meta data-react-helmet="true" name="twitter:description" content="Using Julia to scrape useful information from the Mexican Senate&#x27;s website."/><meta data-react-helmet="true" name="twitter:image" content="https://ollin18.github.io/og-image.png"/><title data-react-helmet="true">Scraping the Mexican Senate | Ollin D. Langle-Chimal</title><link data-react-helmet="true" rel="canonical" href="https://ollin18.github.io/projects/project_2"/><link data-react-helmet="true" rel="alternate" hrefLang="en-us" href="https://ollin18.github.io/projects/project_2"/><link data-react-helmet="true" rel="alternate" hrefLang="es-mx" href="https://ollin18.github.io/es-mx/projects/project_2"/><link data-react-helmet="true" rel="alternate" hrefLang="x-default" href="https://ollin18.github.io/projects/project_2"/><style data-styled="" data-styled-version="6.1.19">@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Jost:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');/*!sc*/
+@import url('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css');/*!sc*/
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}/*!sc*/
+:root{--color-bg:#0A0E27;--color-bg-secondary:#1A1F3A;--color-text:#E8E9ED;--color-text-secondary:#A0A8C5;--color-surface:#151B35;--color-border:#2A3250;--color-primary:#FF6B35;--color-secondary:#004E89;--color-accent:#F7931E;--color-bg-rgb:10,14,39;}/*!sc*/
+[data-theme='light']{--color-bg:#FFFFFF;--color-bg-secondary:#F5F7FA;--color-text:#1A1A1A;--color-text-secondary:#6B7280;--color-surface:#FAFBFC;--color-border:#E5E7EB;--color-bg-rgb:255,255,255;}/*!sc*/
+html{font-size:16px;scroll-behavior:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;}/*!sc*/
+body{margin:0;padding:0;font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1rem;font-weight:400;line-height:1.5;color:var(--color-text);background-color:var(--color-bg);overflow-x:hidden;transition:background-color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+h1,h2,h3,h4,h5,h6{font-family:"Jost","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-weight:700;line-height:1.25;color:var(--color-text);margin:0;}/*!sc*/
+h1{font-size:3.75rem;letter-spacing:-0.025em;}/*!sc*/
+@media (max-width:768px){h1{font-size:2.25rem;}}/*!sc*/
+h2{font-size:2.25rem;}/*!sc*/
+@media (max-width:768px){h2{font-size:1.875rem;}}/*!sc*/
+h3{font-size:1.875rem;}/*!sc*/
+@media (max-width:768px){h3{font-size:1.5rem;}}/*!sc*/
+h4{font-size:1.5rem;}/*!sc*/
+h5{font-size:1.25rem;}/*!sc*/
+h6{font-size:1.125rem;}/*!sc*/
+p{margin:0 0 1rem 0;line-height:1.625;color:var(--color-text);}/*!sc*/
+a{color:#FF6B35;text-decoration:none;transition:color 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);cursor:pointer;}/*!sc*/
+a:hover{color:#F7931E;}/*!sc*/
+a:focus-visible{outline:2px solid #FF6B35;outline-offset:2px;border-radius:2px;}/*!sc*/
+ul,ol{margin:0 0 1rem 0;padding-left:1.5rem;}/*!sc*/
+li{margin-bottom:0.5rem;line-height:1.625;}/*!sc*/
+code,pre{font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,monospace;}/*!sc*/
+code{background-color:var(--color-surface);padding:0.125rem 0.375rem;border-radius:0.125rem;font-size:0.875em;color:#F7931E;}/*!sc*/
+pre{background-color:var(--color-surface);padding:1rem;border-radius:0.375rem;overflow-x:auto;margin-bottom:1rem;border:1px solid var(--color-border);}/*!sc*/
+pre code{background-color:transparent;padding:0;border-radius:0;color:var(--color-text);}/*!sc*/
+blockquote{margin:1.5rem 0;padding:1rem 1.5rem;border-left:4px solid #FF6B35;background-color:var(--color-surface);border-radius:0.375rem;font-style:italic;color:var(--color-text-secondary);}/*!sc*/
+blockquote p:last-child{margin-bottom:0;}/*!sc*/
+img{max-width:100%;height:auto;display:block;}/*!sc*/
+hr{border:0;height:1px;background-color:var(--color-border);margin:2rem 0;}/*!sc*/
+table{width:100%;border-collapse:collapse;margin-bottom:1.5rem;}/*!sc*/
+th,td{padding:0.75rem;text-align:left;border-bottom:1px solid var(--color-border);}/*!sc*/
+th{font-weight:600;background-color:var(--color-surface);}/*!sc*/
+input,textarea,select,button{font-family:inherit;font-size:inherit;line-height:inherit;}/*!sc*/
+button{cursor:pointer;border:none;background:none;padding:0;color:inherit;}/*!sc*/
+::selection{background-color:#FF6B35;color:#0A0E27;}/*!sc*/
+::-moz-selection{background-color:#FF6B35;color:#0A0E27;}/*!sc*/
+::-webkit-scrollbar{width:12px;height:12px;}/*!sc*/
+::-webkit-scrollbar-track{background:var(--color-bg);}/*!sc*/
+::-webkit-scrollbar-thumb{background:#FF6B35;border-radius:9999px;border:3px solid var(--color-bg);}/*!sc*/
+::-webkit-scrollbar-thumb:hover{background:#F7931E;}/*!sc*/
+*{scrollbar-width:thin;scrollbar-color:#FF6B35 var(--color-bg);}/*!sc*/
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0;}/*!sc*/
+*:focus-visible{outline:2px solid #FF6B35;outline-offset:2px;}/*!sc*/
+*:focus:not(:focus-visible){outline:none;}/*!sc*/
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important;}}/*!sc*/
+@media print{body{background-color:white;color:black;}a{text-decoration:underline;}nav,aside,footer{display:none;}}/*!sc*/
+data-styled.g1[id="sc-global-cBdPHX1"]{content:"sc-global-cBdPHX1,"}/*!sc*/
+.jrpXdn{position:fixed;top:0;left:0;right:0;z-index:1100;background-color:transparent;backdrop-filter:none;border-bottom:1px solid transparent;transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+data-styled.g2[id="Header__HeaderWrapper-sc-17836s2-0"]{content:"jrpXdn,"}/*!sc*/
+.gynvdj{max-width:1280px;margin:0 auto;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;}/*!sc*/
+data-styled.g3[id="Header__Nav-sc-17836s2-1"]{content:"gynvdj,"}/*!sc*/
+.iYuVWU{font-family:"Jost","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1.5rem;font-weight:700;color:var(--color-text);letter-spacing:-0.025em;transition:color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.iYuVWU:hover{color:#FF6B35;}/*!sc*/
+data-styled.g4[id="Header__Logo-sc-17836s2-2"]{content:"iYuVWU,"}/*!sc*/
+.hvvEFe{display:flex;align-items:center;gap:1.5rem;}/*!sc*/
+@media (max-width:768px){.hvvEFe{display:none;position:fixed;top:70px;left:0;right:0;background-color:var(--color-surface);flex-direction:column;padding:1.5rem;border-bottom:1px solid var(--color-border);backdrop-filter:blur(12px);}}/*!sc*/
+data-styled.g5[id="Header__NavLinks-sc-17836s2-3"]{content:"hvvEFe,"}/*!sc*/
+.dWMbER{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1rem;font-weight:500;color:var(--color-text);position:relative;transition:color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.dWMbER::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background-color:#FF6B35;transform:scaleX(0);transition:transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.dWMbER:hover{color:#FF6B35;}/*!sc*/
+.dWMbER:hover::after{transform:scaleX(1);}/*!sc*/
+.dWMbER.active{color:#FF6B35;}/*!sc*/
+.dWMbER.active::after{transform:scaleX(1);}/*!sc*/
+data-styled.g6[id="Header__NavLink-sc-17836s2-4"]{content:"dWMbER,"}/*!sc*/
+.eVRumG{display:flex;gap:0.5rem;}/*!sc*/
+data-styled.g7[id="Header__LanguageSwitcher-sc-17836s2-5"]{content:"eVRumG,"}/*!sc*/
+.eWLAbV{font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,monospace;font-size:0.875rem;font-weight:500;color:#FF6B35;padding:0.5rem 0.75rem;border:1px solid #FF6B35;border-radius:0.375rem;background-color:rgba(255, 107, 53, 0.1);cursor:pointer;transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);text-transform:uppercase;}/*!sc*/
+.eWLAbV:hover{color:#FF6B35;border-color:#FF6B35;background-color:rgba(255,107,53,0.1);}/*!sc*/
+.dklIUD{font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,monospace;font-size:0.875rem;font-weight:500;color:var(--color-text-secondary);padding:0.5rem 0.75rem;border:1px solid var(--color-border);border-radius:0.375rem;background-color:transparent;cursor:pointer;transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);text-transform:uppercase;}/*!sc*/
+.dklIUD:hover{color:#FF6B35;border-color:#FF6B35;background-color:rgba(255,107,53,0.1);}/*!sc*/
+data-styled.g8[id="Header__LangButton-sc-17836s2-6"]{content:"eWLAbV,dklIUD,"}/*!sc*/
+.fFMim{display:none;flex-direction:column;gap:4px;background:transparent;border:none;cursor:pointer;padding:0.5rem;}/*!sc*/
+@media (max-width:768px){.fFMim{display:flex;}}/*!sc*/
+.fFMim span{width:24px;height:2px;background-color:var(--color-text);transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.fFMim span:nth-child(1){transform:none;}/*!sc*/
+.fFMim span:nth-child(2){opacity:1;}/*!sc*/
+.fFMim span:nth-child(3){transform:none;}/*!sc*/
+data-styled.g9[id="Header__MobileMenuButton-sc-17836s2-7"]{content:"fFMim,"}/*!sc*/
+.kHVmag{background:transparent;border:1px solid var(--color-border);border-radius:9999px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--color-text);font-size:1.25rem;transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);margin-left:1rem;}/*!sc*/
+.kHVmag:hover{border-color:#FF6B35;color:#FF6B35;background:rgba(255,107,53,0.1);}/*!sc*/
+@media (max-width:768px){.kHVmag{margin-left:0;}}/*!sc*/
+data-styled.g10[id="Header__ThemeToggle-sc-17836s2-8"]{content:"kHVmag,"}/*!sc*/
+.cPFteU{display:flex;align-items:center;gap:1rem;}/*!sc*/
+data-styled.g11[id="Header__DesktopActions-sc-17836s2-9"]{content:"cPFteU,"}/*!sc*/
+.hZgUt{display:flex;align-items:center;gap:0.75rem;}/*!sc*/
+@media (min-width:768px){.hZgUt{display:none;}}/*!sc*/
+data-styled.g12[id="Header__MobileActions-sc-17836s2-10"]{content:"hZgUt,"}/*!sc*/
+.bULOHN{background-color:var(--color-surface);border-top:1px solid var(--color-border);padding:3rem 1.5rem;margin-top:5rem;}/*!sc*/
+data-styled.g13[id="Footer__FooterWrapper-sc-jaeqzk-0"]{content:"bULOHN,"}/*!sc*/
+.iQowSC{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;}/*!sc*/
+@media (max-width:768px){.iQowSC{grid-template-columns:1fr;}}/*!sc*/
+data-styled.g14[id="Footer__FooterContent-sc-jaeqzk-1"]{content:"iQowSC,"}/*!sc*/
+.hzRrLe{display:flex;flex-direction:column;gap:1rem;}/*!sc*/
+data-styled.g15[id="Footer__FooterSection-sc-jaeqzk-2"]{content:"hzRrLe,"}/*!sc*/
+.jMqLUe{font-family:"Jost","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1.125rem;font-weight:600;color:var(--color-text);margin-bottom:0.5rem;}/*!sc*/
+data-styled.g16[id="Footer__FooterTitle-sc-jaeqzk-3"]{content:"jMqLUe,"}/*!sc*/
+.jlxgqc{font-size:0.875rem;color:var(--color-text-secondary);line-height:1.625;margin:0;}/*!sc*/
+data-styled.g17[id="Footer__FooterText-sc-jaeqzk-4"]{content:"jlxgqc,"}/*!sc*/
+.gvYEeR{display:flex;gap:1rem;flex-wrap:wrap;}/*!sc*/
+data-styled.g18[id="Footer__SocialLinks-sc-jaeqzk-5"]{content:"gvYEeR,"}/*!sc*/
+.cVFpvx{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:var(--color-text-secondary);transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.cVFpvx:hover{color:#FF6B35;transform:translateY(-2px);}/*!sc*/
+.cVFpvx::before{content:'';width:20px;height:20px;background-color:currentColor;mask-size:contain;mask-repeat:no-repeat;mask-position:center;}/*!sc*/
+data-styled.g19[id="Footer__SocialLink-sc-jaeqzk-6"]{content:"cVFpvx,"}/*!sc*/
+.dmOyhI::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z'/%3E%3C/svg%3E");}/*!sc*/
+data-styled.g20[id="Footer__GitHubLink-sc-jaeqzk-7"]{content:"dmOyhI,"}/*!sc*/
+.jAVeyI::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z'/%3E%3C/svg%3E");}/*!sc*/
+data-styled.g21[id="Footer__LinkedInLink-sc-jaeqzk-8"]{content:"jAVeyI,"}/*!sc*/
+.hiEvCn::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 0l11 6v8.5c0 5.25-3.25 10.2-11 13.5-7.75-3.3-11-8.25-11-13.5v-8.5l11-6zm0 2.18l-9 4.91v7.41c0 4.09 2.59 8.05 9 10.9 6.41-2.85 9-6.81 9-10.9v-7.41l-9-4.91zm1 10.32v5.5h-2v-5.5h-3l4-4 4 4h-3z'/%3E%3C/svg%3E");}/*!sc*/
+data-styled.g22[id="Footer__ScholarLink-sc-jaeqzk-9"]{content:"hiEvCn,"}/*!sc*/
+.gyOWIP::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z'/%3E%3C/svg%3E");}/*!sc*/
+data-styled.g23[id="Footer__EmailLink-sc-jaeqzk-10"]{content:"gyOWIP,"}/*!sc*/
+.fFDhGG{text-align:center;padding-top:2rem;margin-top:2rem;border-top:1px solid var(--color-border);color:var(--color-text-secondary);font-size:0.875rem;}/*!sc*/
+data-styled.g24[id="Footer__Copyright-sc-jaeqzk-11"]{content:"fFDhGG,"}/*!sc*/
+.ghjyuh{min-height:100vh;display:flex;flex-direction:column;}/*!sc*/
+data-styled.g25[id="Layout__MainWrapper-sc-147ozt3-0"]{content:"ghjyuh,"}/*!sc*/
+.cZWiyp{flex:1;margin-top:70px;}/*!sc*/
+data-styled.g26[id="Layout__MainContent-sc-147ozt3-1"]{content:"cZWiyp,"}/*!sc*/
+.iIZsSs{min-height:60vh;display:flex;flex-direction:column;justify-content:center;padding:5rem 1.5rem;background:linear-gradient( 135deg,var(--color-bg) 0%,var(--color-surface) 100% );position:relative;overflow:hidden;}/*!sc*/
+.iIZsSs::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient( circle at 20% 50%,rgba(255,107,53,0.1) 0%,transparent 50% );pointer-events:none;}/*!sc*/
+data-styled.g33[id="project-detail__ProjectHero-sc-nsoc72-0"]{content:"iIZsSs,"}/*!sc*/
+.khoxLO{max-width:1024px;margin:0 auto;position:relative;z-index:1;}/*!sc*/
+data-styled.g34[id="project-detail__HeroContent-sc-nsoc72-1"]{content:"khoxLO,"}/*!sc*/
+.dLtGgn{display:inline-block;font-size:0.875rem;font-weight:600;color:#FF6B35;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:1rem;}/*!sc*/
+data-styled.g35[id="project-detail__ProjectCategory-sc-nsoc72-2"]{content:"dLtGgn,"}/*!sc*/
+.iPXGuD{font-size:3.75rem;margin-bottom:1.5rem;background:linear-gradient( 135deg,#FF6B35 0%,#F7931E 100% );-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}/*!sc*/
+@media (max-width:768px){.iPXGuD{font-size:2.25rem;}}/*!sc*/
+data-styled.g36[id="project-detail__ProjectTitle-sc-nsoc72-3"]{content:"iPXGuD,"}/*!sc*/
+.hzkKhf{font-size:1.5rem;color:var(--color-text-secondary);max-width:800px;line-height:1.625;}/*!sc*/
+data-styled.g37[id="project-detail__ProjectDescription-sc-nsoc72-4"]{content:"hzkKhf,"}/*!sc*/
+.cramKJ{max-width:1024px;margin:0 auto;padding:3rem 1.5rem;}/*!sc*/
+.cramKJ h2{font-size:2.25rem;margin-top:4rem;margin-bottom:1.5rem;color:var(--color-text);}/*!sc*/
+.cramKJ h3{font-size:1.5rem;margin-top:2.5rem;margin-bottom:1rem;color:var(--color-text);}/*!sc*/
+.cramKJ p{font-size:1.125rem;line-height:1.625;margin-bottom:1.5rem;}/*!sc*/
+.cramKJ img{width:100%;border-radius:0.75rem;margin:2rem 0;box-shadow:0 20px 25px -5px rgba(0, 0, 0, 0.1),0 10px 10px -5px rgba(0, 0, 0, 0.04);}/*!sc*/
+.cramKJ ul,.cramKJ ol{font-size:1.125rem;line-height:1.625;margin-bottom:1.5rem;}/*!sc*/
+.cramKJ li{margin-bottom:0.75rem;}/*!sc*/
+.cramKJ blockquote{border-left:4px solid #FF6B35;padding-left:1.5rem;margin:2rem 0;font-style:italic;color:var(--color-text-secondary);}/*!sc*/
+.cramKJ code{background-color:var(--color-surface);padding:0.25rem 0.5rem;border-radius:0.125rem;font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,monospace;font-size:0.9em;}/*!sc*/
+.cramKJ pre{background-color:var(--color-surface);padding:1.5rem;border-radius:0.5rem;overflow-x:auto;margin:2rem 0;}/*!sc*/
+.cramKJ pre code{background:none;padding:0;}/*!sc*/
+.cramKJ hr{margin:3rem 0;border:none;height:1px;background:linear-gradient( 90deg,transparent 0%,var(--color-border) 50%,transparent 100% );}/*!sc*/
+data-styled.g38[id="project-detail__ProjectContent-sc-nsoc72-5"]{content:"cramKJ,"}/*!sc*/
+</style><style>.gatsby-image-wrapper{position:relative;overflow:hidden}.gatsby-image-wrapper picture.object-fit-polyfill{position:static!important}.gatsby-image-wrapper img{bottom:0;height:100%;left:0;margin:0;max-width:none;padding:0;position:absolute;right:0;top:0;width:100%;object-fit:cover}.gatsby-image-wrapper [data-main-image]{opacity:0;transform:translateZ(0);transition:opacity .25s linear;will-change:opacity}.gatsby-image-wrapper-constrained{display:inline-block;vertical-align:top}</style><noscript><style>.gatsby-image-wrapper noscript [data-main-image]{opacity:1!important}.gatsby-image-wrapper [data-placeholder-image]{opacity:0!important}</style></noscript><script type="module">const e="undefined"!=typeof HTMLImageElement&&"loading"in HTMLImageElement.prototype;e&&document.body.addEventListener("load",(function(e){const t=e.target;if(void 0===t.dataset.mainImage)return;if(void 0===t.dataset.gatsbyImageSsr)return;let a=null,n=t;for(;null===a&&n;)void 0!==n.parentNode.dataset.gatsbyImageWrapper&&(a=n.parentNode),n=n.parentNode;const o=a.querySelector("[data-placeholder-image]"),r=new Image;r.src=t.currentSrc,r.decode().catch((()=>{})).then((()=>{t.style.opacity=1,o&&(o.style.opacity=0,o.style.transition="opacity 500ms linear")}))}),!0);</script><link rel="preconnect" href="https://www.googletagmanager.com"/><link rel="dns-prefetch" href="https://www.googletagmanager.com"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div class="Layout__MainWrapper-sc-147ozt3-0 ghjyuh"><header class="Header__HeaderWrapper-sc-17836s2-0 jrpXdn"><nav class="Header__Nav-sc-17836s2-1 gynvdj"><a class="Header__Logo-sc-17836s2-2 iYuVWU" href="/">Ollin D. Langle-Chimal</a><div class="Header__NavLinks-sc-17836s2-3 hvvEFe"><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/projects/">projects</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/publications/">publications</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/blog/">blog</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/teaching/">teaching</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/people/">people</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/books/">books</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/cv/">cv</a><div class="Header__LanguageSwitcher-sc-17836s2-5 eVRumG"><button aria-label="Switch to English" class="Header__LangButton-sc-17836s2-6 eWLAbV">EN</button><button aria-label="Cambiar a Español" class="Header__LangButton-sc-17836s2-6 dklIUD">ES</button></div></div><div class="Header__DesktopActions-sc-17836s2-9 cPFteU"><button aria-label="Switch to light mode" class="Header__ThemeToggle-sc-17836s2-8 kHVmag">☀️</button></div><div class="Header__MobileActions-sc-17836s2-10 hZgUt"><button aria-label="Switch to light mode" class="Header__ThemeToggle-sc-17836s2-8 kHVmag">☀️</button><button aria-label="Toggle mobile menu" class="Header__MobileMenuButton-sc-17836s2-7 fFMim"><span></span><span></span><span></span></button></div></nav></header><main class="Layout__MainContent-sc-147ozt3-1 cZWiyp"><section class="project-detail__ProjectHero-sc-nsoc72-0 iIZsSs"><div class="project-detail__HeroContent-sc-nsoc72-1 khoxLO"><span class="project-detail__ProjectCategory-sc-nsoc72-2 dLtGgn">fun</span><h1 class="project-detail__ProjectTitle-sc-nsoc72-3 iPXGuD">Scraping the Mexican Senate</h1><p class="project-detail__ProjectDescription-sc-nsoc72-4 hzkKhf">Using Julia to scrape useful information from the Mexican Senate&#x27;s website.</p></div></section><article class="project-detail__ProjectContent-sc-nsoc72-5 cramKJ"><div><h1>Scraping useful information from the Mexican Senate</h1>
+<p>On August 2017 the Mexican Senate was awarder for fulfill it's transparency obligations.
+This mostly has to be with the fact that a great deal of information is
+publish every day at the <a href="https://www.senado.gob.mx">Senate's website</a>.</p>
+<p>Well, yes... the information is massive but impossible to handle for must of the users as it
+doesn't show any important statistics and the useful data is very sparse through the website.
+That's where our scraping skills comes to save the day! If we collect the information in maneageble
+formats then we can rearange it to gain some insights.</p>
+<p>The first thing that we need to do to successfully scrap a website is to visit and study it in
+order to discover what things would we want to see. In this case we're going to separate the information
+in certain principal topics:</p>
+<ul>
+<li>Senators
+<ul>
+<li>Name</li>
+<li>State (entity)</li>
+<li>Party</li>
+<li>Alternate</li>
+</ul>
+</li>
+<li>Attendance
+<ul>
+<li>Present</li>
+<li>Absent</li>
+<li>Justified Absence</li>
+<li>Absent on Official Comission</li>
+</ul>
+</li>
+<li>Comissions
+<ul>
+<li>96 comission</li>
+</ul>
+</li>
+<li>Votes
+<ul>
+<li>PRO</li>
+<li>CON</li>
+<li>Abstention</li>
+<li>Absent</li>
+</ul>
+</li>
+<li>Edicts (bills)</li>
+</ul>
+<p>JuliaLang is what we're going to do use for this task with some help from 3 wonderful packages.</p>
+<ul>
+<li>Requests</li>
+<li>Gumbo</li>
+<li>Cascadia</li>
+</ul>
+<p>Requests: To download the code from a website.
+Gumbo: A HTML parser.
+Cascadia: A CSS selector.</p>
+<p>Then the pipeline we'll follow is: Download the raw file text -> parse in into HTML -> use the HTML tree-like structure
+to download the information we need.</p>
+<p>In order to use the built-in Julia's parallelization capabilities I wrote everything as a function so the <em>map</em> function would
+be available. You can look at all these functions <a href="https://github.com/ollin18/The_Mexican_Senate/blob/master/Scraping/scraping_functions.jl">right here</a>.</p>
+<p>Now let's take for example how we would scrap the Senators info (name, entity, party and alternate). Which is <a href="https://github.com/ollin18/The_Mexican_Senate/blob/master/Scraping/get_names_and_reps.jl">this file</a>.</p>
+<p>{% highlight julia %}
+#!/usr/bin/env julia</p>
+<p>@everywhere alternates = 640:767</p>
+<p>@everywhere using Requests
+@everywhere using Cascadia</p>
+<p>@everywhere include("scraping_functions.jl")</p>
+<p>pmap(senators_and_alternates,alternates)
+{% endhighlight %}</p>
+<p>The first to take notice is the 640:767 range. This is the alternates' id in the website, and we're going to use
+these ones insted of the titular's because there's no link to the alternates from the original Senator's site but
+there is the other way around.
+Then, as we're using multiple workers (parallelization) we have to import every function and package to every one
+of them and that's the macro <code>@everywhere</code> for. And <code>pmap</code> is a parallel map for the <code>senators_and_alternates</code>
+function in the <em>alternates</em> array.</p>
+<p>But what's on the <code>senators_and_alternates</code> function?</p>
+<p>{% highlight julia %}
+function senators_and_alternates(id::Int64)
+tit_id, name, party, state, comissions, alt_id, alternate = names_and_representations(id)
+println(tit_id, "|", name, "|", party, "|", state, "|", alt_id, "|", alternate)
+end
+{% endhighlight %}</p>
+<p>Which prints a <em>pipe</em> separated CSV to the STDOUT but it's calling another another function that takes the id as
+argument and returns multiple fields as result from that particular id.</p>
+<p>{% highlight julia %}
+function names_and_representations(id::Int64)
+tit_id, alt_id, alt_name, alt_com = alternate_info(id)
+h = get_info(tit_id)
+qs = matchall(Selector("div table strong"),h.root)
+pty = matchall(Selector("div table tr td table img"),h.root)
+alt = matchall(Selector("div span b"),h.root)
+com = matchall(Selector("div ul li a[href^='index.php?watch=9&#x26;sm=100&#x26;id']"),h.root)
+name = giveme_names(qs)
+state = giveme_states(qs)
+party = giveme_party(pty)
+alternate = giveme_alternate(alt)
+if giveme_comissions(com) != nothing
+comissions = giveme_comissions(com)
+else
+comissions = alt_com
+end
+tit_id, name, party, state, comissions, alt_id, alternate
+end
+{% endhighlight %}</p>
+<p>Now here's where the scraping for the Senators happens! but as I said before, it's using data
+from the alternate's webpage. But here we can see the use of the Selector and matches from
+the Cascadia package, taking advantage from the tree-like structure of the HTML document as stated before.</p>
+<p>Finally, lets take a look into the <code>get_info</code> function.</p>
+<p>{% highlight julia %}
+function get_info(id::Int64)
+r = get("<a href="https://www.senado.gob.mx/index.php?watch=8&#x26;id=$id">https://www.senado.gob.mx/index.php?watch=8&#x26;id=$id</a>")
+h = parsehtml(String(copy(r.data)))
+h
+end
+{% endhighlight %}</p>
+<p>This is a very important function because is the one that downloads the files from the website. The argument
+it takes is the Senator or alternate's id and downloads that specific site via the Requests package and
+then parse it into HTML using Gumbo.</p>
+<p>Now that we have understood how this works we need to run the scraper telling the computer how many workers do we want,
+for that we can write a simple bash script.</p>
+<p>{% highlight bash %}
+#! /usr/bin/env bash</p>
+<p>procs=<code>grep -c ^processor /proc/cpuinfo</code></p>
+<p>julia -p $procs get_names_and_reps.jl | egrep -o "[0-9]{3}.*"
+{% endhighlight %}</p>
+<p>What it does is to look how many procs does your computer have and use them all to scrap the Senate! but we need
+to clean the output a little bit because we don't want to know which worker did what so that's what the <code>egrep</code>
+is for.</p>
+<p>Well that's all you need to know to scrap the Mexican Senate's website! If you want the info but don't want to write
+code you can always use mine which is <a href="https://github.com/ollin18/The_Mexican_Senate/tree/master/Scraping">right in this repo</a>.</p></div></article></main><footer class="Footer__FooterWrapper-sc-jaeqzk-0 bULOHN"><div class="Footer__FooterContent-sc-jaeqzk-1 iQowSC"><div class="Footer__FooterSection-sc-jaeqzk-2 hzRrLe"><h3 class="Footer__FooterTitle-sc-jaeqzk-3 jMqLUe">About</h3><p class="Footer__FooterText-sc-jaeqzk-4 jlxgqc">Complex Systems Researcher specializing in urban mobility, computational social science, and statistical physics.</p></div><div class="Footer__FooterSection-sc-jaeqzk-2 hzRrLe"><h3 class="Footer__FooterTitle-sc-jaeqzk-3 jMqLUe">Connect</h3><div class="Footer__SocialLinks-sc-jaeqzk-5 gvYEeR"><a href="https://github.com/ollin18" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="Footer__SocialLink-sc-jaeqzk-6 Footer__GitHubLink-sc-jaeqzk-7 cVFpvx dmOyhI">GitHub</a><a href="https://www.linkedin.com/in/ollin18" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="Footer__SocialLink-sc-jaeqzk-6 Footer__LinkedInLink-sc-jaeqzk-8 cVFpvx jAVeyI">LinkedIn</a><a href="https://scholar.google.com/citations?user=L1QJLFoAAAAJ&amp;hl" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar" class="Footer__SocialLink-sc-jaeqzk-6 Footer__ScholarLink-sc-jaeqzk-9 cVFpvx hiEvCn">Scholar</a><a href="mailto:ollin@berkeley.edu" aria-label="Email" class="Footer__SocialLink-sc-jaeqzk-6 Footer__EmailLink-sc-jaeqzk-10 cVFpvx gyOWIP">Email</a></div></div><div class="Footer__FooterSection-sc-jaeqzk-2 hzRrLe"><h3 class="Footer__FooterTitle-sc-jaeqzk-3 jMqLUe">Site</h3><p class="Footer__FooterText-sc-jaeqzk-4 jlxgqc">Built with Gatsby, React, and styled-components. Powered by GSAP for scroll animations.</p></div></div><div class="Footer__Copyright-sc-jaeqzk-11 fFDhGG">© <!-- -->2025<!-- --> Ollin D. Langle-Chimal. <!-- -->All rights reserved.<br/>Generated by Ollin</div></footer></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-9FS4V8SGLR"></script><script>
+      
+      function gaOptout(){document.cookie=disableStr+'=true; expires=Thu, 31 Dec 2099 23:59:59 UTC;path=/',window[disableStr]=!0}var gaProperty='G-9FS4V8SGLR',disableStr='ga-disable-'+gaProperty;document.cookie.indexOf(disableStr+'=true')>-1&&(window[disableStr]=!0);
+      if(!(navigator.doNotTrack == "1" || window.doNotTrack == "1")) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-9FS4V8SGLR', {"anonymize_ip":true,"cookie_expires":0,"send_page_view":false});
+      }
+      </script><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/projects/project_2/";/*]]>*/</script><!-- slice-start id="_gatsby-scripts-1" -->
+          <script
+            id="gatsby-chunk-mapping"
+          >
+            window.___chunkMapping="{\"app\":[\"/app-6b07f2d1820cf14b4d08.js\"],\"component---src-pages-404-js\":[\"/component---src-pages-404-js-f337ef602b06ee964200.js\"],\"component---src-pages-blog-jsx\":[\"/component---src-pages-blog-jsx-20759427d2695e7f55ed.js\"],\"component---src-pages-books-jsx\":[\"/component---src-pages-books-jsx-8f5a8417a20b16bee764.js\"],\"component---src-pages-cv-jsx\":[\"/component---src-pages-cv-jsx-3c891b956d7cedd9b783.js\"],\"component---src-pages-index-jsx\":[\"/component---src-pages-index-jsx-01f4dd51ca7a402bfeb0.js\"],\"component---src-pages-page-2-js\":[\"/component---src-pages-page-2-js-77e179c82fc1d05bd2cd.js\"],\"component---src-pages-people-jsx\":[\"/component---src-pages-people-jsx-b11a990fdb3f85122417.js\"],\"component---src-pages-projects-jsx\":[\"/component---src-pages-projects-jsx-d4ca39b38575b4e224f5.js\"],\"component---src-pages-publications-jsx\":[\"/component---src-pages-publications-jsx-3ef830e511ff854d52dc.js\"],\"component---src-pages-teaching-jsx\":[\"/component---src-pages-teaching-jsx-00802d5f59144504008d.js\"],\"component---src-pages-using-ssr-js\":[\"/component---src-pages-using-ssr-js-96362a78fd84d7080f7f.js\"],\"component---src-pages-using-typescript-tsx\":[\"/component---src-pages-using-typescript-tsx-5bcf42512638b022a421.js\"],\"component---src-templates-blog-post-jsx\":[\"/component---src-templates-blog-post-jsx-8975796e2e28586ff5ee.js\"],\"component---src-templates-book-review-jsx\":[\"/component---src-templates-book-review-jsx-f973f2e45b2fcf27fe83.js\"],\"component---src-templates-project-detail-jsx\":[\"/component---src-templates-project-detail-jsx-259aa42f03aa0c59758d.js\"]}";
+          </script>
+        <script>window.___webpackCompilationHash="605b00de1ebb89974b42";</script><script src="/webpack-runtime-885fe404981ed5d02423.js" async></script><script src="/framework-a98cd6097609b685b73f.js" async></script><script src="/94726e6d-823c10e1ea9abde67a2e.js" async></script><script src="/app-6b07f2d1820cf14b4d08.js" async></script><!-- slice-end id="_gatsby-scripts-1" --></body></html>

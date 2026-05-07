@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+  <head>
+    <meta charset="utf-8">
+    <title>Gini Index - Mexico</title>
+  </head>
+  <body style="height: 100%; margin: 0">
+    <div id="container" style="height:100%;"></div>
+
+    <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/jquery"></script>
+    <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+
+    <script type="text/javascript">
+      // based on prepared DOM, initialize echarts instance
+      //var myChart = echarts.init(document.getElementById('main'));
+
+      var dom = document.getElementById('container');
+      var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+      });
+      var option;
+      var app = {};
+      myChart.showLoading();
+
+      $.ajax({
+        url: 'https://raw.githubusercontent.com/strotgen/mexico-leaflet/master/states.geojson',
+        dataType: 'json',
+        success: function(mexicoJson) {
+          myChart.hideLoading();
+          mexicoJson.features.forEach(function(feature) {
+              feature.properties.name = feature.properties.state_name;
+              delete feature.properties.state_name;
+            });
+          echarts.registerMap('MEXICO', mexicoJson);
+
+          var data = [
+            {name: 'Aguascalientes', original_name: 'Aguascalientes', value: -3.49 },
+            {name: 'Baja California', original_name: 'Baja California', value: 0.69 },
+            {name: 'Baja California Sur', original_name: 'Baja California Sur', value: 4.43 },
+            {name: 'Campeche', original_name: 'Campeche', value: -6.81 },
+            {name: 'Chiapas', original_name: 'Chiapas', value: -1.97 },
+            {name: 'Chihuahua', original_name: 'Chihuahua', value: -3.02 },
+            {name: 'Coahuila de Zaragoza', original_name: 'Coahuila', value: -0.52 },
+            {name: 'Colima', original_name: 'Colima', value: -4.44 },
+            {name: 'Durango', original_name: 'Durango', value: 2.60 },
+            {name: 'Guanajuato', original_name: 'Guanajuato', value: -3.70 },
+            {name: 'Guerrero', original_name: 'Guerrero', value: -0.72 },
+            {name: 'Hidalgo', original_name: 'Hidalgo', value: 0.04 },
+            {name: 'Jalisco', original_name: 'Jalisco', value: -1.26 },
+            {name: 'Distrito Federal', original_name: 'Mexico City', value: -0.10 },
+            {name: 'Michoacan de Ocampo', original_name: 'Michoacan', value: -1.2 },
+            {name: 'México', original_name: 'Mexico', value: -0.18 },
+            {name: 'Morelos', original_name: 'Morelos', value: -0.11 },
+            {name: 'Nayarit', original_name: 'Nayarit', value: 1.40 },
+            {name: 'Nuevo León', original_name: 'Nuevo Leon', value: -1.91 },
+            {name: 'Oaxaca', original_name: 'Oaxaca', value: -0.76 },
+            {name: 'Puebla', original_name: 'Puebla', value: 0.26 },
+            {name: 'Querétaro', original_name: 'Queretaro', value: 1.05 },
+            {name: 'Quintana Roo', original_name: 'Quintana Roo', value: 1.90 },
+            {name: 'San Luis Potosí', original_name: 'San Luis Potosi', value: -0.79 },
+            {name: 'Sinaloa', original_name: 'Sinaloa', value: 0.88 },
+            {name: 'Sonora', original_name: 'Sonora', value: -0.32 },
+            {name: 'Tabasco', original_name: 'Tabasco', value: -0.81 },
+            {name: 'Tamaulipas', original_name: 'Tamaulipas', value: -2.27 },
+            {name: 'Tlaxcala', original_name: 'Tlaxcala', value: -1.25 },
+            {name: 'Veracruz de Ignacio de la Llave', original_name: 'Veracruz', value: -1.17 },
+            {name: 'Yucatán', original_name: 'Yucatan', value: 3.80 },
+            {name: 'Zacatecas', original_name: 'Zacatecas', value: -0.65 },
+          ];
+          data.sort(function (a, b) {
+            return a.value - b.value;
+          });
+
+          const mapOption = {
+            visualMap: {
+              left: 'right',
+              min: -7,
+              max: 7,
+              inRange: {
+                color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+              },
+              text: ['Increase', 'Decrease'],
+              calculable: true,
+            },
+            series: [
+              {
+                id: 'population',
+                type: 'map',
+                roam: true,
+                map: 'MEXICO',
+                // name: 'Mexico',
+                // mapType: 'MEXICO',
+                animationDurationUpdate: 1000,
+                universalTransition: true,
+                data:data,
+              }
+            ]
+          };
+
+          const barOption = {
+            xAxis: {
+              type: 'value'
+            },
+            yAxis: {
+              type: 'category',
+              axisLabel: {
+                rotate: 30
+              },
+              data: data.map(function (item) {
+                return item.original_name;
+              })
+            },
+            animationDurationUpdate: 1000,
+            series: {
+              type: 'bar',
+              id: 'population',
+              data: data.map(function (item) {
+                return item.value;
+              }),
+            itemStyle: {
+              color: function(params) {
+                var value = data[params.dataIndex].value;
+                var colorPalette = ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+                var minValue = -7;
+                var maxValue = 7;
+                var normalizedValue = (value - minValue) / (maxValue - minValue);
+                var colorIndex = Math.round(normalizedValue * (colorPalette.length - 1));
+                return colorPalette[colorIndex];
+              }
+              },
+              universalTransition: true
+            }
+          };
+
+          let currentOption = mapOption;
+          myChart.setOption(currentOption);
+          setInterval(function () {
+            currentOption = currentOption === mapOption ? barOption : mapOption;
+            myChart.setOption(currentOption, true);
+          }, 2000);
+        }
+      });
+          if (option && typeof option === 'object') {
+      myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+
+    </script>
+  </body>
+</html>
+

@@ -1,0 +1,251 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><meta name="generator" content="Gatsby 5.14.6"/><meta data-react-helmet="true" name="description" content="Using a SIS model to simulate the effect of social distancing and self-isolation in the spreading of COVID-19."/><meta data-react-helmet="true" name="keywords" content="complex-systems, urban-science, economics, mobility, computational-social-science"/><meta data-react-helmet="true" property="og:title" content="Distanciamiento Social y Auto-aislamiento en épocas de COVID-19"/><meta data-react-helmet="true" property="og:description" content="Using a SIS model to simulate the effect of social distancing and self-isolation in the spreading of COVID-19."/><meta data-react-helmet="true" property="og:type" content="website"/><meta data-react-helmet="true" property="og:url" content="https://ollin18.github.io/es-mx/projects/distanciamiento"/><meta data-react-helmet="true" property="og:image" content="/assets/images/covidSIS/opinion_cycle_2.gif"/><meta data-react-helmet="true" property="og:image:alt" content="Distanciamiento Social y Auto-aislamiento en épocas de COVID-19"/><meta data-react-helmet="true" property="og:locale" content="es_mx"/><meta data-react-helmet="true" name="twitter:card" content="summary_large_image"/><meta data-react-helmet="true" name="twitter:creator" content="Ollin D. Langle-Chimal"/><meta data-react-helmet="true" name="twitter:title" content="Distanciamiento Social y Auto-aislamiento en épocas de COVID-19"/><meta data-react-helmet="true" name="twitter:description" content="Using a SIS model to simulate the effect of social distancing and self-isolation in the spreading of COVID-19."/><meta data-react-helmet="true" name="twitter:image" content="/assets/images/covidSIS/opinion_cycle_2.gif"/><title data-react-helmet="true">Distanciamiento Social y Auto-aislamiento en épocas de COVID-19 | Ollin D. Langle-Chimal</title><link data-react-helmet="true" rel="canonical" href="https://ollin18.github.io/es-mx/projects/distanciamiento"/><link data-react-helmet="true" rel="alternate" hrefLang="en-us" href="https://ollin18.github.io/projects/distanciamiento"/><link data-react-helmet="true" rel="alternate" hrefLang="es-mx" href="https://ollin18.github.io/es-mx/projects/distanciamiento"/><link data-react-helmet="true" rel="alternate" hrefLang="x-default" href="https://ollin18.github.io/projects/distanciamiento"/><style data-styled="" data-styled-version="6.1.19">@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Jost:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');/*!sc*/
+@import url('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css');/*!sc*/
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}/*!sc*/
+:root{--color-bg:#0A0E27;--color-bg-secondary:#1A1F3A;--color-text:#E8E9ED;--color-text-secondary:#A0A8C5;--color-surface:#151B35;--color-border:#2A3250;--color-primary:#FF6B35;--color-secondary:#004E89;--color-accent:#F7931E;--color-bg-rgb:10,14,39;}/*!sc*/
+[data-theme='light']{--color-bg:#FFFFFF;--color-bg-secondary:#F5F7FA;--color-text:#1A1A1A;--color-text-secondary:#6B7280;--color-surface:#FAFBFC;--color-border:#E5E7EB;--color-bg-rgb:255,255,255;}/*!sc*/
+html{font-size:16px;scroll-behavior:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;}/*!sc*/
+body{margin:0;padding:0;font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1rem;font-weight:400;line-height:1.5;color:var(--color-text);background-color:var(--color-bg);overflow-x:hidden;transition:background-color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+h1,h2,h3,h4,h5,h6{font-family:"Jost","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-weight:700;line-height:1.25;color:var(--color-text);margin:0;}/*!sc*/
+h1{font-size:3.75rem;letter-spacing:-0.025em;}/*!sc*/
+@media (max-width:768px){h1{font-size:2.25rem;}}/*!sc*/
+h2{font-size:2.25rem;}/*!sc*/
+@media (max-width:768px){h2{font-size:1.875rem;}}/*!sc*/
+h3{font-size:1.875rem;}/*!sc*/
+@media (max-width:768px){h3{font-size:1.5rem;}}/*!sc*/
+h4{font-size:1.5rem;}/*!sc*/
+h5{font-size:1.25rem;}/*!sc*/
+h6{font-size:1.125rem;}/*!sc*/
+p{margin:0 0 1rem 0;line-height:1.625;color:var(--color-text);}/*!sc*/
+a{color:#FF6B35;text-decoration:none;transition:color 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);cursor:pointer;}/*!sc*/
+a:hover{color:#F7931E;}/*!sc*/
+a:focus-visible{outline:2px solid #FF6B35;outline-offset:2px;border-radius:2px;}/*!sc*/
+ul,ol{margin:0 0 1rem 0;padding-left:1.5rem;}/*!sc*/
+li{margin-bottom:0.5rem;line-height:1.625;}/*!sc*/
+code,pre{font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,monospace;}/*!sc*/
+code{background-color:var(--color-surface);padding:0.125rem 0.375rem;border-radius:0.125rem;font-size:0.875em;color:#F7931E;}/*!sc*/
+pre{background-color:var(--color-surface);padding:1rem;border-radius:0.375rem;overflow-x:auto;margin-bottom:1rem;border:1px solid var(--color-border);}/*!sc*/
+pre code{background-color:transparent;padding:0;border-radius:0;color:var(--color-text);}/*!sc*/
+blockquote{margin:1.5rem 0;padding:1rem 1.5rem;border-left:4px solid #FF6B35;background-color:var(--color-surface);border-radius:0.375rem;font-style:italic;color:var(--color-text-secondary);}/*!sc*/
+blockquote p:last-child{margin-bottom:0;}/*!sc*/
+img{max-width:100%;height:auto;display:block;}/*!sc*/
+hr{border:0;height:1px;background-color:var(--color-border);margin:2rem 0;}/*!sc*/
+table{width:100%;border-collapse:collapse;margin-bottom:1.5rem;}/*!sc*/
+th,td{padding:0.75rem;text-align:left;border-bottom:1px solid var(--color-border);}/*!sc*/
+th{font-weight:600;background-color:var(--color-surface);}/*!sc*/
+input,textarea,select,button{font-family:inherit;font-size:inherit;line-height:inherit;}/*!sc*/
+button{cursor:pointer;border:none;background:none;padding:0;color:inherit;}/*!sc*/
+::selection{background-color:#FF6B35;color:#0A0E27;}/*!sc*/
+::-moz-selection{background-color:#FF6B35;color:#0A0E27;}/*!sc*/
+::-webkit-scrollbar{width:12px;height:12px;}/*!sc*/
+::-webkit-scrollbar-track{background:var(--color-bg);}/*!sc*/
+::-webkit-scrollbar-thumb{background:#FF6B35;border-radius:9999px;border:3px solid var(--color-bg);}/*!sc*/
+::-webkit-scrollbar-thumb:hover{background:#F7931E;}/*!sc*/
+*{scrollbar-width:thin;scrollbar-color:#FF6B35 var(--color-bg);}/*!sc*/
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0;}/*!sc*/
+*:focus-visible{outline:2px solid #FF6B35;outline-offset:2px;}/*!sc*/
+*:focus:not(:focus-visible){outline:none;}/*!sc*/
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important;}}/*!sc*/
+@media print{body{background-color:white;color:black;}a{text-decoration:underline;}nav,aside,footer{display:none;}}/*!sc*/
+data-styled.g1[id="sc-global-cBdPHX1"]{content:"sc-global-cBdPHX1,"}/*!sc*/
+.jrpXdn{position:fixed;top:0;left:0;right:0;z-index:1100;background-color:transparent;backdrop-filter:none;border-bottom:1px solid transparent;transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+data-styled.g2[id="Header__HeaderWrapper-sc-17836s2-0"]{content:"jrpXdn,"}/*!sc*/
+.gynvdj{max-width:1280px;margin:0 auto;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;}/*!sc*/
+data-styled.g3[id="Header__Nav-sc-17836s2-1"]{content:"gynvdj,"}/*!sc*/
+.iYuVWU{font-family:"Jost","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1.5rem;font-weight:700;color:var(--color-text);letter-spacing:-0.025em;transition:color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.iYuVWU:hover{color:#FF6B35;}/*!sc*/
+data-styled.g4[id="Header__Logo-sc-17836s2-2"]{content:"iYuVWU,"}/*!sc*/
+.hvvEFe{display:flex;align-items:center;gap:1.5rem;}/*!sc*/
+@media (max-width:768px){.hvvEFe{display:none;position:fixed;top:70px;left:0;right:0;background-color:var(--color-surface);flex-direction:column;padding:1.5rem;border-bottom:1px solid var(--color-border);backdrop-filter:blur(12px);}}/*!sc*/
+data-styled.g5[id="Header__NavLinks-sc-17836s2-3"]{content:"hvvEFe,"}/*!sc*/
+.dWMbER{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1rem;font-weight:500;color:var(--color-text);position:relative;transition:color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.dWMbER::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background-color:#FF6B35;transform:scaleX(0);transition:transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.dWMbER:hover{color:#FF6B35;}/*!sc*/
+.dWMbER:hover::after{transform:scaleX(1);}/*!sc*/
+.dWMbER.active{color:#FF6B35;}/*!sc*/
+.dWMbER.active::after{transform:scaleX(1);}/*!sc*/
+data-styled.g6[id="Header__NavLink-sc-17836s2-4"]{content:"dWMbER,"}/*!sc*/
+.eVRumG{display:flex;gap:0.5rem;}/*!sc*/
+data-styled.g7[id="Header__LanguageSwitcher-sc-17836s2-5"]{content:"eVRumG,"}/*!sc*/
+.dklIUD{font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,monospace;font-size:0.875rem;font-weight:500;color:var(--color-text-secondary);padding:0.5rem 0.75rem;border:1px solid var(--color-border);border-radius:0.375rem;background-color:transparent;cursor:pointer;transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);text-transform:uppercase;}/*!sc*/
+.dklIUD:hover{color:#FF6B35;border-color:#FF6B35;background-color:rgba(255,107,53,0.1);}/*!sc*/
+.eWLAbV{font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,monospace;font-size:0.875rem;font-weight:500;color:#FF6B35;padding:0.5rem 0.75rem;border:1px solid #FF6B35;border-radius:0.375rem;background-color:rgba(255, 107, 53, 0.1);cursor:pointer;transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);text-transform:uppercase;}/*!sc*/
+.eWLAbV:hover{color:#FF6B35;border-color:#FF6B35;background-color:rgba(255,107,53,0.1);}/*!sc*/
+data-styled.g8[id="Header__LangButton-sc-17836s2-6"]{content:"dklIUD,eWLAbV,"}/*!sc*/
+.fFMim{display:none;flex-direction:column;gap:4px;background:transparent;border:none;cursor:pointer;padding:0.5rem;}/*!sc*/
+@media (max-width:768px){.fFMim{display:flex;}}/*!sc*/
+.fFMim span{width:24px;height:2px;background-color:var(--color-text);transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.fFMim span:nth-child(1){transform:none;}/*!sc*/
+.fFMim span:nth-child(2){opacity:1;}/*!sc*/
+.fFMim span:nth-child(3){transform:none;}/*!sc*/
+data-styled.g9[id="Header__MobileMenuButton-sc-17836s2-7"]{content:"fFMim,"}/*!sc*/
+.kHVmag{background:transparent;border:1px solid var(--color-border);border-radius:9999px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--color-text);font-size:1.25rem;transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);margin-left:1rem;}/*!sc*/
+.kHVmag:hover{border-color:#FF6B35;color:#FF6B35;background:rgba(255,107,53,0.1);}/*!sc*/
+@media (max-width:768px){.kHVmag{margin-left:0;}}/*!sc*/
+data-styled.g10[id="Header__ThemeToggle-sc-17836s2-8"]{content:"kHVmag,"}/*!sc*/
+.cPFteU{display:flex;align-items:center;gap:1rem;}/*!sc*/
+data-styled.g11[id="Header__DesktopActions-sc-17836s2-9"]{content:"cPFteU,"}/*!sc*/
+.hZgUt{display:flex;align-items:center;gap:0.75rem;}/*!sc*/
+@media (min-width:768px){.hZgUt{display:none;}}/*!sc*/
+data-styled.g12[id="Header__MobileActions-sc-17836s2-10"]{content:"hZgUt,"}/*!sc*/
+.bULOHN{background-color:var(--color-surface);border-top:1px solid var(--color-border);padding:3rem 1.5rem;margin-top:5rem;}/*!sc*/
+data-styled.g13[id="Footer__FooterWrapper-sc-jaeqzk-0"]{content:"bULOHN,"}/*!sc*/
+.iQowSC{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;}/*!sc*/
+@media (max-width:768px){.iQowSC{grid-template-columns:1fr;}}/*!sc*/
+data-styled.g14[id="Footer__FooterContent-sc-jaeqzk-1"]{content:"iQowSC,"}/*!sc*/
+.hzRrLe{display:flex;flex-direction:column;gap:1rem;}/*!sc*/
+data-styled.g15[id="Footer__FooterSection-sc-jaeqzk-2"]{content:"hzRrLe,"}/*!sc*/
+.jMqLUe{font-family:"Jost","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1.125rem;font-weight:600;color:var(--color-text);margin-bottom:0.5rem;}/*!sc*/
+data-styled.g16[id="Footer__FooterTitle-sc-jaeqzk-3"]{content:"jMqLUe,"}/*!sc*/
+.jlxgqc{font-size:0.875rem;color:var(--color-text-secondary);line-height:1.625;margin:0;}/*!sc*/
+data-styled.g17[id="Footer__FooterText-sc-jaeqzk-4"]{content:"jlxgqc,"}/*!sc*/
+.gvYEeR{display:flex;gap:1rem;flex-wrap:wrap;}/*!sc*/
+data-styled.g18[id="Footer__SocialLinks-sc-jaeqzk-5"]{content:"gvYEeR,"}/*!sc*/
+.cVFpvx{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:var(--color-text-secondary);transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.cVFpvx:hover{color:#FF6B35;transform:translateY(-2px);}/*!sc*/
+.cVFpvx::before{content:'';width:20px;height:20px;background-color:currentColor;mask-size:contain;mask-repeat:no-repeat;mask-position:center;}/*!sc*/
+data-styled.g19[id="Footer__SocialLink-sc-jaeqzk-6"]{content:"cVFpvx,"}/*!sc*/
+.dmOyhI::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z'/%3E%3C/svg%3E");}/*!sc*/
+data-styled.g20[id="Footer__GitHubLink-sc-jaeqzk-7"]{content:"dmOyhI,"}/*!sc*/
+.jAVeyI::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z'/%3E%3C/svg%3E");}/*!sc*/
+data-styled.g21[id="Footer__LinkedInLink-sc-jaeqzk-8"]{content:"jAVeyI,"}/*!sc*/
+.hiEvCn::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 0l11 6v8.5c0 5.25-3.25 10.2-11 13.5-7.75-3.3-11-8.25-11-13.5v-8.5l11-6zm0 2.18l-9 4.91v7.41c0 4.09 2.59 8.05 9 10.9 6.41-2.85 9-6.81 9-10.9v-7.41l-9-4.91zm1 10.32v5.5h-2v-5.5h-3l4-4 4 4h-3z'/%3E%3C/svg%3E");}/*!sc*/
+data-styled.g22[id="Footer__ScholarLink-sc-jaeqzk-9"]{content:"hiEvCn,"}/*!sc*/
+.gyOWIP::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z'/%3E%3C/svg%3E");}/*!sc*/
+data-styled.g23[id="Footer__EmailLink-sc-jaeqzk-10"]{content:"gyOWIP,"}/*!sc*/
+.fFDhGG{text-align:center;padding-top:2rem;margin-top:2rem;border-top:1px solid var(--color-border);color:var(--color-text-secondary);font-size:0.875rem;}/*!sc*/
+data-styled.g24[id="Footer__Copyright-sc-jaeqzk-11"]{content:"fFDhGG,"}/*!sc*/
+.ghjyuh{min-height:100vh;display:flex;flex-direction:column;}/*!sc*/
+data-styled.g25[id="Layout__MainWrapper-sc-147ozt3-0"]{content:"ghjyuh,"}/*!sc*/
+.cZWiyp{flex:1;margin-top:70px;}/*!sc*/
+data-styled.g26[id="Layout__MainContent-sc-147ozt3-1"]{content:"cZWiyp,"}/*!sc*/
+.iIZsSs{min-height:60vh;display:flex;flex-direction:column;justify-content:center;padding:5rem 1.5rem;background:linear-gradient( 135deg,var(--color-bg) 0%,var(--color-surface) 100% );position:relative;overflow:hidden;}/*!sc*/
+.iIZsSs::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient( circle at 20% 50%,rgba(255,107,53,0.1) 0%,transparent 50% );pointer-events:none;}/*!sc*/
+data-styled.g33[id="project-detail__ProjectHero-sc-nsoc72-0"]{content:"iIZsSs,"}/*!sc*/
+.khoxLO{max-width:1024px;margin:0 auto;position:relative;z-index:1;}/*!sc*/
+data-styled.g34[id="project-detail__HeroContent-sc-nsoc72-1"]{content:"khoxLO,"}/*!sc*/
+.dLtGgn{display:inline-block;font-size:0.875rem;font-weight:600;color:#FF6B35;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:1rem;}/*!sc*/
+data-styled.g35[id="project-detail__ProjectCategory-sc-nsoc72-2"]{content:"dLtGgn,"}/*!sc*/
+.iPXGuD{font-size:3.75rem;margin-bottom:1.5rem;background:linear-gradient( 135deg,#FF6B35 0%,#F7931E 100% );-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}/*!sc*/
+@media (max-width:768px){.iPXGuD{font-size:2.25rem;}}/*!sc*/
+data-styled.g36[id="project-detail__ProjectTitle-sc-nsoc72-3"]{content:"iPXGuD,"}/*!sc*/
+.hzkKhf{font-size:1.5rem;color:var(--color-text-secondary);max-width:800px;line-height:1.625;}/*!sc*/
+data-styled.g37[id="project-detail__ProjectDescription-sc-nsoc72-4"]{content:"hzkKhf,"}/*!sc*/
+.cramKJ{max-width:1024px;margin:0 auto;padding:3rem 1.5rem;}/*!sc*/
+.cramKJ h2{font-size:2.25rem;margin-top:4rem;margin-bottom:1.5rem;color:var(--color-text);}/*!sc*/
+.cramKJ h3{font-size:1.5rem;margin-top:2.5rem;margin-bottom:1rem;color:var(--color-text);}/*!sc*/
+.cramKJ p{font-size:1.125rem;line-height:1.625;margin-bottom:1.5rem;}/*!sc*/
+.cramKJ img{width:100%;border-radius:0.75rem;margin:2rem 0;box-shadow:0 20px 25px -5px rgba(0, 0, 0, 0.1),0 10px 10px -5px rgba(0, 0, 0, 0.04);}/*!sc*/
+.cramKJ ul,.cramKJ ol{font-size:1.125rem;line-height:1.625;margin-bottom:1.5rem;}/*!sc*/
+.cramKJ li{margin-bottom:0.75rem;}/*!sc*/
+.cramKJ blockquote{border-left:4px solid #FF6B35;padding-left:1.5rem;margin:2rem 0;font-style:italic;color:var(--color-text-secondary);}/*!sc*/
+.cramKJ code{background-color:var(--color-surface);padding:0.25rem 0.5rem;border-radius:0.125rem;font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,monospace;font-size:0.9em;}/*!sc*/
+.cramKJ pre{background-color:var(--color-surface);padding:1.5rem;border-radius:0.5rem;overflow-x:auto;margin:2rem 0;}/*!sc*/
+.cramKJ pre code{background:none;padding:0;}/*!sc*/
+.cramKJ hr{margin:3rem 0;border:none;height:1px;background:linear-gradient( 90deg,transparent 0%,var(--color-border) 50%,transparent 100% );}/*!sc*/
+data-styled.g38[id="project-detail__ProjectContent-sc-nsoc72-5"]{content:"cramKJ,"}/*!sc*/
+</style><style>.gatsby-image-wrapper{position:relative;overflow:hidden}.gatsby-image-wrapper picture.object-fit-polyfill{position:static!important}.gatsby-image-wrapper img{bottom:0;height:100%;left:0;margin:0;max-width:none;padding:0;position:absolute;right:0;top:0;width:100%;object-fit:cover}.gatsby-image-wrapper [data-main-image]{opacity:0;transform:translateZ(0);transition:opacity .25s linear;will-change:opacity}.gatsby-image-wrapper-constrained{display:inline-block;vertical-align:top}</style><noscript><style>.gatsby-image-wrapper noscript [data-main-image]{opacity:1!important}.gatsby-image-wrapper [data-placeholder-image]{opacity:0!important}</style></noscript><script type="module">const e="undefined"!=typeof HTMLImageElement&&"loading"in HTMLImageElement.prototype;e&&document.body.addEventListener("load",(function(e){const t=e.target;if(void 0===t.dataset.mainImage)return;if(void 0===t.dataset.gatsbyImageSsr)return;let a=null,n=t;for(;null===a&&n;)void 0!==n.parentNode.dataset.gatsbyImageWrapper&&(a=n.parentNode),n=n.parentNode;const o=a.querySelector("[data-placeholder-image]"),r=new Image;r.src=t.currentSrc,r.decode().catch((()=>{})).then((()=>{t.style.opacity=1,o&&(o.style.opacity=0,o.style.transition="opacity 500ms linear")}))}),!0);</script><link rel="preconnect" href="https://www.googletagmanager.com"/><link rel="dns-prefetch" href="https://www.googletagmanager.com"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div class="Layout__MainWrapper-sc-147ozt3-0 ghjyuh"><header class="Header__HeaderWrapper-sc-17836s2-0 jrpXdn"><nav class="Header__Nav-sc-17836s2-1 gynvdj"><a class="Header__Logo-sc-17836s2-2 iYuVWU" href="/">Ollin D. Langle-Chimal</a><div class="Header__NavLinks-sc-17836s2-3 hvvEFe"><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/projects/">projects</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/publications/">publications</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/blog/">blog</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/teaching/">teaching</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/people/">people</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/books/">books</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/cv/">cv</a><div class="Header__LanguageSwitcher-sc-17836s2-5 eVRumG"><button aria-label="Switch to English" class="Header__LangButton-sc-17836s2-6 dklIUD">EN</button><button aria-label="Cambiar a Español" class="Header__LangButton-sc-17836s2-6 eWLAbV">ES</button></div></div><div class="Header__DesktopActions-sc-17836s2-9 cPFteU"><button aria-label="Switch to light mode" class="Header__ThemeToggle-sc-17836s2-8 kHVmag">☀️</button></div><div class="Header__MobileActions-sc-17836s2-10 hZgUt"><button aria-label="Switch to light mode" class="Header__ThemeToggle-sc-17836s2-8 kHVmag">☀️</button><button aria-label="Toggle mobile menu" class="Header__MobileMenuButton-sc-17836s2-7 fFMim"><span></span><span></span><span></span></button></div></nav></header><main class="Layout__MainContent-sc-147ozt3-1 cZWiyp"><section class="project-detail__ProjectHero-sc-nsoc72-0 iIZsSs"><div class="project-detail__HeroContent-sc-nsoc72-1 khoxLO"><span class="project-detail__ProjectCategory-sc-nsoc72-2 dLtGgn">work</span><h1 class="project-detail__ProjectTitle-sc-nsoc72-3 iPXGuD">Distanciamiento Social y Auto-aislamiento en épocas de COVID-19</h1><p class="project-detail__ProjectDescription-sc-nsoc72-4 hzkKhf">Using a SIS model to simulate the effect of social distancing and self-isolation in the spreading of COVID-19.</p></div></section><article class="project-detail__ProjectContent-sc-nsoc72-5 cramKJ"><div><img src="/assets/images/covidSIS/opinion_cycle_2.gif" alt="lattice" style="width:280px;">
+<h3>TLDR;</h3>
+El auto-aislamiento es efectivo para controlar la propagación de una enfermedad viral. La alta movilidad a la que estamos acostumbrados implica el contacto o cercanía con un mayor número de personas conocidas y otras tantas aleatorias durante el periodo de translado, este mayor número de contactos y su naturaleza estocástica produce un gran impacto en la contención de una epidemia.
+<p>La canción de este post:</p>
+<iframe src="https://open.spotify.com/embed/track/5r7uA7AxZi1tSBr8Kj4svH" width="300" height="100" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+<p>Esta entrada del blog está altamente inspirada por esta TED talk de Alanna Shaik</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Fqw-9yMV0sI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<p>También cabe destacar que para nada soy un epidemiólogo pero he tomado clases y colaborado con algunos de ellos y que son muy reconocidos en su área. Aquí les dejo sus cuentas de Twitter <a href="https://twitter.com/LHDnets">Laurent Hébert-Dufresne</a>, <a href="https://twitter.com/svscarpino">Samuel V. Scarpino</a>, <a href="https://twitter.com/vcolizza">Vittoria Colizza</a>, <a href="https://twitter.com/BMAlthouse">Ben Althouse</a> y en español <a href="https://twitter.com/gomezgardenes">Jesús Gomez-Gardeñes</a>, si tienen dudas grandes al respecto les sugiero leer lo que ellos escriben o contactarlos si tienen alguna duda científica.</p>
+<p>Cabe aclarar que todo lo que van a leer aquí son ejemplos, lo que llamamos "modelos de juguete", pero sirven para entender las dinámicas de este tipo de sistemas. No escogí nada para que se viera más dramático ni hice algún cambio entre simulaciones, todas tienen los mismos parámetros.</p>
+<h2>¿Qué es el Coronavirus? y ¿qué es el COVID-19?</h2>
+<p>Los Coronavirus es una familia de virus zoonóticos (se transmiten entre animales y humanos), se llaman así porque físicamente tienen un halo de proteinas en forma de corona. Existen distintos tipos de ellos y en los últimos años varios han tomado cierta relevancia como es el caso del MERS (Middle East Respiratory Syndrome), el SARS (Severe Acute Respiratory Syndrome) y actualmente el COVID-19 (Coronavirus Disease 2019). El origen de este último se rastreó hasta un mercado mojado en la ciudad de Wuhan en China (esto seguro ya lo sabías) y probablemente el contagio vino de un murciélago o un pangolín, todavía no se ha determinado pero los murciélagos parecen llevar la delantera dado que se encontró un tipo de coronavirus en ellos que comparte el <a href="https://www.nature.com/articles/s41586-020-2012-7">96% de su material genético con el encontrado en humanos</a>. Aprovechando el enlace anterior al artículo del genonma del coronavirus, es importante mencionar que varias revistas científicas que usualmente cobran por leer los artículos han puesto los relacionados con el COVID-19 en una ventana gratuita (estoy en contra de las revistas de paga, pero al menos...).</p>
+<h2>¿Cuáles son los síntomas?</h2>
+<p>El COVID-19 en particular tipicamente causa malestares respiratorios leves a moderados muy similares a los de una gripe, como lo son:</p>
+<ul>
+<li>Tos</li>
+<li>Fiebre</li>
+<li>Falta de aliento</li>
+</ul>
+<p>Un gran problema es que los síntomas aparecen hasta más de dos semanas después de contraer el virus, mientras tanto aquellas personas que no presentan síntomas pero son portadoras potencialmente están contagiando a otros (se sigue evaluando este tema). La mayoría de las personas contagiadas se recuperan por su cuenta pero hay un número de personas en estado vulnerable como los adultos mayores, gente con obesidad, diabetes, enfermedades respiratorias, etc. a los que les causa complicaciones y deben ser atendidos en hospitales.</p>
+<p>A esta altura ya todos sabemos que la tasa de mortalidad incrementa con la edad de la persona (click en la imagen para leer el artículo de Vox)</p>
+<p><a href="https://www.vox.com/2020/3/12/21173783/coronavirus-death-age-covid-19-elderly-seniors"><img src="https://cdn.vox-cdn.com/thumbor/jttKYhporW2qkpZhceZR9sqJ3b8=/0x0:1804x910/920x0/filters:focal(0x0:1804x910):format(webp):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/19788829/estimate_case_fatality_hubei_age.jpg" alt="lattice" style="width:650px;"></a></p>
+<p>Esto se debe a las condiciones preexistentes que mencionaba antes, el sistema inmune suele verse disminuido con la edad.</p>
+<p>Como dije anteriormente, en la mayoría de los casos los síntomas son leves y menos del 5% son críticos</p>
+<p><a href="https://medium.com/@tomaspueyo/coronavirus-act-today-or-people-will-die-f4d3d9cd99ca"><img src="https://miro.medium.com/max/1830/1*-O84hhKDRHmgMVAslvgj-Q.png" alt="lattice" style="width:650px;"></a></p>
+<p>Así que hay que tener calma en estos momentos, no parece ser la pandemia que nos va aniquilar. Pero es <strong>Importantísimo</strong> tener medidas <em>profilácticas</em>:</p>
+<ul>
+<li>Evitar el contacto con otros</li>
+<li>Cubrirse al toser o estornudar (Con el codo, por favor)</li>
+<li>No viajar cuando se esté enfermo</li>
+<li>Lavarse bien las manos</li>
+<li>Limpiar y desinfectar las cosas que tocamos regularmente (perillas, teléfono, mesa, compu, apagadores...)</li>
+</ul>
+<p>Los contagios se dan cuando inhalamos lo que otros tosen o estornudan y el virus dura vivo al rededor de 9 días en superficies. Así que cuando tocamos objetos infectados y luego llevamos las manos a la cara es posible que estemos contagiándonos.</p>
+<h2>Yo soy una persona joven y sana, voy a seguir mi vida normal pues no estoy en riesgo</h2>
+<p>Puede ser que pienses de esta manera pero esto solo es un reflejo de tu falta de empatía. Es probable que para ti solo parezca un resfriado feo pero ¿con cuántas personas vulnerables convives?, más allá ¿con cuántas personas vulnerables conviven tú y las otras personas a tu al rededor?.</p>
+<p>Si muchas personas se contagian al mismo tiempo, los sistemas de salud se verán saturados y no podrá haber una respuesta eficiente para todos los casos, lo cual aumentaría la tasa de mortalidad. Por eso es importante actuar desde <strong>YA</strong>, es imperativo <em>aplanar la curva</em>.</p>
+<h2>¿Cómo que aplanar la curva?</h2>
+<p>Con <em>la curva</em> nos referimos al número de personas que requieren de atencion médica a lo largo del tiempo. Pensemos en una situación en la que el total de personas que van a requerir atención médica es fijo, por ejemplo, sin importar si se toman medidas 100 personas van a necesitar ser ingresadas al hospital en 10 días, pero si no existen acciones tempranas 80 de ellas lo necesitarán al segundo día mientras que con medidas de contención se alcanza un máximo de 20 al cuarto día. Puede que no suene importante porque de todos modos 100 personas van a necesitar atención médica, pero digamos que el hospital solo puede admitir a 50 personas a la vez, entonces en el primer escenario hay 30 personas vulnerables que no son atendidas y en el segundo se le puede dar atención a todos. Tal vez sea más facil entenderlo con la siguiente imagen.</p>
+<p><a href="https://flowingdata.com/2020/03/09/flatten-the-coronavirus-curve/"><img src="https://i2.wp.com/flowingdata.com/wp-content/uploads/2020/03/flatten-the-curve-smaller.gif" alt="lattice" style="width:650px;"></a></p>
+<p>Las líneas naranjas marcan la capacidad de tratamiento, la línea negra punteada dice el número de personas que requerirían atención si no se toman medidas de contención y el desplazamiento de la curva muestra la distribución de personas que requieren atención a lo largo del tiempo dependiendo del éxito de las medidas preventivas, la parte morada indica los casos no tratados y por ende de alta mortandad contra el área verde que son los casos tratados.</p>
+<h2>Bueno, ¿y cómo aplanamos la curva?</h2>
+<p>Tal vez ya escuchamos el término <strong>R0</strong> en este contexto y sabemos que es un número entre 2 y 3 para el COVID-19 pero no sabemos bien lo que significa. En términos básicos nos dice que cada persona infectada va a contagiar en promedio a R0 número de personas. Es decir, si el R0 es de 3, cada persona infectada en promedio va a contagiar a otras tres. Para contener el esparcimiento debemos de llegar a un R0 menor a 1, es decir que en promedio una persona no contagie a más de una otra.</p>
+<p><strong>Distanciamiento social.</strong> Ya sé, suena horrible y no nos gusta (a algunos no nos molesta). Pero la mejor forma para contener esto es mantenerse aislado lo más posible, durante el tiempo necesario hasta que la enfermedad entre en recesión. No suena bien, pero es lo que tenemos. En México, por ejemplo, con la falta de medicamentos que ya tenemos, el desamparo a la gente con necesidad de atención médica, la eliminación del Seguro Popular sin la instrumentación de algún remplazo, definitivamente no nos podemos dar el lujo de probar hasta dónde aguanta nuestro sector salud.</p>
+<p>Evidencia empirica sugiere que la mejor manera de actuar es de una forma "bottom-up" es decir, que nosotros como sociedad nos organicemos para tomar medidas de distanciamiento social como trabajar desde casa, evitar ir a conciertos masivos (guiño guiño VL2020) en fin, todo lo que esté en nuestras manos para reducir nuestros contactos diarios. En contraste la forma "top-down" es cuando el gobierno toma medidas de manera mandatoria, poniendo a gente en cuarentena o cerrando carreteras, pero aunque suene a que son buenas medidas de contención puede ser que no lo sean, si una persona quiere evitar el riesgo de ser puesta en cuarentena, muy probablemente no avise que está enferma o si cerramos las vías de comunicación, la gente va a seguir viajando pero de una manera que dificulta el rastreo de rutas y puede generar nuevos brotes.</p>
+<h2>OK Ollin, ya muéstrame las simulaciones... todo eso lo leo en otro lado...</h2>
+<p>Está bien, pero primero hablemos del modelo epidemiológico más básico:</p>
+<h2>Modelo SI: Susceptible-Infectado</h2>
+<p>Tal cual como el mismo nombre lo indica, es un modelo donde tenemos dos tipos de sujetos. Los susceptibles que son aquellos propensos a enfermarse y los infectados que son los que contraen alguna enfermedad. Algo así como el dicho: "Hay dos tipos de ciclistas, los que ya se cayeron y los que se van a caer". Este modelo nos sirve para ver qué tan rápido una población se verá infectada por completo.</p>
+<p>Recordemos la imagen con la que abrí este blog</p>
+<img src="/assets/images/covidSIS/opinion_cycle_2.gif" alt="lattice" style="width:280px;">
+<p>Con ella imaginemos que tenemos personas con los dos estados (susceptible e infectado) y que cada infectado puede contagiar a sus vecinos (pues están en contacto) con una cierta probabilidad. Algo así:</p>
+<img src="/assets/images/covidSIS/1site.gif" alt="sznajd" style="width:280px;">
+<p>Entonces, digamos que tenemos una cierta población de 40,000 personas que viven en una retícula como la mostrada y no se mueven para nada. Es decir sus contactos siempre son con las mismas personas. Esta población de pronto tiene 4 casos de COVID-19 y cada infectado contagia a entre 1 y 3 de sus vecinos con una probabilidad de tan solo 1%. Veamos cuál sería la dinámica a lo largo de 1000 iteraciones:</p>
+<img src="/assets/images/covidSIS/simple_SI.gif" alt="1s05" height="500" width="1000">
+<p>Podemos ver que la población infectada empieza a crecer y se forman grupos de infectados, aunque no hay crecimiento exponencial. Ahora pensemos en que así no son nuestros días regularmente. Por lo general al menos estamos en dos espacios distintos, puede ser casa y escuela o trabajo o gimnasio o lo que quieran. Entonces podemos hacer una simulación idéntica a la pasada pero en la que las mismas personas estén en dos puntos diferentes a lo largo del tiempo. Es decir, en la cuadrícula vamos a empezar en un lugar fijo, luego cada persona va a cambiar de lugar, por lo tanto va a tener diferentes vecinos y después va a regresar a su punto original. Con esto vamos a simular el estar en casa y luego en el trabajo y luego en casa y luego en el trabajo y así cada 150 iteraciones hasta completar las 1000.</p>
+<img src="/assets/images/covidSIS/two_sites_SI.gif" alt="1s05" height="500" width="1000">
+<p>Ahora podemos ver que el número de infectados llegó casi a la totalidad en los mismos 1000 pasos que la simulación anterior. No se cambió nada en los parámetros, la única diferencia es que cada 150 pasos cambiamos de vecinos de manera intercalada, siempre regresando a los mismos puntos. Notamos que al rededor del paso 800 hay un punto de inflexión que es nuestro punto de saturación.</p>
+<p>Nos podemos ver más sofisticados aún y pensar que esos no son nuestros únicos contactos del día. Nosotros viajamos en metro, combi y/o camión y quién sabe quién me toque al lado o aún más, no sabemos quién ha tocado el barandal del que vamos agarrados desde hace 9 días a la fecha. Entonces tenemos un regimen de contactos aleatorios en nuestro día. Lo modelamos como posición fija 1, contactos aleatorios durante un periodo corto, posición fija 2, contactos aleatorios otra vez, regresamos a posición fija 1 y continuamos en forma de ciclo hasta completar los 1000 pasos.</p>
+<img src="/assets/images/covidSIS/double_commute_SI.gif" alt="1s05" height="500" width="1000">
+<p>Otra vez, no cambiamos nada más que los contactos aleatorios y ahora nuestro punto de saturación se movió cerca del paso 700. Es decir, con la misma probabilidad de infección la diferencia entre los resultados de continuar con nuestros contactos personales normales y tomar medidas preventivas como el distanciamiento social influyen enormemente en qué tan rápido se esparce la infección y por lo mismo depende mucho de nosotros el aplanar la curva.</p>
+<h2>Ollin, esto no es nada realista. Además la gente se recupera, no se queda enferma como en el VIH.</h2>
+<p>Bueno, eso ya lo sé... por eso les dije que eran modelos de juguete pero nos sirven muchísimo para entender como la dinámica de esta enfermedad se ve afectada por nuestra propia dinámica humana.</p>
+<h2>Modelo SIS: Susceptible-Infectado-Susceptible</h2>
+<p>Este modelo es ligeramente más complicado pues toma en cuenta que la gente se recupera con cierta probabilidad. Existen otros como el SIR o SIRS donde el otro estado (R) se refiere a los recuperados, es decir, se entra a un punto en donde al recuperarse de la enfermedad no puede volver a ser infectado nunca o durante un tiempo (como varicela o la gripe), existen casos de reincidencia de COVID-19 en un periodo muy corto de tiempo por lo cual me limité a hacer las simulaciones del SIS.</p>
+<p>Todos los parámetros son compartidos con los modelos anteriores, pero ahora se tiene una probabilidad de recuperación del 0.1% en cada paso, parece poco pero cumulativamente a lo largo del tiempo es bastante alta. Empecemos con el modelo estático.</p>
+<img src="/assets/images/covidSIS/simple_SIS.gif" alt="1s05" height="500" width="1000">
+<p>Como era de esperarse es bastante similar al SI pero el número de infectados es aún menor.</p>
+<p>Ahora veamos qué pasa si los agentes se pueden encontrar en dos distintos sitios.</p>
+<img src="/assets/images/covidSIS/two_sites_SISerratas.gif" alt="1s05" height="500" width="1000">
+<p>En este nuevo modelo sí encontramos muy distintos comportamientos entre el SI y el SIS, como podemos ver, el contagio llega a la fase exponencial más tarde y es menos pronunciada que en el SI. Este es un resultado muy interesante porque nos dice que el hecho de tener tan solo dos interacciones distintas se incurre en un cambio de fase. Ahora veamos qué ocurre cuando entramos en contacto con personas aleatoriamente durante un periodo corto de tiempo. Aunque es importante notar que llegamos al punto de saturación hasta casi el final de las iteraciones.</p>
+<img src="/assets/images/covidSIS/double_commute_SIS.gif" alt="1s05" height="500" width="1000">
+<p>En este modelo el efecto que tiene la recuperación es prácticamente nulo para la forma de la curva, solo evitamos que la población total se encuentre infectada al mismo tiempo. Es importantísimo notar que en contrario con lo que sucede en el modelo anterior, aquí llegamos muy rápido al punto de saturación, es decir, la velocidad a la que se propaga la enfermedad es mucho más alta. Esto sorprende más si tomamos en cuenta el efecto que tuvo introducir la tasa de recuperación para el modelo donde nos encontramos solo en dos lugares (como si nos teletransportáramos). Dichos resultado sugiere que hay un cierto valor crítico para el cual hay un cambio de fase (tal cual como en el modelo Ising), pero esa exploración la dejaremos para después porque va más allá del alcance de lo que quiero transmitir.</p>
+<h2>Modelo SIR: Susceptible-Infectado-Recuperado</h2>
+<h3>Ollin, hablaste de aplanar la curva pero en estos modelos no aparece eso</h3>
+<p>Bueno, para eso tenemos que tomar en cuenta el hecho de que la gente se recupera y pues en general hay un tiempo en el que los recuperados son menos susceptibles que los que nunca han sido infectados y esto es multifactorial, puede ser porque siguen mayores medidas de precaución o porque su sistema inmune ya sabe como controlar ese virus. Entonces, podemos crear un modelo en el que después de que la gente se infecta, se recupera y no vuelve a ser susceptible.</p>
+<p>Para el caso estático</p>
+<img src="/assets/images/covidSIS/simple_SIRslow.gif" alt="1s05" height="500" width="1000">
+<p>Para ver un ejemplo más dramático y donde sí veamos realmente una curva con máximo,  aumentemos la tasa de contagio a 10% y la recuperación a 1%.</p>
+<img src="/assets/images/covidSIS/simple_SIRslow.gif" alt="1s05" height="500" width="1000">
+<p>Estas tasas solo las usaremos para este ejemplo, pero veamos lo que sucede con las originales cuando cambiamos de lugares.</p>
+<img src="/assets/images/covidSIS/two_sites_SIRslow.gif" alt="1s05" height="500" width="1000">
+<p>Notemos que la fase exponencial entra cerca de la iteración 600 hasta llegar al punto de saturación cerca de la 900 con un valor máximo ligeramente arriba de los 30,000 infectados.</p>
+<p>Pero, ¿qué ocurre si tenemos contactos aleatorios en esta situación?</p>
+<img src="/assets/images/covidSIS/double_commute_SIRslow.gif" alt="1s05" height="500" width="1000">
+<p>El caso es realmente muy parecido al modelo anterior, la diferencia más grande es que existe un (ligeramente) mayor número de infectados. Pero la gran moraleja en esta historia se encuentra al ver la comparación de las curvas donde no hay movimiento y donde sí lo hay. Incluso teniendo una enfermedad 10 veces más contagiosa no llegamos a tener más de 10,000 casos si nos mantenemos relativamente aislados, además que la distribución es mucho menos sesgada, es decir no se concentra hacia un lado en el tiempo. Esto nos permite una mejor atención médica para todos los casos que con los modelos donde hay un mayor número de contactos entre individuos.</p>
+<h2>En conclusión</h2>
+<p>El resumen aquí es muy sencillo, no hay que tomar a la ligera las medidas de contención de la pandemia. Entre más pronto actuemos es mejor, no entren en pánico pero por el bien de las personas que nos rodean sean precavidos y tomen las medidas de seguridad necesarias. Si les es posible trabajar desde casa, háganlo. Eviten lugares donde tengan que estar a menos de dos metros entre personas (ya sé que es difícil pues el transporte público no funciona así). Desinfecten todo lo que tocan regularmente y lávense las manos. El distanciamiento social es la mejor arma que tenemos actualmente, esperemos que se desarrollen vacunas pronto pero por el momento sean empáticos y manténganse alerta. No vayan al hospital directamente si sospechan que están infectados, la mayoría de los paises ya cuentan con <a href="https://cnnespanol.cnn.com/2020/03/06/conoce-donde-puedes-encontrar-ayuda-en-tu-pais-para-presuntos-casos-de-coronavirus/">líneas de atención</a>.</p>
+<p>Revisen de nuevo las simulaciones que les presenté y vean la gran diferencia que puede hacer el hecho de minimizar los contactos. Recuerden que este es un ejercicio de empatía y que aunque nosotros no nos veamos gravemente afectados muchas otras personas en situaciones precarias pueden sufrir mucho. Por el momento quiéranse de lejitos. Sean buenos entre ustedes.</p>
+<p>Si lees esto y hay más cosas que quieras agregar, por favor escríbe. También si pueden y quieren dejar comentarios lo pueden hacer aquí abajo, recuerden que no soy un experto pero me interesa el tema.</p>
+<h3>Cuídense, aplanemos esa curva.</h3></div></article></main><footer class="Footer__FooterWrapper-sc-jaeqzk-0 bULOHN"><div class="Footer__FooterContent-sc-jaeqzk-1 iQowSC"><div class="Footer__FooterSection-sc-jaeqzk-2 hzRrLe"><h3 class="Footer__FooterTitle-sc-jaeqzk-3 jMqLUe">About</h3><p class="Footer__FooterText-sc-jaeqzk-4 jlxgqc">Complex Systems Researcher specializing in urban mobility, computational social science, and statistical physics.</p></div><div class="Footer__FooterSection-sc-jaeqzk-2 hzRrLe"><h3 class="Footer__FooterTitle-sc-jaeqzk-3 jMqLUe">Connect</h3><div class="Footer__SocialLinks-sc-jaeqzk-5 gvYEeR"><a href="https://github.com/ollin18" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="Footer__SocialLink-sc-jaeqzk-6 Footer__GitHubLink-sc-jaeqzk-7 cVFpvx dmOyhI">GitHub</a><a href="https://www.linkedin.com/in/ollin18" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="Footer__SocialLink-sc-jaeqzk-6 Footer__LinkedInLink-sc-jaeqzk-8 cVFpvx jAVeyI">LinkedIn</a><a href="https://scholar.google.com/citations?user=L1QJLFoAAAAJ&amp;hl" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar" class="Footer__SocialLink-sc-jaeqzk-6 Footer__ScholarLink-sc-jaeqzk-9 cVFpvx hiEvCn">Scholar</a><a href="mailto:ollin@berkeley.edu" aria-label="Email" class="Footer__SocialLink-sc-jaeqzk-6 Footer__EmailLink-sc-jaeqzk-10 cVFpvx gyOWIP">Email</a></div></div><div class="Footer__FooterSection-sc-jaeqzk-2 hzRrLe"><h3 class="Footer__FooterTitle-sc-jaeqzk-3 jMqLUe">Site</h3><p class="Footer__FooterText-sc-jaeqzk-4 jlxgqc">Built with Gatsby, React, and styled-components. Powered by GSAP for scroll animations.</p></div></div><div class="Footer__Copyright-sc-jaeqzk-11 fFDhGG">© <!-- -->2025<!-- --> Ollin D. Langle-Chimal. <!-- -->All rights reserved.<br/>Generated by Ollin</div></footer></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-9FS4V8SGLR"></script><script>
+      
+      function gaOptout(){document.cookie=disableStr+'=true; expires=Thu, 31 Dec 2099 23:59:59 UTC;path=/',window[disableStr]=!0}var gaProperty='G-9FS4V8SGLR',disableStr='ga-disable-'+gaProperty;document.cookie.indexOf(disableStr+'=true')>-1&&(window[disableStr]=!0);
+      if(!(navigator.doNotTrack == "1" || window.doNotTrack == "1")) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-9FS4V8SGLR', {"anonymize_ip":true,"cookie_expires":0,"send_page_view":false});
+      }
+      </script><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/es-mx/proyectos/distanciamiento/";/*]]>*/</script><!-- slice-start id="_gatsby-scripts-1" -->
+          <script
+            id="gatsby-chunk-mapping"
+          >
+            window.___chunkMapping="{\"app\":[\"/app-6b07f2d1820cf14b4d08.js\"],\"component---src-pages-404-js\":[\"/component---src-pages-404-js-f337ef602b06ee964200.js\"],\"component---src-pages-blog-jsx\":[\"/component---src-pages-blog-jsx-20759427d2695e7f55ed.js\"],\"component---src-pages-books-jsx\":[\"/component---src-pages-books-jsx-8f5a8417a20b16bee764.js\"],\"component---src-pages-cv-jsx\":[\"/component---src-pages-cv-jsx-3c891b956d7cedd9b783.js\"],\"component---src-pages-index-jsx\":[\"/component---src-pages-index-jsx-01f4dd51ca7a402bfeb0.js\"],\"component---src-pages-page-2-js\":[\"/component---src-pages-page-2-js-77e179c82fc1d05bd2cd.js\"],\"component---src-pages-people-jsx\":[\"/component---src-pages-people-jsx-b11a990fdb3f85122417.js\"],\"component---src-pages-projects-jsx\":[\"/component---src-pages-projects-jsx-d4ca39b38575b4e224f5.js\"],\"component---src-pages-publications-jsx\":[\"/component---src-pages-publications-jsx-3ef830e511ff854d52dc.js\"],\"component---src-pages-teaching-jsx\":[\"/component---src-pages-teaching-jsx-00802d5f59144504008d.js\"],\"component---src-pages-using-ssr-js\":[\"/component---src-pages-using-ssr-js-96362a78fd84d7080f7f.js\"],\"component---src-pages-using-typescript-tsx\":[\"/component---src-pages-using-typescript-tsx-5bcf42512638b022a421.js\"],\"component---src-templates-blog-post-jsx\":[\"/component---src-templates-blog-post-jsx-8975796e2e28586ff5ee.js\"],\"component---src-templates-book-review-jsx\":[\"/component---src-templates-book-review-jsx-f973f2e45b2fcf27fe83.js\"],\"component---src-templates-project-detail-jsx\":[\"/component---src-templates-project-detail-jsx-259aa42f03aa0c59758d.js\"]}";
+          </script>
+        <script>window.___webpackCompilationHash="605b00de1ebb89974b42";</script><script src="/webpack-runtime-885fe404981ed5d02423.js" async></script><script src="/framework-a98cd6097609b685b73f.js" async></script><script src="/94726e6d-823c10e1ea9abde67a2e.js" async></script><script src="/app-6b07f2d1820cf14b4d08.js" async></script><!-- slice-end id="_gatsby-scripts-1" --></body></html>
