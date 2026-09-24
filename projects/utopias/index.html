@@ -1,0 +1,225 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><meta name="generator" content="Gatsby 5.14.6"/><meta data-react-helmet="true" name="description" content="We used mobility data from cell phones to understand who visits the 13 UTOPÍAS in Iztapalapa, where they come from, and what transit, services, and violence have to do with it."/><meta data-react-helmet="true" name="keywords" content="complex-systems, urban-science, economics, mobility, computational-social-science"/><meta data-react-helmet="true" property="og:title" content="Who Reaches the UTOPÍAS? Third Places and Mobility in Iztapalapa"/><meta data-react-helmet="true" property="og:description" content="We used mobility data from cell phones to understand who visits the 13 UTOPÍAS in Iztapalapa, where they come from, and what transit, services, and violence have to do with it."/><meta data-react-helmet="true" property="og:type" content="website"/><meta data-react-helmet="true" property="og:url" content="https://ollinlangle.com/projects/utopias"/><meta data-react-helmet="true" property="og:image" content="/assets/images/utopias/card_utopias.jpg"/><meta data-react-helmet="true" property="og:image:alt" content="Who Reaches the UTOPÍAS? Third Places and Mobility in Iztapalapa"/><meta data-react-helmet="true" property="og:locale" content="en_us"/><meta data-react-helmet="true" name="twitter:card" content="summary_large_image"/><meta data-react-helmet="true" name="twitter:creator" content="Ollin D. Langle-Chimal"/><meta data-react-helmet="true" name="twitter:title" content="Who Reaches the UTOPÍAS? Third Places and Mobility in Iztapalapa"/><meta data-react-helmet="true" name="twitter:description" content="We used mobility data from cell phones to understand who visits the 13 UTOPÍAS in Iztapalapa, where they come from, and what transit, services, and violence have to do with it."/><meta data-react-helmet="true" name="twitter:image" content="/assets/images/utopias/card_utopias.jpg"/><title data-react-helmet="true">Who Reaches the UTOPÍAS? Third Places and Mobility in Iztapalapa | Ollin D. Langle-Chimal</title><link data-react-helmet="true" rel="canonical" href="https://ollinlangle.com/projects/utopias"/><link data-react-helmet="true" rel="alternate" hrefLang="en-us" href="https://ollinlangle.com/projects/utopias"/><link data-react-helmet="true" rel="alternate" hrefLang="es-mx" href="https://ollinlangle.com/es-mx/projects/utopias"/><link data-react-helmet="true" rel="alternate" hrefLang="x-default" href="https://ollinlangle.com/projects/utopias"/><link rel="sitemap" type="application/xml" href="/sitemap-index.xml"/><style data-styled="" data-styled-version="6.1.19">@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Jost:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');/*!sc*/
+@import url('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css');/*!sc*/
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}/*!sc*/
+:root{--color-bg:#0A0E27;--color-bg-secondary:#1A1F3A;--color-text:#E8E9ED;--color-text-secondary:#A0A8C5;--color-surface:#151B35;--color-border:#2A3250;--color-primary:#FF6B35;--color-secondary:#004E89;--color-accent:#F7931E;--color-bg-rgb:10,14,39;}/*!sc*/
+[data-theme='light']{--color-bg:#FFFFFF;--color-bg-secondary:#F5F7FA;--color-text:#1A1A1A;--color-text-secondary:#6B7280;--color-surface:#FAFBFC;--color-border:#E5E7EB;--color-bg-rgb:255,255,255;}/*!sc*/
+html{font-size:16px;scroll-behavior:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;}/*!sc*/
+body{margin:0;padding:0;font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1rem;font-weight:400;line-height:1.5;color:var(--color-text);background-color:var(--color-bg);overflow-x:hidden;transition:background-color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+h1,h2,h3,h4,h5,h6{font-family:"Jost","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-weight:700;line-height:1.25;color:var(--color-text);margin:0;}/*!sc*/
+h1{font-size:3.75rem;letter-spacing:-0.025em;}/*!sc*/
+@media (max-width:768px){h1{font-size:2.25rem;}}/*!sc*/
+h2{font-size:2.25rem;}/*!sc*/
+@media (max-width:768px){h2{font-size:1.875rem;}}/*!sc*/
+h3{font-size:1.875rem;}/*!sc*/
+@media (max-width:768px){h3{font-size:1.5rem;}}/*!sc*/
+h4{font-size:1.5rem;}/*!sc*/
+h5{font-size:1.25rem;}/*!sc*/
+h6{font-size:1.125rem;}/*!sc*/
+p{margin:0 0 1rem 0;line-height:1.625;color:var(--color-text);}/*!sc*/
+a{color:#FF6B35;text-decoration:none;transition:color 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);cursor:pointer;}/*!sc*/
+a:hover{color:#F7931E;}/*!sc*/
+a:focus-visible{outline:2px solid #FF6B35;outline-offset:2px;border-radius:2px;}/*!sc*/
+ul,ol{margin:0 0 1rem 0;padding-left:1.5rem;}/*!sc*/
+li{margin-bottom:0.5rem;line-height:1.625;}/*!sc*/
+code,pre{font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,monospace;}/*!sc*/
+code{background-color:var(--color-surface);padding:0.125rem 0.375rem;border-radius:0.125rem;font-size:0.875em;color:#F7931E;}/*!sc*/
+pre{background-color:var(--color-surface);padding:1rem;border-radius:0.375rem;overflow-x:auto;margin-bottom:1rem;border:1px solid var(--color-border);}/*!sc*/
+pre code{background-color:transparent;padding:0;border-radius:0;color:var(--color-text);}/*!sc*/
+blockquote{margin:1.5rem 0;padding:1rem 1.5rem;border-left:4px solid #FF6B35;background-color:var(--color-surface);border-radius:0.375rem;font-style:italic;color:var(--color-text-secondary);}/*!sc*/
+blockquote p:last-child{margin-bottom:0;}/*!sc*/
+img{max-width:100%;height:auto;display:block;}/*!sc*/
+hr{border:0;height:1px;background-color:var(--color-border);margin:2rem 0;}/*!sc*/
+table{width:100%;border-collapse:collapse;margin-bottom:1.5rem;}/*!sc*/
+th,td{padding:0.75rem;text-align:left;border-bottom:1px solid var(--color-border);}/*!sc*/
+th{font-weight:600;background-color:var(--color-surface);}/*!sc*/
+input,textarea,select,button{font-family:inherit;font-size:inherit;line-height:inherit;}/*!sc*/
+button{cursor:pointer;border:none;background:none;padding:0;color:inherit;}/*!sc*/
+::selection{background-color:#FF6B35;color:#0A0E27;}/*!sc*/
+::-moz-selection{background-color:#FF6B35;color:#0A0E27;}/*!sc*/
+::-webkit-scrollbar{width:12px;height:12px;}/*!sc*/
+::-webkit-scrollbar-track{background:var(--color-bg);}/*!sc*/
+::-webkit-scrollbar-thumb{background:#FF6B35;border-radius:9999px;border:3px solid var(--color-bg);}/*!sc*/
+::-webkit-scrollbar-thumb:hover{background:#F7931E;}/*!sc*/
+*{scrollbar-width:thin;scrollbar-color:#FF6B35 var(--color-bg);}/*!sc*/
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0;}/*!sc*/
+*:focus-visible{outline:2px solid #FF6B35;outline-offset:2px;}/*!sc*/
+*:focus:not(:focus-visible){outline:none;}/*!sc*/
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important;}}/*!sc*/
+@media print{body{background-color:white;color:black;}a{text-decoration:underline;}nav,aside,footer{display:none;}}/*!sc*/
+data-styled.g1[id="sc-global-cBdPHX1"]{content:"sc-global-cBdPHX1,"}/*!sc*/
+.jrpXdn{position:fixed;top:0;left:0;right:0;z-index:1100;background-color:transparent;backdrop-filter:none;border-bottom:1px solid transparent;transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+data-styled.g2[id="Header__HeaderWrapper-sc-17836s2-0"]{content:"jrpXdn,"}/*!sc*/
+.gynvdj{max-width:1280px;margin:0 auto;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;}/*!sc*/
+data-styled.g3[id="Header__Nav-sc-17836s2-1"]{content:"gynvdj,"}/*!sc*/
+.iYuVWU{font-family:"Jost","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1.5rem;font-weight:700;color:var(--color-text);letter-spacing:-0.025em;transition:color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.iYuVWU:hover{color:#FF6B35;}/*!sc*/
+data-styled.g4[id="Header__Logo-sc-17836s2-2"]{content:"iYuVWU,"}/*!sc*/
+.hvvEFe{display:flex;align-items:center;gap:1.5rem;}/*!sc*/
+@media (max-width:768px){.hvvEFe{display:none;position:fixed;top:70px;left:0;right:0;background-color:var(--color-surface);flex-direction:column;padding:1.5rem;border-bottom:1px solid var(--color-border);backdrop-filter:blur(12px);}}/*!sc*/
+data-styled.g5[id="Header__NavLinks-sc-17836s2-3"]{content:"hvvEFe,"}/*!sc*/
+.dWMbER{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1rem;font-weight:500;color:var(--color-text);position:relative;transition:color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.dWMbER::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background-color:#FF6B35;transform:scaleX(0);transition:transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.dWMbER:hover{color:#FF6B35;}/*!sc*/
+.dWMbER:hover::after{transform:scaleX(1);}/*!sc*/
+.dWMbER.active{color:#FF6B35;}/*!sc*/
+.dWMbER.active::after{transform:scaleX(1);}/*!sc*/
+data-styled.g6[id="Header__NavLink-sc-17836s2-4"]{content:"dWMbER,"}/*!sc*/
+.eVRumG{display:flex;gap:0.5rem;}/*!sc*/
+data-styled.g7[id="Header__LanguageSwitcher-sc-17836s2-5"]{content:"eVRumG,"}/*!sc*/
+.eWLAbV{font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,monospace;font-size:0.875rem;font-weight:500;color:#FF6B35;padding:0.5rem 0.75rem;border:1px solid #FF6B35;border-radius:0.375rem;background-color:rgba(255, 107, 53, 0.1);cursor:pointer;transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);text-transform:uppercase;}/*!sc*/
+.eWLAbV:hover{color:#FF6B35;border-color:#FF6B35;background-color:rgba(255,107,53,0.1);}/*!sc*/
+.dklIUD{font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,monospace;font-size:0.875rem;font-weight:500;color:var(--color-text-secondary);padding:0.5rem 0.75rem;border:1px solid var(--color-border);border-radius:0.375rem;background-color:transparent;cursor:pointer;transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);text-transform:uppercase;}/*!sc*/
+.dklIUD:hover{color:#FF6B35;border-color:#FF6B35;background-color:rgba(255,107,53,0.1);}/*!sc*/
+data-styled.g8[id="Header__LangButton-sc-17836s2-6"]{content:"eWLAbV,dklIUD,"}/*!sc*/
+.fFMim{display:none;flex-direction:column;gap:4px;background:transparent;border:none;cursor:pointer;padding:0.5rem;}/*!sc*/
+@media (max-width:768px){.fFMim{display:flex;}}/*!sc*/
+.fFMim span{width:24px;height:2px;background-color:var(--color-text);transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.fFMim span:nth-child(1){transform:none;}/*!sc*/
+.fFMim span:nth-child(2){opacity:1;}/*!sc*/
+.fFMim span:nth-child(3){transform:none;}/*!sc*/
+data-styled.g9[id="Header__MobileMenuButton-sc-17836s2-7"]{content:"fFMim,"}/*!sc*/
+.kHVmag{background:transparent;border:1px solid var(--color-border);border-radius:9999px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--color-text);font-size:1.25rem;transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);margin-left:1rem;}/*!sc*/
+.kHVmag:hover{border-color:#FF6B35;color:#FF6B35;background:rgba(255,107,53,0.1);}/*!sc*/
+@media (max-width:768px){.kHVmag{margin-left:0;}}/*!sc*/
+data-styled.g10[id="Header__ThemeToggle-sc-17836s2-8"]{content:"kHVmag,"}/*!sc*/
+.cPFteU{display:flex;align-items:center;gap:1rem;}/*!sc*/
+data-styled.g11[id="Header__DesktopActions-sc-17836s2-9"]{content:"cPFteU,"}/*!sc*/
+.hZgUt{display:flex;align-items:center;gap:0.75rem;}/*!sc*/
+@media (min-width:768px){.hZgUt{display:none;}}/*!sc*/
+data-styled.g12[id="Header__MobileActions-sc-17836s2-10"]{content:"hZgUt,"}/*!sc*/
+.bULOHN{background-color:var(--color-surface);border-top:1px solid var(--color-border);padding:3rem 1.5rem;margin-top:5rem;}/*!sc*/
+data-styled.g13[id="Footer__FooterWrapper-sc-jaeqzk-0"]{content:"bULOHN,"}/*!sc*/
+.iQowSC{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;}/*!sc*/
+@media (max-width:768px){.iQowSC{grid-template-columns:1fr;}}/*!sc*/
+data-styled.g14[id="Footer__FooterContent-sc-jaeqzk-1"]{content:"iQowSC,"}/*!sc*/
+.hzRrLe{display:flex;flex-direction:column;gap:1rem;}/*!sc*/
+data-styled.g15[id="Footer__FooterSection-sc-jaeqzk-2"]{content:"hzRrLe,"}/*!sc*/
+.jMqLUe{font-family:"Jost","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1.125rem;font-weight:600;color:var(--color-text);margin-bottom:0.5rem;}/*!sc*/
+data-styled.g16[id="Footer__FooterTitle-sc-jaeqzk-3"]{content:"jMqLUe,"}/*!sc*/
+.jlxgqc{font-size:0.875rem;color:var(--color-text-secondary);line-height:1.625;margin:0;}/*!sc*/
+data-styled.g17[id="Footer__FooterText-sc-jaeqzk-4"]{content:"jlxgqc,"}/*!sc*/
+.gvYEeR{display:flex;gap:1rem;flex-wrap:wrap;}/*!sc*/
+data-styled.g18[id="Footer__SocialLinks-sc-jaeqzk-5"]{content:"gvYEeR,"}/*!sc*/
+.cVFpvx{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:var(--color-text-secondary);transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.cVFpvx:hover{color:#FF6B35;transform:translateY(-2px);}/*!sc*/
+.cVFpvx::before{content:'';width:20px;height:20px;background-color:currentColor;mask-size:contain;mask-repeat:no-repeat;mask-position:center;}/*!sc*/
+data-styled.g19[id="Footer__SocialLink-sc-jaeqzk-6"]{content:"cVFpvx,"}/*!sc*/
+.dmOyhI::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z'/%3E%3C/svg%3E");}/*!sc*/
+data-styled.g20[id="Footer__GitHubLink-sc-jaeqzk-7"]{content:"dmOyhI,"}/*!sc*/
+.jAVeyI::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z'/%3E%3C/svg%3E");}/*!sc*/
+data-styled.g21[id="Footer__LinkedInLink-sc-jaeqzk-8"]{content:"jAVeyI,"}/*!sc*/
+.hiEvCn::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 0l11 6v8.5c0 5.25-3.25 10.2-11 13.5-7.75-3.3-11-8.25-11-13.5v-8.5l11-6zm0 2.18l-9 4.91v7.41c0 4.09 2.59 8.05 9 10.9 6.41-2.85 9-6.81 9-10.9v-7.41l-9-4.91zm1 10.32v5.5h-2v-5.5h-3l4-4 4 4h-3z'/%3E%3C/svg%3E");}/*!sc*/
+data-styled.g22[id="Footer__ScholarLink-sc-jaeqzk-9"]{content:"hiEvCn,"}/*!sc*/
+.gyOWIP::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z'/%3E%3C/svg%3E");}/*!sc*/
+data-styled.g23[id="Footer__EmailLink-sc-jaeqzk-10"]{content:"gyOWIP,"}/*!sc*/
+.fFDhGG{text-align:center;padding-top:2rem;margin-top:2rem;border-top:1px solid var(--color-border);color:var(--color-text-secondary);font-size:0.875rem;}/*!sc*/
+data-styled.g24[id="Footer__Copyright-sc-jaeqzk-11"]{content:"fFDhGG,"}/*!sc*/
+.ghjyuh{min-height:100vh;display:flex;flex-direction:column;}/*!sc*/
+data-styled.g25[id="Layout__MainWrapper-sc-147ozt3-0"]{content:"ghjyuh,"}/*!sc*/
+.cZWiyp{flex:1;margin-top:70px;}/*!sc*/
+data-styled.g26[id="Layout__MainContent-sc-147ozt3-1"]{content:"cZWiyp,"}/*!sc*/
+.iIZsSs{min-height:60vh;display:flex;flex-direction:column;justify-content:center;padding:5rem 1.5rem;background:linear-gradient( 135deg,var(--color-bg) 0%,var(--color-surface) 100% );position:relative;overflow:hidden;}/*!sc*/
+.iIZsSs::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient( circle at 20% 50%,rgba(255,107,53,0.1) 0%,transparent 50% );pointer-events:none;}/*!sc*/
+data-styled.g33[id="project-detail__ProjectHero-sc-nsoc72-0"]{content:"iIZsSs,"}/*!sc*/
+.khoxLO{max-width:1024px;margin:0 auto;position:relative;z-index:1;}/*!sc*/
+data-styled.g34[id="project-detail__HeroContent-sc-nsoc72-1"]{content:"khoxLO,"}/*!sc*/
+.dLtGgn{display:inline-block;font-size:0.875rem;font-weight:600;color:#FF6B35;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:1rem;}/*!sc*/
+data-styled.g35[id="project-detail__ProjectCategory-sc-nsoc72-2"]{content:"dLtGgn,"}/*!sc*/
+.iPXGuD{font-size:3.75rem;margin-bottom:1.5rem;background:linear-gradient( 135deg,#FF6B35 0%,#F7931E 100% );-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}/*!sc*/
+@media (max-width:768px){.iPXGuD{font-size:2.25rem;}}/*!sc*/
+data-styled.g36[id="project-detail__ProjectTitle-sc-nsoc72-3"]{content:"iPXGuD,"}/*!sc*/
+.hzkKhf{font-size:1.5rem;color:var(--color-text-secondary);max-width:800px;line-height:1.625;}/*!sc*/
+data-styled.g37[id="project-detail__ProjectDescription-sc-nsoc72-4"]{content:"hzkKhf,"}/*!sc*/
+.cramKJ{max-width:1024px;margin:0 auto;padding:3rem 1.5rem;}/*!sc*/
+.cramKJ h2{font-size:2.25rem;margin-top:4rem;margin-bottom:1.5rem;color:var(--color-text);}/*!sc*/
+.cramKJ h3{font-size:1.5rem;margin-top:2.5rem;margin-bottom:1rem;color:var(--color-text);}/*!sc*/
+.cramKJ p{font-size:1.125rem;line-height:1.625;margin-bottom:1.5rem;}/*!sc*/
+.cramKJ img{width:100%;border-radius:0.75rem;margin:2rem 0;box-shadow:0 20px 25px -5px rgba(0, 0, 0, 0.1),0 10px 10px -5px rgba(0, 0, 0, 0.04);}/*!sc*/
+.cramKJ ul,.cramKJ ol{font-size:1.125rem;line-height:1.625;margin-bottom:1.5rem;}/*!sc*/
+.cramKJ li{margin-bottom:0.75rem;}/*!sc*/
+.cramKJ blockquote{border-left:4px solid #FF6B35;padding-left:1.5rem;margin:2rem 0;font-style:italic;color:var(--color-text-secondary);}/*!sc*/
+.cramKJ code{background-color:var(--color-surface);padding:0.25rem 0.5rem;border-radius:0.125rem;font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,monospace;font-size:0.9em;}/*!sc*/
+.cramKJ pre{background-color:var(--color-surface);padding:1.5rem;border-radius:0.5rem;overflow-x:auto;margin:2rem 0;}/*!sc*/
+.cramKJ pre code{background:none;padding:0;}/*!sc*/
+.cramKJ hr{margin:3rem 0;border:none;height:1px;background:linear-gradient( 90deg,transparent 0%,var(--color-border) 50%,transparent 100% );}/*!sc*/
+data-styled.g38[id="project-detail__ProjectContent-sc-nsoc72-5"]{content:"cramKJ,"}/*!sc*/
+</style><style>.gatsby-image-wrapper{position:relative;overflow:hidden}.gatsby-image-wrapper picture.object-fit-polyfill{position:static!important}.gatsby-image-wrapper img{bottom:0;height:100%;left:0;margin:0;max-width:none;padding:0;position:absolute;right:0;top:0;width:100%;object-fit:cover}.gatsby-image-wrapper [data-main-image]{opacity:0;transform:translateZ(0);transition:opacity .25s linear;will-change:opacity}.gatsby-image-wrapper-constrained{display:inline-block;vertical-align:top}</style><noscript><style>.gatsby-image-wrapper noscript [data-main-image]{opacity:1!important}.gatsby-image-wrapper [data-placeholder-image]{opacity:0!important}</style></noscript><script type="module">const e="undefined"!=typeof HTMLImageElement&&"loading"in HTMLImageElement.prototype;e&&document.body.addEventListener("load",(function(e){const t=e.target;if(void 0===t.dataset.mainImage)return;if(void 0===t.dataset.gatsbyImageSsr)return;let a=null,n=t;for(;null===a&&n;)void 0!==n.parentNode.dataset.gatsbyImageWrapper&&(a=n.parentNode),n=n.parentNode;const o=a.querySelector("[data-placeholder-image]"),r=new Image;r.src=t.currentSrc,r.decode().catch((()=>{})).then((()=>{t.style.opacity=1,o&&(o.style.opacity=0,o.style.transition="opacity 500ms linear")}))}),!0);</script><link rel="preconnect" href="https://www.googletagmanager.com"/><link rel="dns-prefetch" href="https://www.googletagmanager.com"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div class="Layout__MainWrapper-sc-147ozt3-0 ghjyuh"><header class="Header__HeaderWrapper-sc-17836s2-0 jrpXdn"><nav class="Header__Nav-sc-17836s2-1 gynvdj"><a class="Header__Logo-sc-17836s2-2 iYuVWU" href="/">Ollin D. Langle-Chimal</a><div class="Header__NavLinks-sc-17836s2-3 hvvEFe"><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/projects/">Projects</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/publications/">Publications</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/blog/">Blog</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/teaching/">Teaching</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/people/">People</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/books/">Books</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/cv/">CV</a><div class="Header__LanguageSwitcher-sc-17836s2-5 eVRumG"><button aria-label="Switch to English" class="Header__LangButton-sc-17836s2-6 eWLAbV">EN</button><button aria-label="Cambiar a Español" class="Header__LangButton-sc-17836s2-6 dklIUD">ES</button></div></div><div class="Header__DesktopActions-sc-17836s2-9 cPFteU"><button aria-label="Switch to light mode" class="Header__ThemeToggle-sc-17836s2-8 kHVmag">☀️</button></div><div class="Header__MobileActions-sc-17836s2-10 hZgUt"><button aria-label="Switch to light mode" class="Header__ThemeToggle-sc-17836s2-8 kHVmag">☀️</button><button aria-label="Toggle mobile menu" class="Header__MobileMenuButton-sc-17836s2-7 fFMim"><span></span><span></span><span></span></button></div></nav></header><main class="Layout__MainContent-sc-147ozt3-1 cZWiyp"><section class="project-detail__ProjectHero-sc-nsoc72-0 iIZsSs"><div class="project-detail__HeroContent-sc-nsoc72-1 khoxLO"><span class="project-detail__ProjectCategory-sc-nsoc72-2 dLtGgn">Research</span><h1 class="project-detail__ProjectTitle-sc-nsoc72-3 iPXGuD">Who Reaches the UTOPÍAS? Third Places and Mobility in Iztapalapa</h1><p class="project-detail__ProjectDescription-sc-nsoc72-4 hzkKhf">We used mobility data from cell phones to understand who visits the 13 UTOPÍAS in Iztapalapa, where they come from, and what transit, services, and violence have to do with it.</p></div></section><article class="project-detail__ProjectContent-sc-nsoc72-5 cramKJ"><div><h2>Do you know what third places are?</h2>
+<p>If you don't know yet, a good way to answer this question is to start by thinking about where we spend most of our days. The first things that come to mind are probably our home and our workplace, and precisely, in urban studies, these two are called first and second places, respectively (the terms come from the sociologist Ray Oldenburg). So, what are third places? They are the spaces outside of home and work where people spend their time. They tend to be social (although socializing isn't really necessary), like parks, cafés, libraries, public squares, etc. They are spaces for leisure that let us socialize, feel like we belong in our community, and strengthen the social fabric.</p>
+<p>It's no secret that communities with structural deficits and high marginalization also lack effective third places, where people are not only welcome but also don't need to spend money to spend time. That's why city governments around the world have invested in community centers where people can go to exercise, learn new skills, talk, have fun, or simply get together and be. Personally, my first contact (even if, for now, only a virtual one) with a big investment from a city to create third places and improve access to them for its whole population were the Library Parks (Parques Biblioteca) and the Articulated Life Units (Unidades de Vida Articulada) in Medellín (I really want to go see them in person!). With these investments, Medellín looks to give mainly marginalized populations access to sports and cultural services, and also to destigmatize neighborhoods and give them new life, as happened in Comuna 13.</p>
+<p>In Mexico, specifically in Mexico City, we haven't stayed behind in this kind of social investment. You have probably heard of the PILARES (Points of Innovation, Freedom, Art, Education, and Knowledge) or the FAROS (Factories of Arts and Trades), and I'm sure you've heard of some event at the Faro de Oriente. These two are huge programs focused on access to arts and vocational education, computer literacy, sports areas, and cultural events. Even older than the FAROS, which started around the year 2000, we have a large number of Casas de Cultura (community cultural centers) spread all over the city. I learned to play the guitar at the Casa de Cultura "Raúl Anguiano", inside the Huayamilpas Ecological Park, so I know firsthand how important these kinds of centers are.</p>
+<p>All of these options are mostly small in scale and local in reach, although the FAROS tend to be a bit bigger. To go one step further, in 2019, under Clara Brugada's government in the borough of Iztapalapa, the UTOPÍAS (Units of Transformation and Organization for Inclusion and Social Harmony) were born, with the idea of creating third places that offer not only sports and classes, but also a focus on overall well-being, with medical and psychological care, community kitchens, and even laundry areas. Today, with Brugada as Mayor of Mexico City, UTOPÍAS are being built in other parts of the city. When I visited the UTOPÍA "Elena Poniatowska Amor" in Coyoacán, what caught my attention the most were the urban gardens, the pollinator gardens, the 3D printing design classes (with direct access to the printers!), the language and knowledge labs, and a space they hadn't defined yet, but that looked very interesting, about virtual reality.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;align-items:start;margin:2rem 0;">
+<img src="/assets/images/utopias/foto_entrada.jpg" alt="Entrance of the UTOPÍA Elena Poniatowska Amor in Coyoacán, with a pink axolotl welcoming visitors" style="margin:0;">
+<img src="/assets/images/utopias/foto_laboratorio_lenguas.jpg" alt="Poster for the Language, Knowledge and Inclusion Lab with 3D printers" style="margin:0;">
+<img src="/assets/images/utopias/foto_jardin_polinizadores.jpg" alt="Pollinator garden next to the greenhouse" style="margin:0;">
+<img src="/assets/images/utopias/foto_mural_vr.jpg" alt="Mural of a girl wearing a virtual reality headset in the space that will host virtual reality activities" style="margin:0;">
+<img src="/assets/images/utopias/foto_emprendimiento.jpg" alt="Poster for the entrepreneurship space for local businesses" style="margin:0;">
+<img src="/assets/images/utopias/foto_mercado_campo.jpg" alt="Poster for the From the Countryside to the City market, with no middlemen" style="margin:0;">
+</div>
+<p><em>Some of the services at the UTOPÍA "Elena Poniatowska Amor" in Coyoacán: the entrance (axolotl included), the language and knowledge lab, the pollinator garden, the virtual reality space that was still under construction, the entrepreneurship space, and the farmers' market.</em></p>
+<p>With all this investment in infrastructure to create third places, I started wondering how far these new projects actually reach. So, together with Natalia Cadavid-Aguilar, Roberto Ponce-López, and Alberto Meouchi-Vélez, from Tec de Monterrey, I did a study on the real access to the UTOPÍAS, looking at the 13 original ones in Iztapalapa. In short, we used human mobility data from cell phones to understand who visited the UTOPÍAS, when, and under what general circumstances.</p>
+<p>We found very interesting usage patterns that have important implications for urban infrastructure planning. Specifically, they help us define who an amenity like this is built for and how far its reach will be, whether it will be local or attract people from all over the city. They also tell us whether we are going to encourage people to use the facilities regularly or simply create a tourist attraction that brings in visitors on weekends. Below I briefly go over the general results we got, which you can see in more detail in the full article (the link is at the end of the page).</p>
+<hr>
+<h2>How did we measure it?</h2>
+<p>The data we used comes from cell phone apps that record their users' location anonymously. With this data we detect when someone stayed for a while inside a UTOPÍA and, based on where they spend their nights and weekends, we estimate where they live. This way we can know which neighborhood or municipality each visitor comes from, how far they traveled, and how rich or poor the area where they live is. We looked at almost six months, from late September 2023 to the end of March 2024.</p>
+<p>On top of that, we added three things that any government can know before building a UTOPÍA. The first is the public transit within one kilometer around it, using the city's open route data. The second is how unique each UTOPÍA's offer is, because having an outdoor gym, which almost all of them have, is not the same as having a planetarium or a dinosaur park. The third is the reported crime around each site, using the open data from the city's prosecutor's office.</p>
+<p>Something important to keep in mind is that this kind of data tends to have more young and better-off users, so it's very likely that we are undercounting the poorest people, who are exactly the ones the UTOPÍAS want to reach. Also, with only 13 UTOPÍAS, everything we found is a relationship and not a cause.</p>
+<img src="/assets/images/utopias/network_map.png" alt="Map of the 13 UTOPÍAS in Iztapalapa, with the size of each circle based on its number of visitors" style="width:720px;">
+<p><em>The 13 UTOPÍAS of Iztapalapa. The size of each circle goes with how many visitors it had.</em></p>
+<hr>
+<h2>Two giant UTOPÍAS and many neighborhood ones</h2>
+<p>The first thing we saw is that not all UTOPÍAS get the same number of people, not even close. Olini and Meyehualco take more than four out of every five visitors we detected, with around 2,700 and 1,200 unique visitors, respectively. Next comes Teotongo with a little over 300, and the rest get anywhere from a few dozen to about a hundred. Careful, this doesn't mean the smaller UTOPÍAS are empty. What happens is that they are visited by a smaller group of people who live nearby and go very consistently.</p>
+<img src="/assets/images/utopias/visitors_per_utopia.png" alt="Unique visitors per UTOPÍA on a log scale" style="width:720px;">
+<p><em>Unique visitors per UTOPÍA. Watch the scale, each mark is ten times the one before.</em></p>
+<p>Something I found really interesting is where people come from. Overall, a little more than half of the visitors (around 55%) come from outside Iztapalapa, and roughly one in five comes from municipalities in the State of Mexico like Nezahualcóyotl. After Iztapalapa, the boroughs that send the most visitors are Coyoacán, Cuauhtémoc, and Iztacalco. But this happens almost only at the two biggest ones, because at Olini and Meyehualco less than half of their visitors live in Iztapalapa. In contrast, UTOPÍAS like Papalotl, Atzintli, or Tecoloxtitlan get more than 90% of their people from Iztapalapa.</p>
+<img src="/assets/images/utopias/origin_site_composition.png" alt="Share of each UTOPÍA's visitors coming from Iztapalapa, the rest of Mexico City, and the State of Mexico" style="width:720px;">
+<p><em>Where each UTOPÍA's visitors come from. Purple is Iztapalapa, blue is the rest of Mexico City, and orange is the State of Mexico.</em></p>
+<p>Over time, visits grew little by little. In October 2023 we saw around 20 visitors a day across the whole network, and by early February there were about 60, before dropping a bit in March. Something we didn't expect is that the difference between weekends and weekdays is super small, which tells us that the UTOPÍAS are used all week long and are not just a Sunday outing. During the day, visits go up in the afternoon and reach their highest point in the evening.</p>
+<img src="/assets/images/utopias/ts_daily_visitors.png" alt="Unique visitors per day across all UTOPÍAS, from October 2023 to March 2024" style="width:720px;">
+<p><em>Unique visitors per day across the whole network. The purple line is the average of the last seven days.</em></p>
+<hr>
+<h2>Public transit goes with how many people arrive</h2>
+<p>Of the three things we measured, public transit is the one most related to how many people visit a UTOPÍA. The UTOPÍAS with more routes and more weekday trips within one kilometer are the ones that get more visitors (r = 0.64). And here comes something curious. If instead of transit we use the classic measure of accessibility, which basically counts how many people live nearby, we don't find any relationship with visits. In other words, being surrounded by lots of people isn't enough, what matters is how easy it is to get there.</p>
+<img src="/assets/images/utopias/axis_transit_vs_visitors.png" alt="Relationship between the public transit score and the unique visitors of each UTOPÍA" style="width:600px;">
+<p>Olini is the best example of this. Around it there are 115 routes from five types of transit, including the Metro, Metrobús, RTP buses, bus corridors, and a ton of microbuses.</p>
+<img src="/assets/images/utopias/map_transit_olini.png" alt="Public transit stops within one kilometer of the UTOPÍA Olini, by type of transit" style="width:600px;">
+<p><em>All the public transit stops within one kilometer of Olini.</em></p>
+<hr>
+<h2>What a UTOPÍA offers goes with how far people come</h2>
+<p>You would think that the UTOPÍAS with more stuff, or with more spectacular stuff, would be the most visited, but that's not the case. How unique a UTOPÍA's offer is has nothing to do with how many visitors it gets (r = 0.05). What does change is how far people come from, especially on weekends. We call this the "weekend distance premium", which is how many more kilometers weekend visitors travel compared to weekday visitors. The UTOPÍAS with things that don't exist anywhere else in the network, like a planetarium, a wave pool, or a dinosaur park, have a much bigger premium (r = 0.68). The clearest case is Barco, which is the UTOPÍA with the most unique offer and where weekend visitors travel more than 8 km extra.</p>
+<img src="/assets/images/utopias/distinct_vs_premium.png" alt="Relationship between how unique each UTOPÍA's offer is and the weekend distance premium" style="width:600px;">
+<p>On the other hand, the more everyday things, like gyms and courts for team sports, do go hand in hand with more visitors. This makes sense, because these are things people use often and close to home. In short, unique attractions make people come from farther away, but they don't make more people come.</p>
+<hr>
+<h2>Violence around a UTOPÍA goes with who arrives</h2>
+<p>Another thing we didn't expect is that the total amount of crime around a UTOPÍA has no relationship with how many people visit it. What we did find is that the share of violent crimes (homicides, rapes, kidnappings, and violent robberies) is strongly related to who arrives. UTOPÍAS in areas with a higher share of violent crime get visitors who live in poorer areas (r = −0.75) and who come from closer by.</p>
+<img src="/assets/images/utopias/violent_vs_wealth.png" alt="Relationship between the share of violent crime around each UTOPÍA and the average wealth of its visitors" style="width:600px;">
+<p>Here we have to be very careful, because this doesn't mean that violence decides where people go. In Iztapalapa, the most violent areas and the poorest areas tend to be the same ones, so one possible explanation is that people from those neighborhoods go to the UTOPÍA closest to them, while those with more resources (who mostly don't live there) prefer to go to the safer and better-connected UTOPÍAS. With our data we know where people live and which UTOPÍA they reach, but not why they chose it, so we leave this as a hypothesis.</p>
+<hr>
+<h2>Four types of UTOPÍA</h2>
+<p>Putting together transit and how unique the offer is, which are the two things a government can decide directly, we can split the UTOPÍAS into four types. Flagship destinations have good transit and things you can't find anywhere else, like Olini, Meyehualco, Tezontli, and Ixtapalcalli. Connected neighborhood hubs have good transit but a more standard offer, like Teotongo, Atzintli, and Cuauhtlicalli. Under-connected attractions have unique things but little transit, like Libertad, Barco, and Quetzalcoatl. And neighborhood spaces have neither much transit nor special things, and mostly serve the people who live around them, like La Cascada, Papalotl, and Tecoloxtitlan.</p>
+<img src="/assets/images/utopias/access_typology.png" alt="Typology of the UTOPÍAS by public transit access and how unique their offer is" style="width:640px;">
+<p><em>Each UTOPÍA by its transit (horizontal axis) and how unique its offer is (vertical axis). The size of the circle goes with its visitors.</em></p>
+<hr>
+<h2>So what is this useful for?</h2>
+<p>For me, the most useful part of all this is that, before laying a single brick, a government can check how much public transit there is around a site. The route data is public and the analysis is pretty simple, and it's exactly what is most related to how many people will show up. I also think we need to be careful with how we evaluate each UTOPÍA. A UTOPÍA in an area where almost everyone has few resources is going to get almost only visitors with few resources, no matter how well it's built, and that doesn't make it a worse UTOPÍA. It's actually doing its job in its neighborhood.</p>
+<p>Finally, the unique attractions really depend on what we want to achieve. A planetarium or a dinosaur park won't fill a UTOPÍA on weekdays, but they do make people from all over the city come on weekends. If the goal is for people from different places and income levels to meet in the same place, these attractions do bring something real. But if the goal is for the people around it to use it every day, it's probably better to invest in transit or in everyday things like gyms and courts. In the end, both options create third places, just for different audiences, and now that the UTOPÍAS are expanding across the whole city, it's really worth thinking from the start about who we are building each one for.</p>
+<img src="/assets/images/utopias/foto_cita_epa.jpg" alt="Quote by Elena Poniatowska on the wall of the UTOPÍA: When the earth shook, those below pulled out those above" style="width:520px;">
+<hr>
+<p><em>Paper:</em> Langle-Chimal, O. D., Cadavid-Aguilar, N., Meouchi-Vélez, A., and Ponce-López, R. (2026). "Evaluating the reach and equity of public spaces in Mexico City using mobility data: the case of the Utopías in Iztapalapa." <em>Frontiers in Big Data</em>, 9:1942458.</p>
+<p>📄 <strong><a href="https://www.frontiersin.org/journals/big-data/articles/10.3389/fdata.2026.1942458/full">Read the full article (open access)</a></strong></p></div></article></main><footer class="Footer__FooterWrapper-sc-jaeqzk-0 bULOHN"><div class="Footer__FooterContent-sc-jaeqzk-1 iQowSC"><div class="Footer__FooterSection-sc-jaeqzk-2 hzRrLe"><h3 class="Footer__FooterTitle-sc-jaeqzk-3 jMqLUe">About</h3><p class="Footer__FooterText-sc-jaeqzk-4 jlxgqc">Complex Systems Researcher specializing in urban mobility, computational social science, and statistical physics.</p></div><div class="Footer__FooterSection-sc-jaeqzk-2 hzRrLe"><h3 class="Footer__FooterTitle-sc-jaeqzk-3 jMqLUe">Connect</h3><div class="Footer__SocialLinks-sc-jaeqzk-5 gvYEeR"><a href="https://github.com/ollin18" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="Footer__SocialLink-sc-jaeqzk-6 Footer__GitHubLink-sc-jaeqzk-7 cVFpvx dmOyhI">GitHub</a><a href="https://www.linkedin.com/in/ollin18" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="Footer__SocialLink-sc-jaeqzk-6 Footer__LinkedInLink-sc-jaeqzk-8 cVFpvx jAVeyI">LinkedIn</a><a href="https://scholar.google.com/citations?user=L1QJLFoAAAAJ&amp;hl" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar" class="Footer__SocialLink-sc-jaeqzk-6 Footer__ScholarLink-sc-jaeqzk-9 cVFpvx hiEvCn">Scholar</a><a href="mailto:ollin@berkeley.edu" aria-label="Email" class="Footer__SocialLink-sc-jaeqzk-6 Footer__EmailLink-sc-jaeqzk-10 cVFpvx gyOWIP">Email</a></div></div><div class="Footer__FooterSection-sc-jaeqzk-2 hzRrLe"><h3 class="Footer__FooterTitle-sc-jaeqzk-3 jMqLUe">Site</h3><p class="Footer__FooterText-sc-jaeqzk-4 jlxgqc">Built with Gatsby, React, and styled-components. Powered by GSAP for scroll animations.</p></div></div><div class="Footer__Copyright-sc-jaeqzk-11 fFDhGG">© <!-- -->2026<!-- --> Ollin D. Langle-Chimal. <!-- -->All rights reserved.<br/>Generated by Ollin</div></footer></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-9FS4V8SGLR"></script><script>
+      
+      function gaOptout(){document.cookie=disableStr+'=true; expires=Thu, 31 Dec 2099 23:59:59 UTC;path=/',window[disableStr]=!0}var gaProperty='G-9FS4V8SGLR',disableStr='ga-disable-'+gaProperty;document.cookie.indexOf(disableStr+'=true')>-1&&(window[disableStr]=!0);
+      if(!(navigator.doNotTrack == "1" || window.doNotTrack == "1")) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-9FS4V8SGLR', {"anonymize_ip":true,"cookie_expires":0,"send_page_view":false});
+      }
+      </script><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/projects/utopias/";/*]]>*/</script><!-- slice-start id="_gatsby-scripts-1" -->
+          <script
+            id="gatsby-chunk-mapping"
+          >
+            window.___chunkMapping="{\"app\":[\"/app-d78b370eb2a0d47416a1.js\"],\"component---src-pages-404-js\":[\"/component---src-pages-404-js-f337ef602b06ee964200.js\"],\"component---src-pages-blog-jsx\":[\"/component---src-pages-blog-jsx-20759427d2695e7f55ed.js\"],\"component---src-pages-books-jsx\":[\"/component---src-pages-books-jsx-48898111d2b608c0ad1d.js\"],\"component---src-pages-cv-jsx\":[\"/component---src-pages-cv-jsx-b79eec696a2b3512b569.js\"],\"component---src-pages-index-jsx\":[\"/component---src-pages-index-jsx-01f4dd51ca7a402bfeb0.js\"],\"component---src-pages-page-2-js\":[\"/component---src-pages-page-2-js-77e179c82fc1d05bd2cd.js\"],\"component---src-pages-people-jsx\":[\"/component---src-pages-people-jsx-256e40202b9c9ff85b41.js\"],\"component---src-pages-projects-jsx\":[\"/component---src-pages-projects-jsx-d4ca39b38575b4e224f5.js\"],\"component---src-pages-publications-jsx\":[\"/component---src-pages-publications-jsx-b5196e599b390235b5f5.js\"],\"component---src-pages-teaching-jsx\":[\"/component---src-pages-teaching-jsx-6551f218c762ae82bf4e.js\"],\"component---src-pages-using-ssr-js\":[\"/component---src-pages-using-ssr-js-96362a78fd84d7080f7f.js\"],\"component---src-pages-using-typescript-tsx\":[\"/component---src-pages-using-typescript-tsx-5bcf42512638b022a421.js\"],\"component---src-templates-blog-post-jsx\":[\"/component---src-templates-blog-post-jsx-8975796e2e28586ff5ee.js\"],\"component---src-templates-book-review-jsx\":[\"/component---src-templates-book-review-jsx-f973f2e45b2fcf27fe83.js\"],\"component---src-templates-project-detail-jsx\":[\"/component---src-templates-project-detail-jsx-5c9e02e9e9a20a88272b.js\"]}";
+          </script>
+        <script>window.___webpackCompilationHash="6c7dd8f99a03eda1f8fc";</script><script src="/webpack-runtime-5ee6d90dbfe7adec1753.js" async></script><script src="/framework-a98cd6097609b685b73f.js" async></script><script src="/94726e6d-823c10e1ea9abde67a2e.js" async></script><script src="/app-d78b370eb2a0d47416a1.js" async></script><!-- slice-end id="_gatsby-scripts-1" --></body></html>

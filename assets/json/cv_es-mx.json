@@ -1,0 +1,396 @@
+{
+  "basics": {
+    "name": "Ollin D. Langle-Chimal",
+    "label": "Investigador Postdoctoral en Ciencia Computacional Social",
+    "email": "ollin[at]berkeley.edu",
+    "website": "https://www.ollinlangle.com",
+    "summary": "Investigador postdoctoral especializado en ciencia computacional social, patrones de movilidad humana y ciencia de datos para la respuesta humanitaria. Doctorado en Sistemas Complejos y Ciencia de Datos con amplia experiencia en aprendizaje automático, análisis de redes y economía del desarrollo. Apasionado por el uso de la ciencia de datos para abordar retos sociales y ambientales.",
+    "location": {
+      "address": "401a Wurster Hall",
+      "postalCode": "94720",
+      "city": "Berkeley",
+      "countryCode": "US",
+      "region": "California"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "ollin18",
+        "url": "https://github.com/ollin18"
+      },
+      {
+        "network": "ORCID",
+        "username": "0000-0002-8772-1171",
+        "url": "https://orcid.org/0000-0002-8772-1171"
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "University of Vermont",
+      "area": "Sistemas Complejos y Ciencia de Datos",
+      "studyType": "Doctorado",
+      "startDate": "2018-08-01",
+      "endDate": "2023-07-01",
+      "gpa": "",
+      "summary": "Asesor: Nicholas Cheney. Becario de posgrado del Gund Institute. Tesis: Ciencia de Datos y Modelado Matemático para la Respuesta Humanitaria"
+    },
+    {
+      "institution": "Instituto Tecnológico Autónomo de México (ITAM)",
+      "area": "Ciencia de Datos",
+      "studyType": "Maestría",
+      "startDate": "2016-08-01",
+      "endDate": "2018-05-01",
+      "gpa": "3.67",
+      "summary": "Asesor: Carlos Fernando Esponda Darlington. Tesis: Algoritmo espectral sin retroceso (non-backtracking) para detección de comunidades en redes ponderadas. Egresado con mención honorífica."
+    },
+    {
+      "institution": "Universidad Nacional Autónoma de México (UNAM)",
+      "area": "Física",
+      "studyType": "Licenciatura",
+      "startDate": "2006-08-01",
+      "endDate": "2016-05-01",
+      "gpa": "3.34",
+      "summary": "Asesor: Jesús Espinal Enríquez. Tesis: Percolación óptima en redes complejas."
+    }
+  ],
+  "work": [
+    {
+      "name": "University of California Berkeley",
+      "position": "Investigador Postdoctoral",
+      "website": "https://www.berkeley.edu",
+      "startDate": "2024-06-01",
+      "summary": "Investigación sobre tendencias de movilidad, modelado de elección de empleo y complejidad económica en sistemas urbanos",
+      "highlights": [
+        "Investigación sobre tendencias de movilidad por situación laboral en países de ingresos bajos y medios",
+        "Investigación sobre la elección de empleo como un Modelo de Utilidad Aleatoria basado en patrones de traslado (commuting)",
+        "Investigación sobre complejidad económica a nivel intraurbano utilizando flujos urbanos",
+        "Estimación de alta resolución de la fuerza laboral informal mediante encuestas y censos"
+      ]
+    },
+    {
+      "name": "THINKMD",
+      "position": "Científico de Datos",
+      "website": "https://thinkmd.org",
+      "startDate": "2022-09-01",
+      "endDate": "2024-09-01",
+      "summary": "Desarrollo de herramientas de vigilancia de enfermedades y aprendizaje automático para evaluaciones clínicas",
+      "highlights": [
+        "Desarrollo de herramientas de vigilancia de enfermedades y síntomas",
+        "Desarrollo de lógica clínica basada en aprendizaje automático para evaluaciones de enfermedades",
+        "Inferencia y detección de anomalías usando expedientes clínicos electrónicos en países de ingresos bajos y medios",
+        "Ingeniería de datos y control de calidad"
+      ]
+    },
+    {
+      "name": "The World Bank",
+      "position": "Científico de Datos - STC",
+      "website": "https://www.worldbank.org",
+      "startDate": "2020-12-01",
+      "endDate": "2023-08-01",
+      "summary": "Análisis geoespacial e investigación de patrones de movilidad durante el COVID-19",
+      "highlights": [
+        "Análisis geoespacial y diseño de tableros (dashboards) con datos de GPS y gasto",
+        "Identificación de brechas en la reducción de movilidad y patrones de actividad económica",
+        "Análisis de distintos grupos socioeconómicos durante la pandemia"
+      ]
+    },
+    {
+      "name": "University of Vermont, Neurobotics Lab",
+      "position": "Asistente de Investigación de Posgrado",
+      "website": "https://www.uvm.edu",
+      "startDate": "2018-08-01",
+      "endDate": "2022-08-01",
+      "summary": "Investigación doctoral sobre modelado del comportamiento humano y análisis de la toma de decisiones",
+      "highlights": [
+        "Gamificación para el análisis de la toma de decisiones",
+        "Análisis y modelado del comportamiento humano en situaciones de crisis",
+        "Clasificación de texto para necesidades expresadas durante crisis humanitarias",
+        "Análisis de correlaciones temporales en patrones de migración humana"
+      ]
+    },
+    {
+      "name": "Ministry of Social Development (SEDESOL)",
+      "position": "Científico de Datos Senior",
+      "website": "https://www.gob.mx/sedesol",
+      "startDate": "2017-08-01",
+      "endDate": "2018-08-01",
+      "summary": "Aprendizaje automático para política pública y análisis de programas sociales",
+      "highlights": [
+        "Estimación de ingresos mediante aprendizaje automático",
+        "Análisis automatizado y detección de errores de reporte en encuestas",
+        "Desarrollo de herramientas para la detección de irregularidades en programas sociales",
+        "Construcción de una base de datos unificada en PostgreSQL para todos los programas sociales",
+        "Desarrollo de un paquete de R para el acceso a la base de datos"
+      ]
+    },
+    {
+      "name": "Presage Research",
+      "position": "Científico de Datos Senior",
+      "startDate": "2017-08-01",
+      "endDate": "2018-08-01",
+      "summary": "Aprendizaje automático para gestión de reputación y análisis de redes sociales",
+      "highlights": [
+        "Desarrollo de una herramienta de gestión de reputación para redes sociales",
+        "Aprendizaje profundo para la detección de derrames de petróleo",
+        "Procesamiento de Lenguaje Natural para el monitoreo de redes sociales"
+      ]
+    },
+    {
+      "name": "Stevens Institute of Technology",
+      "position": "Interno de Investigación de Verano",
+      "website": "https://www.stevens.edu",
+      "startDate": "2017-06-05",
+      "endDate": "2017-08-05",
+      "summary": "Investigación en sistemas complejos sobre percepción urbana y análisis de redes sociales",
+      "highlights": [
+        "Minería y análisis de redes sociales",
+        "Construcción de una base de datos geoespacial para investigación urbana",
+        "Análisis de la percepción urbana a través de redes sociales",
+        "Análisis de correlación entre la ingesta calórica y el uso de redes sociales"
+      ]
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "SACNAS (Society for Advancement of Chicanos/Hispanics and Native Americans in Science)",
+      "position": "Miembro Fundador y Encargado de Redes Sociales",
+      "website": "https://www.sacnas.org",
+      "startDate": "2018-08-01",
+      "summary": "Liderazgo del capítulo de UVM y defensa de científicos subrepresentados"
+    },
+    {
+      "organization": "Mechanism Design for Social Good (MD4SG)",
+      "position": "Miembro del Grupo de Trabajo",
+      "website": "https://www.md4sg.com",
+      "startDate": "2020-01-01",
+      "summary": "Grupo de Trabajo de América Latina y el Caribe"
+    },
+    {
+      "organization": "National Institute of Genomic Medicine (INMEGEN)",
+      "position": "Investigador Visitante",
+      "website": "https://www.inmegen.gob.mx",
+      "startDate": "2015-08-01",
+      "endDate": "2017-06-01",
+      "summary": "Investigación sobre percolación óptima y detección de comunidades en redes genómicas"
+    }
+  ],
+  "awards": [
+    {
+      "title": "Best Poster Award",
+      "date": "2024-01-01",
+      "awarder": "NetMob Conference",
+      "summary": "El impacto desigual del COVID-19 en los patrones de movilidad en países en desarrollo"
+    },
+    {
+      "title": "GCP Credits Award",
+      "date": "2023-01-01",
+      "awarder": "Google",
+      "summary": "4,000 USD en créditos de GCP para investigación sobre movilidad humana"
+    },
+    {
+      "title": "Best Chapter Award",
+      "date": "2022-01-01",
+      "awarder": "Society for the Advancement of Chicanos/Hispanics and Native Americans in Science (SACNAS)",
+      "summary": "Reconocimiento por liderazgo en el capítulo de UVM"
+    },
+    {
+      "title": "Angela Batista Award",
+      "date": "2021-01-01",
+      "awarder": "University of Vermont",
+      "summary": "Para estudiantes de color que han demostrado compromiso con la justicia social y el cambio mediante trabajo antirracista"
+    },
+    {
+      "title": "Ex-ITAM Research Prize",
+      "date": "2018-01-01",
+      "awarder": "ITAM",
+      "summary": "Mejor Tesis de Investigación de la Maestría en Ciencia de Datos"
+    },
+    {
+      "title": "SoFiA 2016",
+      "date": "2016-11-07",
+      "awarder": "Latin American School and Workshop on Data Analysis",
+      "summary": "Beca completa para el Modelado Matemático de las Ciencias Sociales"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Socioeconomic disparities in mobility behavior during the COVID-19 pandemic in developing countries",
+      "publisher": "EPJ Data Science",
+      "releaseDate": "2025-01-01",
+      "summary": "Publicación como primer autor sobre patrones de movilidad durante el COVID-19"
+    },
+    {
+      "name": "Improving Real-Time Malaria Diagnosis on Site: Transforming Malaria Detection with Machine Learning",
+      "publisher": "En revisión",
+      "releaseDate": "2024-01-01",
+      "summary": "Enfoques de aprendizaje automático para la detección de malaria en entornos clínicos"
+    },
+    {
+      "name": "Unmet needs and behaviour during the Ebola response in Sierra Leone",
+      "publisher": "The Lancet Planetary Health",
+      "releaseDate": "2020-02-01",
+      "summary": "Coautor en un análisis retrospectivo de la retroalimentación comunitaria durante el brote de Ébola"
+    },
+    {
+      "name": "Using experimental gaming simulations to elicit risk mitigation behavioral strategies",
+      "publisher": "PloS one",
+      "releaseDate": "2020-03-01",
+      "summary": "Coautor en un estudio de simulación experimental de juegos para el manejo de enfermedades agrícolas"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Lenguajes de Programación",
+      "level": "Experto",
+      "keywords": [
+        "Julia",
+        "Python",
+        "R",
+        "JavaScript",
+        "SQL",
+        "Bash"
+      ]
+    },
+    {
+      "name": "Ciencia de Datos y Aprendizaje Automático",
+      "level": "Experto",
+      "keywords": [
+        "Redes Complejas",
+        "Procesamiento de Lenguaje Natural",
+        "Análisis Geoespacial",
+        "Análisis de Series de Tiempo",
+        "Modelado Estadístico",
+        "Aprendizaje Profundo"
+      ]
+    },
+    {
+      "name": "Herramientas y Frameworks",
+      "level": "Avanzado",
+      "keywords": [
+        "Docker",
+        "Git",
+        "AWS",
+        "GCP",
+        "Spark",
+        "Neo4J",
+        "PostgreSQL",
+        "D3.js",
+        "React"
+      ]
+    }
+  ],
+  "languages": [
+    {
+      "language": "Español",
+      "fluency": "Lengua materna"
+    },
+    {
+      "language": "Inglés",
+      "fluency": "Dominio profesional completo"
+    },
+    {
+      "language": "Francés",
+      "fluency": "Principiante"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Investigación",
+      "keywords": [
+        "Ciencia Computacional Social",
+        "Movilidad Humana",
+        "Economía del Desarrollo",
+        "Ciencia de Redes",
+        "Tecnología Humanitaria"
+      ]
+    },
+    {
+      "name": "Fotografía",
+      "keywords": [
+        "Urbana",
+        "Acción",
+        "Danza"
+      ]
+    },
+    {
+      "name": "Deportes",
+      "keywords": [
+        "Fútbol",
+        "Correr",
+        "Ciclismo",
+        "Montañismo",
+        "Escalada"
+      ]
+    },
+    {
+      "name": "Música",
+      "keywords": [
+        "Batería",
+        "Percusiones",
+        "Guitarra Clásica"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "PolaRoam",
+      "description": "Marco de trabajo abierto para el análisis incremental de movilidad humana",
+      "highlights": [
+        "Desarrollador principal",
+        "Marco de trabajo basado en Python",
+        "2024"
+      ],
+      "keywords": [
+        "Python",
+        "Análisis de Movilidad",
+        "Código Abierto"
+      ],
+      "startDate": "2024-01-01",
+      "url": "https://github.com/ollin18/PolaRoam",
+      "type": "application"
+    },
+    {
+      "name": "wbgps",
+      "description": "Marco de trabajo distribuido para el análisis de movilidad humana del Banco Mundial",
+      "highlights": [
+        "Desarrollador principal",
+        "Marco de trabajo basado en Python",
+        "2021"
+      ],
+      "keywords": [
+        "Python",
+        "Banco Mundial",
+        "Análisis de GPS"
+      ],
+      "startDate": "2021-01-01",
+      "type": "application"
+    },
+    {
+      "name": "NetABM.jl",
+      "description": "Marco de trabajo de modelado basado en agentes en redes para dinámicas epidemiológicas y de opinión",
+      "highlights": [
+        "Desarrollador principal",
+        "Paquete de Julia",
+        "2020"
+      ],
+      "keywords": [
+        "Julia",
+        "Modelado Basado en Agentes",
+        "Epidemiología"
+      ],
+      "startDate": "2020-01-01",
+      "type": "library"
+    }
+  ],
+  "references": [
+    {
+      "name": "Nicholas Cheney",
+      "reference": "Asesor de doctorado y mentor de investigación en University of Vermont. Experto en sistemas complejos y enfoques computacionales para el estudio del comportamiento."
+    },
+    {
+      "name": "Marta C. Gonzalez",
+      "reference": "Asesora postdoctoral actual en UC Berkeley. Investigadora líder en movilidad humana y sistemas urbanos."
+    }
+  ]
+}

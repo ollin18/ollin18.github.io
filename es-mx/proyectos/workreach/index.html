@@ -1,0 +1,230 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><meta name="generator" content="Gatsby 5.14.6"/><meta data-react-helmet="true" name="description" content="Entendiendo cómo elegimos dónde trabajar en las ciudades con un nuevo modelo de elección discreta que combina distancia, complejidad económica e informalidad."/><meta data-react-helmet="true" name="keywords" content="complex-systems, urban-science, economics, mobility, computational-social-science"/><meta data-react-helmet="true" property="og:title" content="WorkReach: cómo la distancia, la calidad del trabajo y la informalidad definen dónde trabajamos"/><meta data-react-helmet="true" property="og:description" content="Entendiendo cómo elegimos dónde trabajar en las ciudades con un nuevo modelo de elección discreta que combina distancia, complejidad económica e informalidad."/><meta data-react-helmet="true" property="og:type" content="website"/><meta data-react-helmet="true" property="og:url" content="https://ollinlangle.com/es-mx/proyectos/workreach"/><meta data-react-helmet="true" property="og:image" content="/assets/images/workreach/concept_model.png"/><meta data-react-helmet="true" property="og:image:alt" content="WorkReach: cómo la distancia, la calidad del trabajo y la informalidad definen dónde trabajamos"/><meta data-react-helmet="true" property="og:locale" content="es_mx"/><meta data-react-helmet="true" name="twitter:card" content="summary_large_image"/><meta data-react-helmet="true" name="twitter:creator" content="Ollin D. Langle-Chimal"/><meta data-react-helmet="true" name="twitter:title" content="WorkReach: cómo la distancia, la calidad del trabajo y la informalidad definen dónde trabajamos"/><meta data-react-helmet="true" name="twitter:description" content="Entendiendo cómo elegimos dónde trabajar en las ciudades con un nuevo modelo de elección discreta que combina distancia, complejidad económica e informalidad."/><meta data-react-helmet="true" name="twitter:image" content="/assets/images/workreach/concept_model.png"/><title data-react-helmet="true">WorkReach: cómo la distancia, la calidad del trabajo y la informalidad definen dónde trabajamos | Ollin D. Langle-Chimal</title><link data-react-helmet="true" rel="canonical" href="https://ollinlangle.com/es-mx/proyectos/workreach"/><link data-react-helmet="true" rel="alternate" hrefLang="en-us" href="https://ollinlangle.com/proyectos/workreach"/><link data-react-helmet="true" rel="alternate" hrefLang="es-mx" href="https://ollinlangle.com/es-mx/proyectos/workreach"/><link data-react-helmet="true" rel="alternate" hrefLang="x-default" href="https://ollinlangle.com/proyectos/workreach"/><link rel="sitemap" type="application/xml" href="/sitemap-index.xml"/><style data-styled="" data-styled-version="6.1.19">@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Jost:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');/*!sc*/
+@import url('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css');/*!sc*/
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}/*!sc*/
+:root{--color-bg:#0A0E27;--color-bg-secondary:#1A1F3A;--color-text:#E8E9ED;--color-text-secondary:#A0A8C5;--color-surface:#151B35;--color-border:#2A3250;--color-primary:#FF6B35;--color-secondary:#004E89;--color-accent:#F7931E;--color-bg-rgb:10,14,39;}/*!sc*/
+[data-theme='light']{--color-bg:#FFFFFF;--color-bg-secondary:#F5F7FA;--color-text:#1A1A1A;--color-text-secondary:#6B7280;--color-surface:#FAFBFC;--color-border:#E5E7EB;--color-bg-rgb:255,255,255;}/*!sc*/
+html{font-size:16px;scroll-behavior:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;}/*!sc*/
+body{margin:0;padding:0;font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1rem;font-weight:400;line-height:1.5;color:var(--color-text);background-color:var(--color-bg);overflow-x:hidden;transition:background-color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+h1,h2,h3,h4,h5,h6{font-family:"Jost","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-weight:700;line-height:1.25;color:var(--color-text);margin:0;}/*!sc*/
+h1{font-size:3.75rem;letter-spacing:-0.025em;}/*!sc*/
+@media (max-width:768px){h1{font-size:2.25rem;}}/*!sc*/
+h2{font-size:2.25rem;}/*!sc*/
+@media (max-width:768px){h2{font-size:1.875rem;}}/*!sc*/
+h3{font-size:1.875rem;}/*!sc*/
+@media (max-width:768px){h3{font-size:1.5rem;}}/*!sc*/
+h4{font-size:1.5rem;}/*!sc*/
+h5{font-size:1.25rem;}/*!sc*/
+h6{font-size:1.125rem;}/*!sc*/
+p{margin:0 0 1rem 0;line-height:1.625;color:var(--color-text);}/*!sc*/
+a{color:#FF6B35;text-decoration:none;transition:color 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);cursor:pointer;}/*!sc*/
+a:hover{color:#F7931E;}/*!sc*/
+a:focus-visible{outline:2px solid #FF6B35;outline-offset:2px;border-radius:2px;}/*!sc*/
+ul,ol{margin:0 0 1rem 0;padding-left:1.5rem;}/*!sc*/
+li{margin-bottom:0.5rem;line-height:1.625;}/*!sc*/
+code,pre{font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,monospace;}/*!sc*/
+code{background-color:var(--color-surface);padding:0.125rem 0.375rem;border-radius:0.125rem;font-size:0.875em;color:#F7931E;}/*!sc*/
+pre{background-color:var(--color-surface);padding:1rem;border-radius:0.375rem;overflow-x:auto;margin-bottom:1rem;border:1px solid var(--color-border);}/*!sc*/
+pre code{background-color:transparent;padding:0;border-radius:0;color:var(--color-text);}/*!sc*/
+blockquote{margin:1.5rem 0;padding:1rem 1.5rem;border-left:4px solid #FF6B35;background-color:var(--color-surface);border-radius:0.375rem;font-style:italic;color:var(--color-text-secondary);}/*!sc*/
+blockquote p:last-child{margin-bottom:0;}/*!sc*/
+img{max-width:100%;height:auto;display:block;}/*!sc*/
+hr{border:0;height:1px;background-color:var(--color-border);margin:2rem 0;}/*!sc*/
+table{width:100%;border-collapse:collapse;margin-bottom:1.5rem;}/*!sc*/
+th,td{padding:0.75rem;text-align:left;border-bottom:1px solid var(--color-border);}/*!sc*/
+th{font-weight:600;background-color:var(--color-surface);}/*!sc*/
+input,textarea,select,button{font-family:inherit;font-size:inherit;line-height:inherit;}/*!sc*/
+button{cursor:pointer;border:none;background:none;padding:0;color:inherit;}/*!sc*/
+::selection{background-color:#FF6B35;color:#0A0E27;}/*!sc*/
+::-moz-selection{background-color:#FF6B35;color:#0A0E27;}/*!sc*/
+::-webkit-scrollbar{width:12px;height:12px;}/*!sc*/
+::-webkit-scrollbar-track{background:var(--color-bg);}/*!sc*/
+::-webkit-scrollbar-thumb{background:#FF6B35;border-radius:9999px;border:3px solid var(--color-bg);}/*!sc*/
+::-webkit-scrollbar-thumb:hover{background:#F7931E;}/*!sc*/
+*{scrollbar-width:thin;scrollbar-color:#FF6B35 var(--color-bg);}/*!sc*/
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0;}/*!sc*/
+*:focus-visible{outline:2px solid #FF6B35;outline-offset:2px;}/*!sc*/
+*:focus:not(:focus-visible){outline:none;}/*!sc*/
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important;}}/*!sc*/
+@media print{body{background-color:white;color:black;}a{text-decoration:underline;}nav,aside,footer{display:none;}}/*!sc*/
+data-styled.g1[id="sc-global-cBdPHX1"]{content:"sc-global-cBdPHX1,"}/*!sc*/
+.jrpXdn{position:fixed;top:0;left:0;right:0;z-index:1100;background-color:transparent;backdrop-filter:none;border-bottom:1px solid transparent;transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+data-styled.g2[id="Header__HeaderWrapper-sc-17836s2-0"]{content:"jrpXdn,"}/*!sc*/
+.gynvdj{max-width:1280px;margin:0 auto;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;}/*!sc*/
+data-styled.g3[id="Header__Nav-sc-17836s2-1"]{content:"gynvdj,"}/*!sc*/
+.iYuVWU{font-family:"Jost","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1.5rem;font-weight:700;color:var(--color-text);letter-spacing:-0.025em;transition:color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.iYuVWU:hover{color:#FF6B35;}/*!sc*/
+data-styled.g4[id="Header__Logo-sc-17836s2-2"]{content:"iYuVWU,"}/*!sc*/
+.hvvEFe{display:flex;align-items:center;gap:1.5rem;}/*!sc*/
+@media (max-width:768px){.hvvEFe{display:none;position:fixed;top:70px;left:0;right:0;background-color:var(--color-surface);flex-direction:column;padding:1.5rem;border-bottom:1px solid var(--color-border);backdrop-filter:blur(12px);}}/*!sc*/
+data-styled.g5[id="Header__NavLinks-sc-17836s2-3"]{content:"hvvEFe,"}/*!sc*/
+.dWMbER{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1rem;font-weight:500;color:var(--color-text);position:relative;transition:color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.dWMbER::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background-color:#FF6B35;transform:scaleX(0);transition:transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.dWMbER:hover{color:#FF6B35;}/*!sc*/
+.dWMbER:hover::after{transform:scaleX(1);}/*!sc*/
+.dWMbER.active{color:#FF6B35;}/*!sc*/
+.dWMbER.active::after{transform:scaleX(1);}/*!sc*/
+data-styled.g6[id="Header__NavLink-sc-17836s2-4"]{content:"dWMbER,"}/*!sc*/
+.eVRumG{display:flex;gap:0.5rem;}/*!sc*/
+data-styled.g7[id="Header__LanguageSwitcher-sc-17836s2-5"]{content:"eVRumG,"}/*!sc*/
+.dklIUD{font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,monospace;font-size:0.875rem;font-weight:500;color:var(--color-text-secondary);padding:0.5rem 0.75rem;border:1px solid var(--color-border);border-radius:0.375rem;background-color:transparent;cursor:pointer;transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);text-transform:uppercase;}/*!sc*/
+.dklIUD:hover{color:#FF6B35;border-color:#FF6B35;background-color:rgba(255,107,53,0.1);}/*!sc*/
+.eWLAbV{font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,monospace;font-size:0.875rem;font-weight:500;color:#FF6B35;padding:0.5rem 0.75rem;border:1px solid #FF6B35;border-radius:0.375rem;background-color:rgba(255, 107, 53, 0.1);cursor:pointer;transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);text-transform:uppercase;}/*!sc*/
+.eWLAbV:hover{color:#FF6B35;border-color:#FF6B35;background-color:rgba(255,107,53,0.1);}/*!sc*/
+data-styled.g8[id="Header__LangButton-sc-17836s2-6"]{content:"dklIUD,eWLAbV,"}/*!sc*/
+.fFMim{display:none;flex-direction:column;gap:4px;background:transparent;border:none;cursor:pointer;padding:0.5rem;}/*!sc*/
+@media (max-width:768px){.fFMim{display:flex;}}/*!sc*/
+.fFMim span{width:24px;height:2px;background-color:var(--color-text);transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.fFMim span:nth-child(1){transform:none;}/*!sc*/
+.fFMim span:nth-child(2){opacity:1;}/*!sc*/
+.fFMim span:nth-child(3){transform:none;}/*!sc*/
+data-styled.g9[id="Header__MobileMenuButton-sc-17836s2-7"]{content:"fFMim,"}/*!sc*/
+.kHVmag{background:transparent;border:1px solid var(--color-border);border-radius:9999px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--color-text);font-size:1.25rem;transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);margin-left:1rem;}/*!sc*/
+.kHVmag:hover{border-color:#FF6B35;color:#FF6B35;background:rgba(255,107,53,0.1);}/*!sc*/
+@media (max-width:768px){.kHVmag{margin-left:0;}}/*!sc*/
+data-styled.g10[id="Header__ThemeToggle-sc-17836s2-8"]{content:"kHVmag,"}/*!sc*/
+.cPFteU{display:flex;align-items:center;gap:1rem;}/*!sc*/
+data-styled.g11[id="Header__DesktopActions-sc-17836s2-9"]{content:"cPFteU,"}/*!sc*/
+.hZgUt{display:flex;align-items:center;gap:0.75rem;}/*!sc*/
+@media (min-width:768px){.hZgUt{display:none;}}/*!sc*/
+data-styled.g12[id="Header__MobileActions-sc-17836s2-10"]{content:"hZgUt,"}/*!sc*/
+.bULOHN{background-color:var(--color-surface);border-top:1px solid var(--color-border);padding:3rem 1.5rem;margin-top:5rem;}/*!sc*/
+data-styled.g13[id="Footer__FooterWrapper-sc-jaeqzk-0"]{content:"bULOHN,"}/*!sc*/
+.iQowSC{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;}/*!sc*/
+@media (max-width:768px){.iQowSC{grid-template-columns:1fr;}}/*!sc*/
+data-styled.g14[id="Footer__FooterContent-sc-jaeqzk-1"]{content:"iQowSC,"}/*!sc*/
+.hzRrLe{display:flex;flex-direction:column;gap:1rem;}/*!sc*/
+data-styled.g15[id="Footer__FooterSection-sc-jaeqzk-2"]{content:"hzRrLe,"}/*!sc*/
+.jMqLUe{font-family:"Jost","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1.125rem;font-weight:600;color:var(--color-text);margin-bottom:0.5rem;}/*!sc*/
+data-styled.g16[id="Footer__FooterTitle-sc-jaeqzk-3"]{content:"jMqLUe,"}/*!sc*/
+.jlxgqc{font-size:0.875rem;color:var(--color-text-secondary);line-height:1.625;margin:0;}/*!sc*/
+data-styled.g17[id="Footer__FooterText-sc-jaeqzk-4"]{content:"jlxgqc,"}/*!sc*/
+.gvYEeR{display:flex;gap:1rem;flex-wrap:wrap;}/*!sc*/
+data-styled.g18[id="Footer__SocialLinks-sc-jaeqzk-5"]{content:"gvYEeR,"}/*!sc*/
+.cVFpvx{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:var(--color-text-secondary);transition:all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);}/*!sc*/
+.cVFpvx:hover{color:#FF6B35;transform:translateY(-2px);}/*!sc*/
+.cVFpvx::before{content:'';width:20px;height:20px;background-color:currentColor;mask-size:contain;mask-repeat:no-repeat;mask-position:center;}/*!sc*/
+data-styled.g19[id="Footer__SocialLink-sc-jaeqzk-6"]{content:"cVFpvx,"}/*!sc*/
+.dmOyhI::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z'/%3E%3C/svg%3E");}/*!sc*/
+data-styled.g20[id="Footer__GitHubLink-sc-jaeqzk-7"]{content:"dmOyhI,"}/*!sc*/
+.jAVeyI::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z'/%3E%3C/svg%3E");}/*!sc*/
+data-styled.g21[id="Footer__LinkedInLink-sc-jaeqzk-8"]{content:"jAVeyI,"}/*!sc*/
+.hiEvCn::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 0l11 6v8.5c0 5.25-3.25 10.2-11 13.5-7.75-3.3-11-8.25-11-13.5v-8.5l11-6zm0 2.18l-9 4.91v7.41c0 4.09 2.59 8.05 9 10.9 6.41-2.85 9-6.81 9-10.9v-7.41l-9-4.91zm1 10.32v5.5h-2v-5.5h-3l4-4 4 4h-3z'/%3E%3C/svg%3E");}/*!sc*/
+data-styled.g22[id="Footer__ScholarLink-sc-jaeqzk-9"]{content:"hiEvCn,"}/*!sc*/
+.gyOWIP::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z'/%3E%3C/svg%3E");}/*!sc*/
+data-styled.g23[id="Footer__EmailLink-sc-jaeqzk-10"]{content:"gyOWIP,"}/*!sc*/
+.fFDhGG{text-align:center;padding-top:2rem;margin-top:2rem;border-top:1px solid var(--color-border);color:var(--color-text-secondary);font-size:0.875rem;}/*!sc*/
+data-styled.g24[id="Footer__Copyright-sc-jaeqzk-11"]{content:"fFDhGG,"}/*!sc*/
+.ghjyuh{min-height:100vh;display:flex;flex-direction:column;}/*!sc*/
+data-styled.g25[id="Layout__MainWrapper-sc-147ozt3-0"]{content:"ghjyuh,"}/*!sc*/
+.cZWiyp{flex:1;margin-top:70px;}/*!sc*/
+data-styled.g26[id="Layout__MainContent-sc-147ozt3-1"]{content:"cZWiyp,"}/*!sc*/
+.bqUSOb{width:100%;min-height:600px;display:flex;justify-content:center;align-items:center;background-color:var(--color-surface);border-radius:0.5rem;color:var(--color-text-secondary);font-size:1.125rem;}/*!sc*/
+data-styled.g28[id="P5Sketch__LoadingContainer-sc-otc9do-1"]{content:"bqUSOb,"}/*!sc*/
+.eFUcpc{width:100%;margin:2rem 0;border-radius:0.75rem;overflow:hidden;box-shadow:0 20px 25px -5px rgba(0, 0, 0, 0.1),0 10px 10px -5px rgba(0, 0, 0, 0.04);background-color:var(--color-surface);}/*!sc*/
+data-styled.g30[id="WorkReachSketch__WorkReachContainer-sc-j3pt0d-0"]{content:"eFUcpc,"}/*!sc*/
+.dSSlmN{padding:1.5rem;background-color:var(--color-bg-secondary);border-bottom:1px solid var(--color-border);}/*!sc*/
+.dSSlmN h3{font-size:1.25rem;margin-bottom:0.75rem;color:#FF6B35;}/*!sc*/
+.dSSlmN p{color:var(--color-text-secondary);line-height:1.625;margin:0;}/*!sc*/
+data-styled.g31[id="WorkReachSketch__SketchDescription-sc-j3pt0d-1"]{content:"dSSlmN,"}/*!sc*/
+.gSrWik{padding:1rem 1.5rem;background-color:rgba(255,107,53,0.05);border-top:1px solid var(--color-border);font-size:0.875rem;color:var(--color-text-secondary);}/*!sc*/
+.gSrWik strong{color:var(--color-text);font-weight:600;}/*!sc*/
+data-styled.g32[id="WorkReachSketch__Instructions-sc-j3pt0d-2"]{content:"gSrWik,"}/*!sc*/
+.iIZsSs{min-height:60vh;display:flex;flex-direction:column;justify-content:center;padding:5rem 1.5rem;background:linear-gradient( 135deg,var(--color-bg) 0%,var(--color-surface) 100% );position:relative;overflow:hidden;}/*!sc*/
+.iIZsSs::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient( circle at 20% 50%,rgba(255,107,53,0.1) 0%,transparent 50% );pointer-events:none;}/*!sc*/
+data-styled.g33[id="project-detail__ProjectHero-sc-nsoc72-0"]{content:"iIZsSs,"}/*!sc*/
+.khoxLO{max-width:1024px;margin:0 auto;position:relative;z-index:1;}/*!sc*/
+data-styled.g34[id="project-detail__HeroContent-sc-nsoc72-1"]{content:"khoxLO,"}/*!sc*/
+.dLtGgn{display:inline-block;font-size:0.875rem;font-weight:600;color:#FF6B35;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:1rem;}/*!sc*/
+data-styled.g35[id="project-detail__ProjectCategory-sc-nsoc72-2"]{content:"dLtGgn,"}/*!sc*/
+.iPXGuD{font-size:3.75rem;margin-bottom:1.5rem;background:linear-gradient( 135deg,#FF6B35 0%,#F7931E 100% );-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}/*!sc*/
+@media (max-width:768px){.iPXGuD{font-size:2.25rem;}}/*!sc*/
+data-styled.g36[id="project-detail__ProjectTitle-sc-nsoc72-3"]{content:"iPXGuD,"}/*!sc*/
+.hzkKhf{font-size:1.5rem;color:var(--color-text-secondary);max-width:800px;line-height:1.625;}/*!sc*/
+data-styled.g37[id="project-detail__ProjectDescription-sc-nsoc72-4"]{content:"hzkKhf,"}/*!sc*/
+.cramKJ{max-width:1024px;margin:0 auto;padding:3rem 1.5rem;}/*!sc*/
+.cramKJ h2{font-size:2.25rem;margin-top:4rem;margin-bottom:1.5rem;color:var(--color-text);}/*!sc*/
+.cramKJ h3{font-size:1.5rem;margin-top:2.5rem;margin-bottom:1rem;color:var(--color-text);}/*!sc*/
+.cramKJ p{font-size:1.125rem;line-height:1.625;margin-bottom:1.5rem;}/*!sc*/
+.cramKJ img{width:100%;border-radius:0.75rem;margin:2rem 0;box-shadow:0 20px 25px -5px rgba(0, 0, 0, 0.1),0 10px 10px -5px rgba(0, 0, 0, 0.04);}/*!sc*/
+.cramKJ ul,.cramKJ ol{font-size:1.125rem;line-height:1.625;margin-bottom:1.5rem;}/*!sc*/
+.cramKJ li{margin-bottom:0.75rem;}/*!sc*/
+.cramKJ blockquote{border-left:4px solid #FF6B35;padding-left:1.5rem;margin:2rem 0;font-style:italic;color:var(--color-text-secondary);}/*!sc*/
+.cramKJ code{background-color:var(--color-surface);padding:0.25rem 0.5rem;border-radius:0.125rem;font-family:"JetBrains Mono","Fira Code","SF Mono",Consolas,monospace;font-size:0.9em;}/*!sc*/
+.cramKJ pre{background-color:var(--color-surface);padding:1.5rem;border-radius:0.5rem;overflow-x:auto;margin:2rem 0;}/*!sc*/
+.cramKJ pre code{background:none;padding:0;}/*!sc*/
+.cramKJ hr{margin:3rem 0;border:none;height:1px;background:linear-gradient( 90deg,transparent 0%,var(--color-border) 50%,transparent 100% );}/*!sc*/
+data-styled.g38[id="project-detail__ProjectContent-sc-nsoc72-5"]{content:"cramKJ,"}/*!sc*/
+</style><style>.gatsby-image-wrapper{position:relative;overflow:hidden}.gatsby-image-wrapper picture.object-fit-polyfill{position:static!important}.gatsby-image-wrapper img{bottom:0;height:100%;left:0;margin:0;max-width:none;padding:0;position:absolute;right:0;top:0;width:100%;object-fit:cover}.gatsby-image-wrapper [data-main-image]{opacity:0;transform:translateZ(0);transition:opacity .25s linear;will-change:opacity}.gatsby-image-wrapper-constrained{display:inline-block;vertical-align:top}</style><noscript><style>.gatsby-image-wrapper noscript [data-main-image]{opacity:1!important}.gatsby-image-wrapper [data-placeholder-image]{opacity:0!important}</style></noscript><script type="module">const e="undefined"!=typeof HTMLImageElement&&"loading"in HTMLImageElement.prototype;e&&document.body.addEventListener("load",(function(e){const t=e.target;if(void 0===t.dataset.mainImage)return;if(void 0===t.dataset.gatsbyImageSsr)return;let a=null,n=t;for(;null===a&&n;)void 0!==n.parentNode.dataset.gatsbyImageWrapper&&(a=n.parentNode),n=n.parentNode;const o=a.querySelector("[data-placeholder-image]"),r=new Image;r.src=t.currentSrc,r.decode().catch((()=>{})).then((()=>{t.style.opacity=1,o&&(o.style.opacity=0,o.style.transition="opacity 500ms linear")}))}),!0);</script><link rel="preconnect" href="https://www.googletagmanager.com"/><link rel="dns-prefetch" href="https://www.googletagmanager.com"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div class="Layout__MainWrapper-sc-147ozt3-0 ghjyuh"><header class="Header__HeaderWrapper-sc-17836s2-0 jrpXdn"><nav class="Header__Nav-sc-17836s2-1 gynvdj"><a class="Header__Logo-sc-17836s2-2 iYuVWU" href="/">Ollin D. Langle-Chimal</a><div class="Header__NavLinks-sc-17836s2-3 hvvEFe"><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/projects/">Proyectos</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/publications/">Publicaciones</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/blog/">Blog</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/teaching/">Enseñanza</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/people/">Personas</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/books/">Libros</a><a class="Header__NavLink-sc-17836s2-4 dWMbER" href="/cv/">CV</a><div class="Header__LanguageSwitcher-sc-17836s2-5 eVRumG"><button aria-label="Switch to English" class="Header__LangButton-sc-17836s2-6 dklIUD">EN</button><button aria-label="Cambiar a Español" class="Header__LangButton-sc-17836s2-6 eWLAbV">ES</button></div></div><div class="Header__DesktopActions-sc-17836s2-9 cPFteU"><button aria-label="Switch to light mode" class="Header__ThemeToggle-sc-17836s2-8 kHVmag">☀️</button></div><div class="Header__MobileActions-sc-17836s2-10 hZgUt"><button aria-label="Switch to light mode" class="Header__ThemeToggle-sc-17836s2-8 kHVmag">☀️</button><button aria-label="Toggle mobile menu" class="Header__MobileMenuButton-sc-17836s2-7 fFMim"><span></span><span></span><span></span></button></div></nav></header><main class="Layout__MainContent-sc-147ozt3-1 cZWiyp"><section class="project-detail__ProjectHero-sc-nsoc72-0 iIZsSs"><div class="project-detail__HeroContent-sc-nsoc72-1 khoxLO"><span class="project-detail__ProjectCategory-sc-nsoc72-2 dLtGgn">Investigación</span><h1 class="project-detail__ProjectTitle-sc-nsoc72-3 iPXGuD">WorkReach: cómo la distancia, la calidad del trabajo y la informalidad definen dónde trabajamos</h1><p class="project-detail__ProjectDescription-sc-nsoc72-4 hzkKhf">Entendiendo cómo elegimos dónde trabajar en las ciudades con un nuevo modelo de elección discreta que combina distancia, complejidad económica e informalidad.</p></div></section><article class="project-detail__ProjectContent-sc-nsoc72-5 cramKJ"><div class="WorkReachSketch__WorkReachContainer-sc-j3pt0d-0 eFUcpc"><div class="WorkReachSketch__SketchDescription-sc-j3pt0d-1 dSSlmN"><h3>Interactive WorkReach Model</h3><p>Explore how distance, economic complexity (ECI), and informality shape work location choices across Mexican states. Adjust parameters to see how mobility flows change in real-time.</p></div><div minHeight="600px" class="P5Sketch__LoadingContainer-sc-otc9do-1 bqUSOb"><span>Loading visualization...</span></div><div class="WorkReachSketch__Instructions-sc-j3pt0d-2 gSrWik"><strong>Instructions:</strong> Use the sliders to adjust model parameters. Click on a state to edit its ECI and informality values. Hover over states to see details and highlight their flows.</div></div><div><!-- WorkReach interactive visualization is automatically embedded above -->
+<p>Las ciudades no ofrecen los mismos trabajos a todas las personas. Cuando la gente decide dónde trabajar, toma en cuenta <strong>qué tan lejos está el trabajo</strong>, <strong>qué tan bueno es</strong> y <strong>sus propias limitaciones</strong> (como la informalidad en la zona donde vive). En nuestro nuevo artículo presentamos <strong>WorkReach</strong>, un modelo de elección discreta que combina la <strong>distancia</strong>, el <strong>Índice de Complejidad Económica (ECI, por sus siglas en inglés)</strong> del lugar de destino y la <strong>informalidad</strong> del lugar de origen para explicar y medir esas decisiones en <strong>la Ciudad de México, Río de Janeiro, Los Ángeles y el Área de la Bahía de San Francisco</strong>.</p>
+<p>📄 <strong><a href="https://storage.googleapis.com/ollinlangle-files/WorkReach_comb.pdf">Descarga el artículo (PDF)</a></strong></p>
+<hr>
+<h2>¿Qué tiene de diferente?</h2>
+<p>La mayoría de los modelos de flujos (como los de gravedad o de radiación) son muy buenos para predecir, pero dicen poco sobre <strong>por qué</strong> la gente escoge trabajar en ciertos lugares. <strong>WorkReach</strong> está pensado para ser <strong>fácil de interpretar</strong>:</p>
+<ul>
+<li>Una <strong>función de utilidad</strong> representa la decisión de trabajar en el lugar <em>j</em> viviendo en el lugar <em>i</em>.</li>
+<li>Un <strong>peso de transición</strong> (una función logística de la distancia) permite que el comportamiento pase de un modo de <strong>"primero la comodidad"</strong> (trabajos cercanos) a un modo de <strong>"primero la oportunidad"</strong> (trabajos más lejanos pero de mejor calidad).</li>
+<li>Estimamos <strong>parámetros para cada ciudad</strong> que se pueden leer directamente: cuánta distancia extra está dispuesta a recorrer la gente por un ECI más alto, y cómo cambia esa disposición según la <strong>informalidad</strong> del lugar de origen.</li>
+</ul>
+<img src="/assets/images/workreach/concept_model.png" alt="Diagrama conceptual de la utilidad de WorkReach y la transición por distancia" style="width:720px;">
+<hr>
+<h2>Datos, ciudades y medidas</h2>
+<p>Juntamos <strong>flujos de movilidad y de traslados al trabajo anonimizados</strong> con <strong>registros de empleo</strong> y <strong>datos de informalidad basados en censos</strong> para calcular:</p>
+<ul>
+<li><strong>ECI</strong> (dentro de cada ciudad): la diversidad y sofisticación de la actividad económica local.</li>
+<li><strong>Informalidad</strong> (zonas de vivienda): aproximaciones basadas en datos de seguridad social o de registro, adaptadas a cada país.</li>
+<li><strong>Flujos</strong>: viajes casa→trabajo observados o sintéticos (en EE. UU.), ubicados en unidades espaciales consistentes.</li>
+</ul>
+<img src="/assets/images/workreach/eci_informality_maps.png" alt="Mapas coropléticos de ECI e informalidad en las cuatro ciudades" style="width:720px;">
+<p><em>Lo que más resalta:</em> las metrópolis de América Latina muestran una <strong>segregación espacial</strong> más fuerte (más informalidad conforme te alejas de los centros con ECI alto), mientras que en las de EE. UU. todo está más mezclado.</p>
+<hr>
+<h2>Resultados principales</h2>
+<h3>1) El gradiente entre distancia y complejidad</h3>
+<p>En todas las ciudades la gente prefiere <strong>trayectos cortos</strong>, pero está dispuesta a ir <strong>más lejos</strong> por trabajos con <strong>ECI más alto</strong>. La <strong>tasa marginal de sustitución</strong> entre distancia y ECI es más grande en <strong>la Ciudad de México</strong> y más pequeña en <strong>Los Ángeles</strong>. Esto quiere decir que en la CDMX la gente acepta las mayores penalizaciones por distancia para llegar a oportunidades más complejas.</p>
+<img src="/assets/images/workreach/msr_elasticities.png" alt="Tasas marginales de sustitución y elasticidades de ECI contra distancia y de informalidad contra distancia" style="width:720px;">
+<h3>2) La informalidad funciona al revés según la región</h3>
+<ul>
+<li><strong>Ciudad de México y Río</strong>: una <strong>informalidad mayor en el origen</strong> <em>aumenta</em> la disposición a viajar más lejos <strong>si</strong> el destino tiene un ECI alto (la gente va tras mejores oportunidades).</li>
+<li><strong>Área de la Bahía y Los Ángeles</strong>: una informalidad mayor en el origen <em>reduce</em> la disposición a hacer viajes largos a destinos con ECI alto (pesan más las limitaciones).</li>
+</ul>
+<h3>3) Un "umbral" de comportamiento en la distancia</h3>
+<p>El <strong>umbral de distancia estimado (τ)</strong> marca el punto en el que la gente pasa del modo <strong>"primero lo cercano"</strong> al modo <strong>"primero la oportunidad"</strong>. Es <strong>más grande</strong> en <strong>la Ciudad de México y Río</strong> (el modo de comodidad dura más) y <strong>muy pequeño y abrupto</strong> en las metrópolis de <strong>EE. UU.</strong> (las oportunidades empiezan a importar más pronto conforme crece la distancia).</p>
+<hr>
+<h2>¿Qué tan bien predice?</h2>
+<p>Aunque le da prioridad a la interpretación, <strong>WorkReach</strong> está al nivel de los modelos <strong>de referencia</strong> de gravedad y radiación en <strong>CPC</strong> y en <strong>correlación</strong>, y en <strong>el Área de la Bahía</strong> obtiene el mejor CPC. La ventaja es que podemos entender <em>por qué</em> las decisiones se ven como se ven, y no solo saber que así son.</p>
+<img src="/assets/images/workreach/model_fit.png" alt="Flujos observados contra predichos, WorkReach contra los modelos de referencia" style="width:720px;">
+<hr>
+<h2>Accesibilidad: la distancia no lo es todo</h2>
+<p>Calculamos dos medidas que se complementan:</p>
+<ol>
+<li><strong>Accesibilidad ponderada por distancia</strong> (los flujos más cercanos cuentan más)</li>
+<li><strong>Accesibilidad por excedente del consumidor</strong> (un logsum del modelo de elección discreta): la <strong>utilidad máxima esperada</strong> entre todas las opciones de trabajo, que integra la distancia, el ECI del destino y la informalidad del origen.</li>
+</ol>
+<p><strong>Resultado:</strong> la accesibilidad por excedente del consumidor es <strong>siempre más baja</strong> para los orígenes con <strong>alta informalidad</strong> en <strong>las cuatro ciudades</strong>, incluso donde las medidas simples de distancia se ven favorables. La calidad del trabajo y las limitaciones de cada quien cambian quién se beneficia de verdad del mercado laboral de la ciudad.</p>
+<img src="/assets/images/workreach/accessibility_boxplots.png" alt="Diagramas de caja de accesibilidad por grupo de informalidad, ponderada por distancia contra excedente del consumidor" style="width:720px;">
+<img src="/assets/images/workreach/accessibility_maps.png" alt="Mapas de accesibilidad (puntajes z) y un índice combinado con PCA" style="width:720px;">
+<hr>
+<h2>¿Por qué importa para las políticas públicas?</h2>
+<ul>
+<li><strong>Conectar donde se abre acceso a trabajos de calidad</strong>: mejorar el acceso desde orígenes con alta informalidad hacia destinos con <strong>ECI alto</strong> (en América Latina), y reducir las <strong>barreras que no tienen que ver con la distancia</strong> para los trabajadores informales en las metrópolis de EE. UU.</li>
+<li><strong>Invertir donde la decisión cuesta más</strong>: los lugares con ECI alto pero con poco excedente del consumidor para los grupos vulnerables son ideales para <strong>mejorar el transporte público</strong>, y las zonas con buen acceso físico pero ECI bajo necesitan <strong>desarrollo económico local</strong>.</li>
+<li><strong>Medir la accesibilidad correcta</strong>: combinar <strong>medidas de distancia</strong> con medidas <strong>basadas en utilidad</strong> para no sobreestimar el acceso en lugares donde los trabajos de <em>calidad</em> siguen fuera de alcance.</li>
+</ul>
+<hr>
+<p><em>Artículo:</em> "WorkReach: Modeling Urban Work Location Choices Through Economic Complexity, Informality, and Mobility Data." (Ciudad de México, Río de Janeiro, Los Ángeles, Área de la Bahía). <a href="https://storage.googleapis.com/ollinlangle-files/WorkReach_comb.pdf">Descarga el PDF</a></p>
+<hr></div></article></main><footer class="Footer__FooterWrapper-sc-jaeqzk-0 bULOHN"><div class="Footer__FooterContent-sc-jaeqzk-1 iQowSC"><div class="Footer__FooterSection-sc-jaeqzk-2 hzRrLe"><h3 class="Footer__FooterTitle-sc-jaeqzk-3 jMqLUe">Acerca de</h3><p class="Footer__FooterText-sc-jaeqzk-4 jlxgqc">Investigador de Sistemas Complejos especializado en movilidad urbana, ciencia computacional social y física estadística.</p></div><div class="Footer__FooterSection-sc-jaeqzk-2 hzRrLe"><h3 class="Footer__FooterTitle-sc-jaeqzk-3 jMqLUe">Conectar</h3><div class="Footer__SocialLinks-sc-jaeqzk-5 gvYEeR"><a href="https://github.com/ollin18" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="Footer__SocialLink-sc-jaeqzk-6 Footer__GitHubLink-sc-jaeqzk-7 cVFpvx dmOyhI">GitHub</a><a href="https://www.linkedin.com/in/ollin18" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="Footer__SocialLink-sc-jaeqzk-6 Footer__LinkedInLink-sc-jaeqzk-8 cVFpvx jAVeyI">LinkedIn</a><a href="https://scholar.google.com/citations?user=L1QJLFoAAAAJ&amp;hl" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar" class="Footer__SocialLink-sc-jaeqzk-6 Footer__ScholarLink-sc-jaeqzk-9 cVFpvx hiEvCn">Scholar</a><a href="mailto:ollin@berkeley.edu" aria-label="Email" class="Footer__SocialLink-sc-jaeqzk-6 Footer__EmailLink-sc-jaeqzk-10 cVFpvx gyOWIP">Email</a></div></div><div class="Footer__FooterSection-sc-jaeqzk-2 hzRrLe"><h3 class="Footer__FooterTitle-sc-jaeqzk-3 jMqLUe">Sitio</h3><p class="Footer__FooterText-sc-jaeqzk-4 jlxgqc">Construido con Gatsby, React y styled-components. Animaciones con GSAP.</p></div></div><div class="Footer__Copyright-sc-jaeqzk-11 fFDhGG">© <!-- -->2026<!-- --> Ollin D. Langle-Chimal. <!-- -->Todos los derechos reservados.<br/>Generado por Ollin</div></footer></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-9FS4V8SGLR"></script><script>
+      
+      function gaOptout(){document.cookie=disableStr+'=true; expires=Thu, 31 Dec 2099 23:59:59 UTC;path=/',window[disableStr]=!0}var gaProperty='G-9FS4V8SGLR',disableStr='ga-disable-'+gaProperty;document.cookie.indexOf(disableStr+'=true')>-1&&(window[disableStr]=!0);
+      if(!(navigator.doNotTrack == "1" || window.doNotTrack == "1")) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-9FS4V8SGLR', {"anonymize_ip":true,"cookie_expires":0,"send_page_view":false});
+      }
+      </script><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/es-mx/proyectos/workreach/";/*]]>*/</script><!-- slice-start id="_gatsby-scripts-1" -->
+          <script
+            id="gatsby-chunk-mapping"
+          >
+            window.___chunkMapping="{\"app\":[\"/app-d78b370eb2a0d47416a1.js\"],\"component---src-pages-404-js\":[\"/component---src-pages-404-js-f337ef602b06ee964200.js\"],\"component---src-pages-blog-jsx\":[\"/component---src-pages-blog-jsx-20759427d2695e7f55ed.js\"],\"component---src-pages-books-jsx\":[\"/component---src-pages-books-jsx-48898111d2b608c0ad1d.js\"],\"component---src-pages-cv-jsx\":[\"/component---src-pages-cv-jsx-b79eec696a2b3512b569.js\"],\"component---src-pages-index-jsx\":[\"/component---src-pages-index-jsx-01f4dd51ca7a402bfeb0.js\"],\"component---src-pages-page-2-js\":[\"/component---src-pages-page-2-js-77e179c82fc1d05bd2cd.js\"],\"component---src-pages-people-jsx\":[\"/component---src-pages-people-jsx-256e40202b9c9ff85b41.js\"],\"component---src-pages-projects-jsx\":[\"/component---src-pages-projects-jsx-d4ca39b38575b4e224f5.js\"],\"component---src-pages-publications-jsx\":[\"/component---src-pages-publications-jsx-b5196e599b390235b5f5.js\"],\"component---src-pages-teaching-jsx\":[\"/component---src-pages-teaching-jsx-6551f218c762ae82bf4e.js\"],\"component---src-pages-using-ssr-js\":[\"/component---src-pages-using-ssr-js-96362a78fd84d7080f7f.js\"],\"component---src-pages-using-typescript-tsx\":[\"/component---src-pages-using-typescript-tsx-5bcf42512638b022a421.js\"],\"component---src-templates-blog-post-jsx\":[\"/component---src-templates-blog-post-jsx-8975796e2e28586ff5ee.js\"],\"component---src-templates-book-review-jsx\":[\"/component---src-templates-book-review-jsx-f973f2e45b2fcf27fe83.js\"],\"component---src-templates-project-detail-jsx\":[\"/component---src-templates-project-detail-jsx-5c9e02e9e9a20a88272b.js\"]}";
+          </script>
+        <script>window.___webpackCompilationHash="6c7dd8f99a03eda1f8fc";</script><script src="/webpack-runtime-5ee6d90dbfe7adec1753.js" async></script><script src="/framework-a98cd6097609b685b73f.js" async></script><script src="/94726e6d-823c10e1ea9abde67a2e.js" async></script><script src="/app-d78b370eb2a0d47416a1.js" async></script><!-- slice-end id="_gatsby-scripts-1" --></body></html>
