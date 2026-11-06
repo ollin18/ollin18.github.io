@@ -8,7 +8,7 @@
 <title>WorkReach: The Game</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Pixelify+Sans:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Pixelify+Sans:wght@500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
   :root {
     --ink: #1f1d1a;
@@ -25,6 +25,7 @@
     --hud: rgba(38, 38, 42, 0.88);
     --hud-edge: #5a5a60;
     --pixel: "Pixelify Sans", ui-rounded, system-ui, sans-serif;
+    --pix8: "Press Start 2P", "Pixelify Sans", monospace;   /* crisp pixel font for numbers and labels */
     --ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   }
   * { box-sizing: border-box; }
@@ -50,10 +51,10 @@
     padding: 8px 12px; box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
   }
   .box .k { font-size: 13px; color: #d9d6cf; }
-  .box .v { font-family: var(--pixel); font-size: 22px; font-weight: 700; line-height: 1.2; }
+  .box .v { font-family: var(--pix8); font-size: 16px; font-weight: 400; line-height: 1.5; letter-spacing: .02em; }
   .box .v.neg { color: #ff8a80; }
   .box .s { font-size: 12px; color: #c9c5bc; margin-top: 2px; }
-  .box.clock .v { font-size: 30px; transition: color .3s; }
+  .box.clock .v { font-size: 24px; transition: color .3s; }
   .box.clock.urgent { border-color: var(--red); }
   .box.clock.urgent .v { animation: tick 1s steps(1) infinite; }
   @keyframes tick { 0%, 50% { opacity: 1; } 75% { opacity: .55; } }
@@ -68,7 +69,7 @@
   .warn { border-left: 4px solid var(--red); background: rgba(214, 69, 65, .08); padding: 8px 12px; margin: 10px 0; border-radius: 0 4px 4px 0; }
   .box.friction { text-align: center; padding: 0; overflow: hidden; }
   .box.friction .k { padding: 8px 10px; border-bottom: 2px solid var(--hud-edge); color: #fff; font-weight: 600; }
-  .box.friction .v { font-size: 26px; padding: 10px 8px 2px; color: var(--gold); }
+  .box.friction .v { font-size: 18px; padding: 10px 8px 2px; color: var(--gold); }
   .box.friction .s { padding: 0 10px 10px; }
   .meter { height: 6px; background: rgba(255, 255, 255, 0.15); margin: 0 12px 8px; border-radius: 3px; overflow: hidden; }
   #hud-friction-bar { height: 100%; width: 0; background: var(--green); transition: width .25s, background .25s; }
@@ -109,6 +110,7 @@
     box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35); padding: 20px 22px 18px;
   }
   .panel.wide { width: min(940px, 100%); }
+  .panel h2, .panel h3, .btn, .chip, .card .ct { -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision; }
   .panel h2 { font-family: var(--pixel); font-size: 26px; font-weight: 700; line-height: 1.15; margin: 0 0 12px; color: var(--orange-dark); }
   .panel h3 { font-family: var(--pixel); font-size: 18px; margin: 18px 0 8px; color: var(--ink); }
   .panel p { margin: 0 0 10px; }
@@ -139,14 +141,14 @@
   .card .ct { font-family: var(--pixel); font-size: 19px; font-weight: 700; line-height: 1.1; }
   .card .swatch { height: 6px; border-radius: 3px; }
   .card .cd { color: var(--muted); font-size: 14px; }
-  .card .rent { font-family: var(--pixel); font-size: 18px; font-weight: 700; }
+  .card .rent { font-family: var(--pix8); font-size: 13px; line-height: 1.6; }
   .card .tag { font-size: 13px; font-weight: 600; color: #11717e; }
 
   table.ledger { width: 100%; border-collapse: collapse; }
   table.ledger td { padding: 6px 6px; border-bottom: 1px solid #e3d8c6; vertical-align: top; }
-  table.ledger td.amt { text-align: right; font-family: var(--pixel); font-size: 18px; font-weight: 700; white-space: nowrap; }
+  table.ledger td.amt { text-align: right; font-family: var(--pix8); font-size: 13px; white-space: nowrap; }
   table.ledger tr.total td { border-top: 3px solid var(--line); border-bottom: none; font-weight: 700; font-size: 18px; }
-  table.ledger tr.total td.amt { font-size: 22px; }
+  table.ledger tr.total td.amt { font-size: 16px; }
   .pos { color: var(--green); }
   .neg { color: var(--red); }
   .zero { color: var(--muted); }
@@ -159,7 +161,9 @@
   .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 6px 0 4px; }
   .stat { background: #fff; border: 2px solid var(--line); border-radius: 6px; padding: 12px; }
   .stat .k { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; font-weight: 700; color: var(--muted); }
-  .stat .v { font-family: var(--pixel); font-size: 28px; font-weight: 700; margin: 6px 0; color: var(--orange-dark); }
+  .stat .v { font-family: var(--pix8); font-size: 20px; line-height: 1.4; margin: 8px 0; color: var(--orange-dark); }
+  .pay { font-family: var(--pix8); font-size: 12px; color: #2f8a3c; letter-spacing: .05em; }
+  .pay .off { color: #c9c2b5; }
   .stat .s { font-size: 14px; color: var(--muted); }
   .paper-box { border: 2px dashed var(--cyan); border-radius: 6px; padding: 12px 14px; margin-top: 16px; background: #f2fbfc; }
   .paper-box a { color: #11717e; font-weight: 600; }
@@ -181,8 +185,8 @@
 
   /* Interview mini-game */
   .iv { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 6px 0 2px; }
-  .iv-status { font-family: var(--pixel); font-size: 22px; font-weight: 700; color: var(--orange-dark); min-height: 30px; text-align: center; }
-  .iv-status.count { font-size: 56px; line-height: 1; min-height: 60px; color: var(--ink); }
+  .iv-status { font-family: var(--pix8); font-size: 16px; line-height: 1.6; font-weight: 700; color: var(--orange-dark); min-height: 30px; text-align: center; }
+  .iv-status.count { font-size: 48px; line-height: 1; min-height: 60px; color: var(--ink); }
   .pad { display: grid; grid-template-columns: repeat(3, 76px); grid-template-rows: repeat(3, 76px); gap: 8px; }
   .pad button {
     font-size: 30px; border: 3px solid var(--line); border-radius: 8px; box-shadow: 0 4px 0 var(--line); cursor: pointer;
@@ -237,7 +241,8 @@
     #hud-left { bottom: 8px; left: 8px; width: auto; flex-direction: row; gap: 6px; align-items: flex-end; }
     #hud-left .box { padding: 4px 8px; }
     #hud-left .box .k { font-size: 11px; }
-    #hud-left .box .v, .box.clock .v { font-size: 17px; }
+    #hud-left .box .v { font-size: 12px; }
+    .box.clock .v { font-size: 16px; }
     #hud-left .box .s { display: none; }
     #hud-right { bottom: 8px; right: 8px; width: 112px; gap: 6px; }
     .box.friction .k { font-size: 11px; padding: 4px 6px; }
@@ -327,7 +332,7 @@
   const VOT = 1.0;               // $/min used to pick the best route
   const FATIGUE = 0.6;           // $/min of commuting charged as time cost
   const START_BALANCE = 3000;
-  const VERSION = '1.2.2';
+  const VERSION = '1.3.0';
 
   const $ = sel => document.querySelector(sel);
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -454,7 +459,7 @@
     {
       id: 'R1', label: 'Round 1 · Baseline', title: 'Round 1 · Baseline',
       prompt: 'You are an individual job seeker in CDMX. Maximize your savings for the month.',
-      rules: ['Mexico City has three rings: the Central Business District (CBD), where most formal jobs are, the Intermediate Ring, and the Periphery.', 'Pick where to live, then explore the city. You have only 30 seconds to land a job.', 'Formal jobs need an interview. Informal jobs hire on the spot.'],
+      rules: ['Each job shows its pay up front: $ (under $9,000 a month), $$ ($9,000 to $15,000) or $$$ (over $15,000).', 'Mexico City has three rings: the Central Business District (CBD), where most formal jobs are, the Intermediate Ring, and the Periphery.', 'Pick where to live, then explore the city. You have only 30 seconds to land a job.', 'Formal jobs need an interview. Informal jobs hire on the spot.'],
       rentMult: { cbd: 1, int: 1, per: 1 }, fareMult: 1, perFareMult: 1, express: false,
       caregiver: false, household: 0, childcareInformal: 0, fatigueMult: 1, forcedInformalShock: false, informalShockP: 0.4,
       wageMult: { formal: 1, informal: 1, tier3: 1 }, homeExtra: {}
@@ -1304,7 +1309,7 @@
     el.textContent = '0:' + String(sec).padStart(2, '0');
     // Grows and turns red as the clock runs out.
     const u = clamp(1 - t / 15, 0, 1);
-    el.style.fontSize = Math.round((window.innerWidth <= 760 ? 17 : 30) * (1 + u * u * 0.9)) + 'px';
+    el.style.fontSize = Math.round((window.innerWidth <= 760 ? 16 : 24) * (1 + u * u * 0.9)) + 'px';
     el.style.color = 'rgb(255,' + Math.round(255 - u * 185) + ',' + Math.round(255 - u * 195) + ')';
     box.classList.toggle('urgent', t <= 10);
   }
@@ -1626,6 +1631,11 @@
   /* ==========================================================
    * Hubs, offers and jobs
    * ========================================================== */
+  // Pay level shown up front on the map and in job panels: $ < 9k, $$ 9k–15k, $$$ ≥ 15k a month.
+  const payLevel = h => { const w = wageFor(h, G.scen || SCENARIOS[0]); return w >= 15000 ? 3 : w >= 9000 ? 2 : 1; };
+  const payTag = h => '$'.repeat(payLevel(h));
+  const payHTML = h => '<span class="pay">' + payTag(h) + '<span class="off">' + '$'.repeat(3 - payLevel(h)) + '</span></span>';
+
   function wageFor(h, scen = G.scen) {
     let w = h.wage * (h.formal ? scen.wageMult.formal : scen.wageMult.informal);
     if (h.tier === 3) w *= scen.wageMult.tier3;
@@ -1655,7 +1665,7 @@
       '<dl class="kv">' +
       '<dt>Type</dt><dd>' + (h.formal ? '<b style="color:#a77b10">Formal contract · IMSS</b>' : '<b style="color:#b0367f">Informal · no contract</b>') + '</dd>' +
       '<dt>Tier</dt><dd><span class="stars">' + stars(h.tier) + '</span> ' + (h.tier === 1 ? 'hired on the spot' : h.tier === 2 ? 'interview, moderate' : 'interview, fast and precise') + '</dd>' +
-      '<dt>Wage</dt><dd>' + money(e.wage) + '/month' + (h.variable ? ' (varies ±' + Math.round(h.variable * 100) + '%)' : !h.formal ? ' (varies ±8%)' : '') + '</dd>' +
+      '<dt>Pay</dt><dd>' + payHTML(h) + ' ' + money(e.wage) + '/month' + (h.variable ? ' (varies ±' + Math.round(h.variable * 100) + '%)' : !h.formal ? ' (varies ±8%)' : '') + '</dd>' +
       '<dt>Commute</dt><dd>' + Math.round(e.c.time) + ' min each way · ' + money(e.c.fare) + '/trip<br><span class="note">' + esc(e.c.desc) + '</span></dd>' +
       '<dt>Est. month</dt><dd><b class="' + (e.net >= 0 ? 'pos' : 'neg') + '">' + money(e.net) + '</b> <span class="note">before shocks</span></dd>' +
       (G.scen.disease ? (() => {
@@ -1742,8 +1752,8 @@
    * Interview mini-game: intro → Start → 3-2-1 → watch → repeat
    * ========================================================== */
   const IV_CFG = {
-    2: { len: 7, show: 520, limit: 7000, pass: 0.85, name: 'Hard' },
-    3: { len: 9, show: 400, limit: 6000, pass: 1, name: 'Very hard' }
+    2: { len: 6, show: 600, limit: 8000, pass: 0.83, name: 'Hard' },
+    3: { len: 8, show: 470, limit: 7000, pass: 1, name: 'Very hard' }
   };
 
   function interviewIntro(h) {
@@ -2104,7 +2114,37 @@
     return dq / dp;
   }
 
+  function feedbackPanel() {
+    G.state = 'debrief';
+    const to = ['ollin', 'berkeley.edu'].join('@');
+    const p = showPanel({
+      title: 'Before your results: a suggestion box',
+      body: '<p>For now no game data is stored, but we would really appreciate any feedback to improve the game: what was confusing, too easy or too hard, or what felt true (or not) about looking for work in the city.</p>' +
+        '<div class="feedback"><label for="fb-text" class="note">Your feedback</label>' +
+        '<textarea id="fb-text" maxlength="1500" placeholder="Write your suggestions here…"></textarea>' +
+        '<p class="note" id="fb-status">Sending opens your email app with the message ready to go to ' + esc(to) + '.</p></div>',
+      buttons: [
+        {
+          label: 'Send feedback ✉', cls: 'good', onClick: () => {
+            const ta = p.querySelector('#fb-text');
+            const text = ta.value.trim();
+            if (!text) { p.querySelector('#fb-status').textContent = 'Write something first, or press “Skip” to see your results.'; ta.focus(); return; }
+            const rounds = G.results.map(r => r.round + ': ' + (r.formal ? 'formal' : 'informal')).join(', ') || 'none';
+            const bodyTxt = text + '\n\n---\nWorkReach: The Game v' + VERSION + ' · rounds played: ' + rounds;
+            log('feedback_sent', { detail: text.length + ' chars' });
+            G.feedbackDone = true;
+            window.location.href = 'mailto:' + to + '?subject=' + encodeURIComponent('WorkReach game feedback') + '&body=' + encodeURIComponent(bodyTxt);
+            closePanel();
+            debrief();
+          }
+        },
+        { label: 'Skip, show my results ▶', cls: 'alt', onClick: () => { log('feedback_skipped'); G.feedbackDone = true; closePanel(); debrief(); } }
+      ]
+    });
+  }
+
   function debrief() {
+    if (!G.feedbackDone) { feedbackPanel(); return; }
     G.state = 'debrief';
     G.job = null;
     G.month = null;
@@ -2160,13 +2200,7 @@
       '<div class="paper-box"><h3 style="margin-top:0">What the research says</h3>' +
       '<p>In the WorkReach model (Langle-Chimal, Knoblauch &amp; González, <i>Nature Communications</i>, 2026), workers in four cities in the United States, Mexico and Brazil consistently travel farther to reach economically complex areas, while the pull of informality differs from region to region. Measuring access by how valuable opportunities are, not only how close they are, reveals gaps that distance-based metrics miss.</p>' +
       '<p class="note">This game is a simplified illustration, not the estimated model. <a href="https://www.nature.com/articles/s41467-026-78293-3" target="_blank" rel="noopener">Read the paper</a>.</p></div>' +
-      '<p class="note" style="margin-top:12px">Your play data stays in this browser. Nothing is sent anywhere unless you download it and share it.</p>' +
-      '<div class="feedback" id="feedback"><h3>Suggestion box</h3>' +
-      '<p class="note">For now no game data is stored, but we would really appreciate any feedback to improve the game: what was confusing, too easy or too hard, or what felt true (or not) about looking for work in the city.</p>' +
-      '<label for="fb-text" class="note">Your feedback</label>' +
-      '<textarea id="fb-text" maxlength="1500" placeholder="Write your suggestions here…"></textarea>' +
-      '<div class="row"><button type="button" class="btn good" id="fb-send">Send feedback ✉</button>' +
-      '<span class="note" id="fb-status">Opens your email app with the message ready to send.</span></div></div>';
+      '<p class="note" style="margin-top:12px">Your play data stays in this browser. Nothing is sent anywhere unless you download it and share it.</p>';
 
     log('debrief_viewed', { formal_baseline: fBase, formal_caregiver: fCare });
     showPanel({
@@ -2179,18 +2213,6 @@
         { label: 'Endless sandbox ▶', cls: 'good', onClick: () => { closePanel(); G.sandboxN++; startRound(makeSandbox(G.sandboxN)); } },
         { label: 'Play again', cls: 'alt', onClick: restart }
       ]
-    });
-    const pnl = $('#panel');
-    pnl.querySelector('#fb-send').addEventListener('click', () => {
-      const text = pnl.querySelector('#fb-text').value.trim();
-      const status = pnl.querySelector('#fb-status');
-      if (!text) { status.textContent = 'Write something first, then press send.'; pnl.querySelector('#fb-text').focus(); return; }
-      const to = ['ollin', 'berkeley.edu'].join('@');
-      const rounds = G.results.map(r => r.round + ': ' + (r.formal ? 'formal' : 'informal')).join(', ') || 'none';
-      const bodyTxt = text + '\n\n---\nWorkReach: The Game v' + VERSION + ' · rounds played: ' + rounds;
-      log('feedback_sent', { detail: text.length + ' chars' });
-      window.location.href = 'mailto:' + to + '?subject=' + encodeURIComponent('WorkReach game feedback') + '&body=' + encodeURIComponent(bodyTxt);
-      status.innerHTML = 'Thank you! If no email window opened, send it to <b>' + to + '</b>.';
     });
   }
 
@@ -2257,6 +2279,7 @@
         '<dt>Job names</dt><dd><kbd>M</kbd> or the MAP button labels every employer. Click a job to walk there</dd>' +
         '<dt>Formal jobs</dt><dd>Gold briefcase bubble. Interview mini-game, taxes, IMSS protection</dd>' +
         '<dt>Informal jobs</dt><dd>Green basket bubble. Instant hire, no taxes, exposed to shocks</dd>' +
+        '<dt>Pay</dt><dd><span class="pay">$</span> under $9,000 · <span class="pay">$$</span> $9,000–15,000 · <span class="pay">$$$</span> over $15,000 a month</dd>' +
         '<dt>Transit</dt><dd>Station signs (the M squares) on the colored lines</dd>' +
         '<dt>Friction</dt><dd>The box on the right shows the daily commute if you worked where you stand</dd>' +
         '<dt>Menus</dt><dd>Arrow keys move between options, <kbd>Enter</kbd> confirms, <kbd>Esc</kbd> closes</dd>' +
@@ -2596,9 +2619,10 @@
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.lineJoin = 'round';
-    const label = (text, x, y, size, color, weight = 700, family = '"Pixelify Sans", sans-serif') => {
+    const PIX8 = '"Press Start 2P", monospace';
+    const label = (text, x, y, size, color, weight = 400, family = PIX8) => {
       ctx.font = weight + ' ' + px(size) + 'px ' + family;
-      ctx.lineWidth = px(4);
+      ctx.lineWidth = px(family === PIX8 ? 5 : 4);
       ctx.strokeStyle = 'rgba(20,20,20,0.85)';
       ctx.strokeText(text, x, y);
       ctx.fillStyle = color;
@@ -2606,19 +2630,19 @@
     };
     if (G.state !== 'title') {
       const big = G.overview || view.zoom <= overviewZoom() * 1.05 || G.state === 'month' || G.state === 'intro' || G.state === 'housing' || G.state === 'debrief';
-      DISTRICT_LABELS.forEach(d => label(d.text, d.x * TILE, d.y * TILE, big ? 13 : 16, '#fffaf1'));
+      DISTRICT_LABELS.forEach(d => label(d.text, d.x * TILE, d.y * TILE, big ? 9 : 12, '#fffaf1'));
       if (!big) {
         Object.entries(PARK_NAMES).forEach(([k2, name]) => {
           const [bx, by] = k2.split(',').map(Number);
-          label(name, bx * TILE + 16, by * TILE + 16, 12, '#e2f5d0', 500);
+          label(name, bx * TILE + 16, by * TILE + 16, 9, '#e2f5d0');
         });
       } else {
-        const INTER = 'Inter, system-ui, sans-serif';
-        label('CBD', 6.5 * TILE, 2.6 * TILE, 26, '#9cc1ff', 800, INTER);
-        label('Central Business District', 6.5 * TILE, 2.6 * TILE + px(22), 13, '#dfe9ff', 600, INTER);
-        label('INTERMEDIATE RING', 19 * TILE, 2.6 * TILE, 18, '#ffc8a8', 800, INTER);
-        label('PERIPHERY', 31.5 * TILE, 2.6 * TILE, 20, '#ffb3dc', 800, INTER);
-        if (G.overview) HUBS.forEach(h => label(h.name, h.bx * TILE + 16, h.by * TILE + 36, 11, h.formal ? '#ffe08a' : '#bff0c4', 500));
+        const zs = cssW < 600 ? 10 : 16;
+        label('CBD', 6.5 * TILE, 2.6 * TILE, zs * 1.5, '#9cc1ff');
+        label('Central Business District', 6.5 * TILE, 2.6 * TILE + px(zs * 1.5), zs < 16 ? 7 : 9, '#dfe9ff');
+        label('INTERMEDIATE RING', 19 * TILE, 2.6 * TILE, zs, '#ffc8a8');
+        label('PERIPHERY', 31.5 * TILE, 2.6 * TILE, zs, '#ffb3dc');
+        if (G.overview) HUBS.forEach(h => label(h.name, h.bx * TILE + 16, h.by * TILE + 36, 8, h.formal ? '#ffe08a' : '#bff0c4'));
       }
       if (G.hover && G.state === 'search' && !G.panel) {
         const bl = blockAt(G.hover.x, G.hover.y);
@@ -2627,7 +2651,22 @@
         if (bl && bl.type === 'hub') txt = bl.hub.name;
         else if (bl && bl.type === 'home') txt = HOMES[bl.zone].label;
         else if (st) txt = 'Station ' + st.name;
-        if (txt) label(txt, G.hover.x * TILE + 8, G.hover.y * TILE - 6, 15, '#ffe08a');
+        if (txt) label(txt, G.hover.x * TILE + 8, G.hover.y * TILE - 6, 11, '#ffe08a');
+      }
+      // Pay level next to every job bubble, so the best-paying jobs are visible up front
+      if (['search', 'ride', 'intro', 'housing'].includes(G.state) || G.overview) {
+        const ps = cssW < 600 ? 8 : 12;
+        ctx.font = px(ps) + 'px ' + PIX8;
+        ctx.textAlign = 'left';
+        HUBS.forEach(h => {
+          const t = payTag(h), x = h.bx * TILE + 25, y = h.by * TILE - 5;
+          const tw = ctx.measureText(t).width, pad = px(4);
+          ctx.fillStyle = 'rgba(20,20,20,0.88)';
+          ctx.fillRect(x - pad, y - px(ps) / 2 - pad, tw + pad * 2, px(ps) + pad * 2);
+          ctx.fillStyle = '#9dff8a';
+          ctx.fillText(t, x, y + px(1));
+        });
+        ctx.textAlign = 'center';
       }
     }
 
@@ -2640,7 +2679,7 @@
   function callout(text, sx, sy, dx, dy) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const small = cssW < 600;
-    ctx.font = '700 ' + (small ? 12 : 15) + 'px "Pixelify Sans", sans-serif';
+    ctx.font = (small ? 8 : 10) + 'px "Press Start 2P", monospace';
     const w = ctx.measureText(text).width + (small ? 12 : 20), h = small ? 22 : 28;
     const bx = clamp(sx + dx - w / 2, 8, cssW - w - 8), by = clamp(sy + dy - h / 2, 60, cssH - h - 8);
     const cx = bx + w / 2, cy = by + h / 2;
