@@ -327,7 +327,7 @@
   const VOT = 1.0;               // $/min used to pick the best route
   const FATIGUE = 0.6;           // $/min of commuting charged as time cost
   const START_BALANCE = 3000;
-  const VERSION = '1.2.1';
+  const VERSION = '1.2.2';
 
   const $ = sel => document.querySelector(sel);
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -2340,13 +2340,19 @@
   let view = { left: 0, top: 0, zoom: 3 };
 
   function baseZoom() {
-    return overviewZoom();   // no zoom: the whole city is always on screen
+    return overviewZoom();   // no zoom while playing: the whole city is always on screen
+  }
+  // Only the title screen is zoomed in; pressing start eases out to the whole city.
+  function titleZoom() {
+    const across = cssW < 600 ? 10 : cssW < 1000 ? 14 : 19;
+    const down = cssH < 600 ? 10 : 12;
+    return 0.85 * Math.max(Math.min(cssW / (across * TILE), cssH / (down * TILE)), cssW / WORLD_W, cssH / WORLD_H);
   }
   const overviewZoom = () => Math.min(cssW / WORLD_W, cssH / WORLD_H);
 
   function updateCamera(dt) {
     const showAll = G.overview || G.state === 'month' || G.state === 'intro' || G.state === 'housing' || G.state === 'debrief';
-    const targetZoom = showAll ? overviewZoom() : baseZoom();
+    const targetZoom = G.state === 'title' ? titleZoom() : showAll ? overviewZoom() : baseZoom();
     let tx, ty;
     if (G.state === 'title') {
       tx = WORLD_W / 2 + Math.sin(G.time * 0.08) * WORLD_W * 0.32;
@@ -2358,7 +2364,8 @@
       tx = G.player.rx * TILE + 8; ty = G.player.ry * TILE + 6;
     }
     const k = Math.min(1, dt * (G.state === 'title' ? 2 : 7));
-    G.cam.zoom = targetZoom;
+    G.cam.zoom += (targetZoom - G.cam.zoom) * Math.min(1, dt * 2.5);
+    if (Math.abs(targetZoom - G.cam.zoom) < 0.002) G.cam.zoom = targetZoom;
     G.cam.x += (tx - G.cam.x) * k;
     G.cam.y += (ty - G.cam.y) * k;
     const z = G.cam.zoom;
