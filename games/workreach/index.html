@@ -57,7 +57,9 @@
   .box.clock.urgent { border-color: var(--red); }
   .box.clock.urgent .v { animation: tick 1s steps(1) infinite; }
   @keyframes tick { 0%, 50% { opacity: 1; } 75% { opacity: .55; } }
-  #btn-sound { min-width: 92px; }
+  #btn-sound { display: inline-flex; align-items: center; justify-content: center; padding: 4px 8px; }
+  #btn-sound svg { display: block; }
+  #btn-sound[aria-pressed="false"] { color: #ff8a80; }
   .feedback { margin-top: 18px; border: 2px dashed var(--line); border-radius: 6px; padding: 12px 14px; background: rgba(255,255,255,.5); }
   .feedback h3 { margin: 0 0 4px; font-size: 17px; }
   .feedback textarea { width: 100%; min-height: 96px; box-sizing: border-box; margin-top: 8px; font: inherit; font-size: 15px; padding: 8px; border: 2px solid var(--line); border-radius: 4px; background: #fff; color: inherit; resize: vertical; }
@@ -267,7 +269,7 @@
     <div class="chip none" id="hud-badge">Seeking work</div>
     <div class="tools">
       <button class="tool" id="btn-map" aria-pressed="false" title="City map (M)">MAP</button>
-      <button class="tool" id="btn-sound" aria-pressed="true" title="Mute or unmute (N)">🔊 MUTE</button>
+      <button class="tool" id="btn-sound" aria-pressed="true" aria-label="Mute sound" title="Mute sound (N)"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 9h4l5-4v14l-5-4H3z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
       <button class="tool" id="btn-help" title="How to play (H)">?</button>
     </div>
   </div>
@@ -325,7 +327,7 @@
   const VOT = 1.0;               // $/min used to pick the best route
   const FATIGUE = 0.6;           // $/min of commuting charged as time cost
   const START_BALANCE = 3000;
-  const VERSION = '1.2.0';
+  const VERSION = '1.2.1';
 
   const $ = sel => document.querySelector(sel);
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -2258,7 +2260,7 @@
         '<dt>Transit</dt><dd>Station signs (the M squares) on the colored lines</dd>' +
         '<dt>Friction</dt><dd>The box on the right shows the daily commute if you worked where you stand</dd>' +
         '<dt>Menus</dt><dd>Arrow keys move between options, <kbd>Enter</kbd> confirms, <kbd>Esc</kbd> closes</dd>' +
-        '<dt>Sound</dt><dd><kbd>N</kbd> or the MUTE button</dd>' +
+        '<dt>Sound</dt><dd><kbd>N</kbd> or the speaker button (top right)</dd>' +
         '</dl>' +
         '<p class="note">Net = wage − rent − commute fares − commute time − shocks (and taxes for formal jobs).</p>',
       buttons: [{ label: 'Back', onClick: closePanel }],
@@ -2338,16 +2340,13 @@
   let view = { left: 0, top: 0, zoom: 3 };
 
   function baseZoom() {
-    if (cssW > 760) return overviewZoom();
-    const across = cssW < 600 ? 10 : cssW < 1000 ? 14 : 19;
-    const down = cssH < 600 ? 10 : 12;
-    return Math.max(Math.min(cssW / (across * TILE), cssH / (down * TILE)), cssW / WORLD_W, cssH / WORLD_H);
+    return overviewZoom();   // no zoom: the whole city is always on screen
   }
   const overviewZoom = () => Math.min(cssW / WORLD_W, cssH / WORLD_H);
 
   function updateCamera(dt) {
     const showAll = G.overview || G.state === 'month' || G.state === 'intro' || G.state === 'housing' || G.state === 'debrief';
-    const targetZoom = showAll ? overviewZoom() : G.state === 'title' ? baseZoom() * 0.85 : baseZoom();
+    const targetZoom = showAll ? overviewZoom() : baseZoom();
     let tx, ty;
     if (G.state === 'title') {
       tx = WORLD_W / 2 + Math.sin(G.time * 0.08) * WORLD_W * 0.32;
@@ -2359,8 +2358,7 @@
       tx = G.player.rx * TILE + 8; ty = G.player.ry * TILE + 6;
     }
     const k = Math.min(1, dt * (G.state === 'title' ? 2 : 7));
-    G.cam.zoom += (targetZoom - G.cam.zoom) * Math.min(1, dt * 8);
-    if (Math.abs(targetZoom - G.cam.zoom) < 0.002) G.cam.zoom = targetZoom;
+    G.cam.zoom = targetZoom;
     G.cam.x += (tx - G.cam.x) * k;
     G.cam.y += (ty - G.cam.y) * k;
     const z = G.cam.zoom;
@@ -2418,10 +2416,15 @@
   $('#title').addEventListener('click', startGame);
   $('#overlay').addEventListener('click', e => { if (e.target.id === 'overlay' && G.panel && G.panel.closable) closePanel(); });
 
+  const SPEAKER_ON = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 9h4l5-4v14l-5-4H3z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+  const SPEAKER_OFF = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 9h4l5-4v14l-5-4H3z" fill="currentColor"/><path d="M16 9l6 6M22 9l-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
   function toggleSound() {
     Snd.setMuted(!Snd.muted);
     $('#btn-sound').setAttribute('aria-pressed', String(!Snd.muted));
-    $('#btn-sound').textContent = Snd.muted ? '🔇 UNMUTE' : '🔊 MUTE';
+    const sb = $('#btn-sound');
+    sb.innerHTML = Snd.muted ? SPEAKER_OFF : SPEAKER_ON;
+    sb.setAttribute('aria-label', Snd.muted ? 'Unmute sound' : 'Mute sound');
+    sb.title = (Snd.muted ? 'Unmute sound' : 'Mute sound') + ' (N)';
     if (!Snd.muted) { Snd.init(); if (G.state !== 'title') Snd.startMusic(); }
   }
   $('#btn-sound').addEventListener('click', e => { e.stopPropagation(); toggleSound(); });
