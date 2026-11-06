@@ -215,6 +215,13 @@
   ],
   "publications": [
     {
+      "name": "The WorkReach model for urban work location choices through economic complexity and informality",
+      "publisher": "Nature Communications",
+      "releaseDate": "2026-10-07",
+      "url": "https://www.nature.com/articles/s41467-026-78293-3",
+      "summary": "Publicación como primer autor que presenta WorkReach, un modelo de elección discreta de la ubicación del trabajo en ciudades basado en complejidad económica e informalidad"
+    },
+    {
       "name": "Socioeconomic disparities in mobility behavior during the COVID-19 pandemic in developing countries",
       "publisher": "EPJ Data Science",
       "releaseDate": "2025-01-01",
