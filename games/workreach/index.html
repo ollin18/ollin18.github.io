@@ -329,9 +329,9 @@
   const INTERVIEW_SECONDS = 3;   // seconds an interview takes off the clock
   const TRIPS = 44;              // 22 workdays x 2 trips
   const VOT = 1.0;               // $/min used to pick the best route
-  const FATIGUE = 0.6;           // $/min of commuting charged as time cost
+  const FATIGUE = 0;             // no extra charge for commuting time: the fare is the cost
   const START_BALANCE = 3000;
-  const VERSION = '1.3.0';
+  const VERSION = '1.3.1';
 
   const $ = sel => document.querySelector(sel);
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -466,9 +466,9 @@
     {
       id: 'R2', label: 'Round 2 · Coronavirus', title: 'Round 2 · Head of Household in an Epidemic',
       prompt: 'You are the head of household with two dependents. A new disease called coronavirus is spreading through the city. If you or your dependents catch it, you will have to pay for medical care, and without social security (IMSS) it costs four times as much.',
-      rules: ['The farther you travel each day, the more likely you are to get infected. Every minute on crowded transit raises the risk: a 2-hour daily commute adds about 13 points.', 'Jobs that face the public (hospital, deliveries, market stalls) are riskier than office work, and your two dependents can also get sick.', 'Watch the Infection probability box: it shows your household\'s risk for the month before you take a job.', 'With a formal job, IMSS covers most of the treatment and you keep your pay while sick. Informal workers pay 4× more and lose their sick days.', 'Dependents add household costs, and time commuting is time away from them (time costs double).'],
+      rules: ['The farther you travel each day, the more likely you are to get infected. Every minute on crowded transit raises the risk: a 2-hour daily commute adds about 13 points.', 'Jobs that face the public (hospital, deliveries, market stalls) are riskier than office work, and your two dependents can also get sick.', 'Watch the Infection probability box: it shows your household\'s risk for the month before you take a job.', 'With a formal job, IMSS covers most of the treatment and you keep your pay while sick. Informal workers pay 4× more and lose their sick days.'],
       rentMult: { cbd: 1, int: 1, per: 1 }, fareMult: 1, perFareMult: 1, express: false,
-      caregiver: true, household: 3500, childcareInformal: 1400, fatigueMult: 2, forcedInformalShock: false, informalShockP: 0,
+      caregiver: true, household: 0, childcareInformal: 0, fatigueMult: 1, forcedInformalShock: false, informalShockP: 0,
       disease: { base: 0.05, transitPerMin: 0.0011, dependents: 2, depP: 0.04, careCost: 2500, noIMSSMult: 4, lostDays: 5 },
       wageMult: { formal: 1, informal: 1, tier3: 1 }, homeExtra: {}
     },
@@ -492,8 +492,7 @@
     { text: 'Economic slowdown: informal earnings drop 15%.', apply: s => { s.wageMult.informal *= 0.85; } },
     { text: 'Minimum wage hike: formal salaries up 8%.', apply: s => { s.wageMult.formal *= 1.08; } },
     { text: 'Rainy season: informal workers face more shocks.', apply: s => { s.informalShockP = Math.min(0.9, s.informalShockP + 0.3); } },
-    { text: 'A coronavirus wave hits the city: medical care costs 4× more without IMSS.', apply: s => { s.disease = { base: 0.05, transitPerMin: 0.0011, dependents: 1, depP: 0.04, careCost: 2500, noIMSSMult: 4, lostDays: 5 }; } },
-    { text: 'You take in a relative who needs care.', apply: s => { s.caregiver = true; s.household += 2200; s.childcareInformal = 1400; s.fatigueMult = 2; } }
+    { text: 'A coronavirus wave hits the city: medical care costs 4× more without IMSS.', apply: s => { s.disease = { base: 0.05, transitPerMin: 0.0011, dependents: 1, depP: 0.04, careCost: 2500, noIMSSMult: 4, lostDays: 5 }; } }
   ];
 
   const INFORMAL_SHOCKS = [
@@ -2073,8 +2072,8 @@
     rows += job.formal ? row('ISR + IMSS contributions', -L.tax, 'Buys health coverage, sick pay and daycare') : row('Taxes', 0, 'None, but no protection either');
     rows += row('Housing rent · ' + ZONES[G.home].short, -L.rent);
     rows += row('Commute fares', -L.fares, TRIPS + ' trips × ' + money(job.commute.fare) + ' · ' + esc(job.commute.desc));
-    rows += row('Commute time cost', -L.timeCost, Math.round(job.commute.time * TRIPS / 60) + ' hours on the road this month' + (G.scen.fatigueMult > 1 ? ' (time away from dependents counts double)' : ''));
-    if (L.household) rows += row('Dependents & household', -L.household);
+    if (L.timeCost) rows += row('Commute time cost', -L.timeCost);
+    if (L.household) rows += row('Water trucks', -L.household);
     if (L.childcare) rows += row('Childcare (no IMSS daycare)', -L.childcare);
     L.shocks.forEach(ev => { rows += row((ev.covered ? 'Covered: ' : 'Shock: ') + esc(ev.title), -ev.cost); });
     if (!L.shocks.length) rows += row('Health & economic shocks', 0, 'A quiet month');
@@ -2284,7 +2283,7 @@
         '<dt>Menus</dt><dd>Arrow keys move between options, <kbd>Enter</kbd> confirms, <kbd>Esc</kbd> closes</dd>' +
         '<dt>Sound</dt><dd><kbd>N</kbd> or the speaker button (top right)</dd>' +
         '</dl>' +
-        '<p class="note">Net = wage − rent − commute fares − commute time − shocks (and taxes for formal jobs).</p>',
+        '<p class="note">Net = wage − rent − commute fares − shocks (and taxes for formal jobs).</p>',
       buttons: [{ label: 'Back', onClick: closePanel }],
       closable: true
     });
