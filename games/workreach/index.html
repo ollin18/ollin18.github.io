@@ -53,7 +53,17 @@
   .box .v { font-family: var(--pixel); font-size: 22px; font-weight: 700; line-height: 1.2; }
   .box .v.neg { color: #ff8a80; }
   .box .s { font-size: 12px; color: #c9c5bc; margin-top: 2px; }
-  .box.clock .v { font-size: 30px; }
+  .box.clock .v { font-size: 30px; transition: color .3s; }
+  .box.clock.urgent { border-color: var(--red); }
+  .box.clock.urgent .v { animation: tick 1s steps(1) infinite; }
+  @keyframes tick { 0%, 50% { opacity: 1; } 75% { opacity: .55; } }
+  #btn-sound { min-width: 92px; }
+  .feedback { margin-top: 18px; border: 2px dashed var(--line); border-radius: 6px; padding: 12px 14px; background: rgba(255,255,255,.5); }
+  .feedback h3 { margin: 0 0 4px; font-size: 17px; }
+  .feedback textarea { width: 100%; min-height: 96px; box-sizing: border-box; margin-top: 8px; font: inherit; font-size: 15px; padding: 8px; border: 2px solid var(--line); border-radius: 4px; background: #fff; color: inherit; resize: vertical; }
+  .feedback textarea:focus { outline: none; border-color: var(--orange); }
+  .feedback .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+  .warn { border-left: 4px solid var(--red); background: rgba(214, 69, 65, .08); padding: 8px 12px; margin: 10px 0; border-radius: 0 4px 4px 0; }
   .box.friction { text-align: center; padding: 0; overflow: hidden; }
   .box.friction .k { padding: 8px 10px; border-bottom: 2px solid var(--hud-edge); color: #fff; font-weight: 600; }
   .box.friction .v { font-size: 26px; padding: 10px 8px 2px; color: var(--gold); }
@@ -221,6 +231,7 @@
     .chip { font-size: 13px; padding: 4px 7px; min-width: 0; overflow: hidden; text-overflow: ellipsis; flex: 0 1 auto; }
     .tools { flex: none; gap: 4px; }
     .tool { font-size: 13px; padding: 4px 8px; min-width: 38px; }
+    #btn-sound { min-width: 0; }
     #hud-left { bottom: 8px; left: 8px; width: auto; flex-direction: row; gap: 6px; align-items: flex-end; }
     #hud-left .box { padding: 4px 8px; }
     #hud-left .box .k { font-size: 11px; }
@@ -256,13 +267,13 @@
     <div class="chip none" id="hud-badge">Seeking work</div>
     <div class="tools">
       <button class="tool" id="btn-map" aria-pressed="false" title="City map (M)">MAP</button>
-      <button class="tool" id="btn-sound" aria-pressed="true" title="Sound (N)">SND</button>
+      <button class="tool" id="btn-sound" aria-pressed="true" title="Mute or unmute (N)">🔊 MUTE</button>
       <button class="tool" id="btn-help" title="How to play (H)">?</button>
     </div>
   </div>
 
   <div class="hud" id="hud-left">
-    <div class="box clock"><div class="v" id="hud-clock">8:00am</div></div>
+    <div class="box clock" id="hud-clock-box"><div class="k">Time to find a job</div><div class="v" id="hud-clock">0:30</div></div>
     <div class="box"><div class="k">Net balance</div><div class="v" id="hud-balance">$0</div></div>
     <div class="box"><div class="k">Expected month</div><div class="v" id="hud-expected">—</div><div class="s" id="hud-expected-sub">Walk up to a job</div></div>
   </div>
@@ -308,11 +319,13 @@
   const DAY_START = 8 * 60, DAY_END = 20 * 60;
   const STEP_MIN = 5;            // search minutes per tile walked
   const STEP_TIME = 0.14;        // seconds per walking step (animation)
+  const SEARCH_SECONDS = 30;     // real seconds to find a job (paused while a menu is open)
+  const INTERVIEW_SECONDS = 3;   // seconds an interview takes off the clock
   const TRIPS = 44;              // 22 workdays x 2 trips
   const VOT = 1.0;               // $/min used to pick the best route
   const FATIGUE = 0.6;           // $/min of commuting charged as time cost
   const START_BALANCE = 3000;
-  const VERSION = '1.1.0';
+  const VERSION = '1.2.0';
 
   const $ = sel => document.querySelector(sel);
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -439,7 +452,7 @@
     {
       id: 'R1', label: 'Round 1 · Baseline', title: 'Round 1 · Baseline',
       prompt: 'You are an individual job seeker in CDMX. Maximize your savings for the month.',
-      rules: ['Pick where to live, then explore the city and land a job before 8 PM.', 'Formal jobs need an interview. Informal jobs hire on the spot.'],
+      rules: ['Mexico City has three rings: the Central Business District (CBD), where most formal jobs are, the Intermediate Ring, and the Periphery.', 'Pick where to live, then explore the city. You have only 30 seconds to land a job.', 'Formal jobs need an interview. Informal jobs hire on the spot.'],
       rentMult: { cbd: 1, int: 1, per: 1 }, fareMult: 1, perFareMult: 1, express: false,
       caregiver: false, household: 0, childcareInformal: 0, fatigueMult: 1, forcedInformalShock: false, informalShockP: 0.4,
       wageMult: { formal: 1, informal: 1, tier3: 1 }, homeExtra: {}
@@ -447,7 +460,7 @@
     {
       id: 'R2', label: 'Round 2 · Coronavirus', title: 'Round 2 · Head of Household in an Epidemic',
       prompt: 'You are the head of household with two dependents. A new disease called coronavirus is spreading through the city. If you or your dependents catch it, you will have to pay for medical care, and without social security (IMSS) it costs four times as much.',
-      rules: ['Watch the Infection probability box: crowded transit and jobs that face the public raise it, and it counts your dependents too.', 'With a formal job, IMSS covers most of the treatment and you keep your pay while sick. Informal workers pay 4× more and lose their sick days.', 'Dependents add household costs, and time commuting is time away from them (time costs double).'],
+      rules: ['The farther you travel each day, the more likely you are to get infected. Every minute on crowded transit raises the risk: a 2-hour daily commute adds about 13 points.', 'Jobs that face the public (hospital, deliveries, market stalls) are riskier than office work, and your two dependents can also get sick.', 'Watch the Infection probability box: it shows your household\'s risk for the month before you take a job.', 'With a formal job, IMSS covers most of the treatment and you keep your pay while sick. Informal workers pay 4× more and lose their sick days.', 'Dependents add household costs, and time commuting is time away from them (time costs double).'],
       rentMult: { cbd: 1, int: 1, per: 1 }, fareMult: 1, perFareMult: 1, express: false,
       caregiver: true, household: 3500, childcareInformal: 1400, fatigueMult: 2, forcedInformalShock: false, informalShockP: 0,
       disease: { base: 0.05, transitPerMin: 0.0011, dependents: 2, depP: 0.04, careCost: 2500, noIMSSMult: 4, lostDays: 5 },
@@ -455,7 +468,7 @@
     },
     {
       id: 'R3', label: 'Round 3 · New transit', title: 'Round 3 · Transit & Rent Shock',
-      prompt: 'The city has launched an expanded rapid transit line cutting commute costs from the periphery by 50%, but inflation has raised CBD rent by 20%.',
+      prompt: 'The city has launched an expanded rapid transit line cutting commute costs from the periphery by 50%, but inflation has raised rent in the Central Business District (CBD) by 20%.',
       rules: ['The teal Línea Oriente Express now runs from Tláhuac to Sevilla.', 'Trips that start or end in the periphery cost half.'],
       rentMult: { cbd: 1.2, int: 1, per: 1 }, fareMult: 1, perFareMult: 0.5, express: true,
       caregiver: false, household: 0, childcareInformal: 0, fatigueMult: 1, forcedInformalShock: false, informalShockP: 0.4,
@@ -713,7 +726,8 @@
    * ========================================================== */
   const Snd = {
     ctx: null, master: null, music: null, fx: null, muted: false,
-    timer: null, step: 0, nextT: 0, playing: false, mood: 'title',
+    timer: null, step: 0, nextT: 0, playing: false, mood: 'title', bpm: 100,
+    setTempo(b) { this.bpm = b; },
     init() {
       if (this.ctx) { if (this.ctx.state === 'suspended') this.ctx.resume(); return; }
       const AC = window.AudioContext || window.webkitAudioContext;
@@ -786,8 +800,8 @@
     },
     padTone(dir) {
       if (!this.ctx || this.muted) return;
-      const fr = { up: 659.25, right: 523.25, down: 392.0, left: 440.0 }[dir];
-      this.tone(fr, this.ctx.currentTime, 0.18, { vol: 0.12 });
+      // All four arrows share one pitch so the sound can't be used to memorise the sequence.
+      this.tone(523.25, this.ctx.currentTime, 0.18, { vol: 0.12 });
     },
     startMusic() {
       if (!this.ctx || this.playing) return;
@@ -801,7 +815,7 @@
       if (this.music) this.music.gain.setTargetAtTime(m === 'title' ? 0.24 : 0.1, this.ctx.currentTime, 0.4);
     },
     schedule() {
-      const spb = 60 / 100 / 4;
+      const spb = 60 / this.bpm / 4;
       const chords = [[60, 64, 67], [57, 60, 64], [53, 57, 60], [55, 59, 62]];
       const bass = [48, 45, 41, 43];
       const arp = [0, 1, 2, 1, 0, 2, 1, 2, 0, 1, 2, 1, 2, 1, 0, 1];
@@ -1235,6 +1249,7 @@
     home: null,
     player: { x: 16, y: 12, rx: 16, ry: 12, dir: 'down', moving: false, prog: 0, from: null, to: null, path: [], pending: null, stepCount: 0 },
     clock: DAY_START,
+    timeLeft: SEARCH_SECONDS,
     searchFares: 0,
     attempts: {},
     interviews: [],
@@ -1266,7 +1281,7 @@
       round: G.scen ? G.scen.id : null,
       event,
       home_zone: G.home,
-      clock: G.state === 'search' ? clock(G.clock) : null,
+      clock: G.state === 'search' || G.state === 'ride' ? +Math.max(0, G.timeLeft).toFixed(1) : null,
       balance: Math.round(G.balance),
       ...data
     });
@@ -1275,12 +1290,29 @@
   /* ==========================================================
    * HUD
    * ========================================================== */
+  function updateClock() {
+    const el = $('#hud-clock'), box = $('#hud-clock-box');
+    const hunting = (G.state === 'search' || G.state === 'ride' || (G.state === 'housing' && !G.job)) && !G.job;
+    if (!hunting) {
+      el.textContent = G.state === 'month' ? 'Working' : G.job ? 'Hired' : '—';
+      el.style.fontSize = ''; el.style.color = ''; box.classList.remove('urgent');
+      return;
+    }
+    const t = Math.max(0, G.timeLeft), sec = Math.ceil(t);
+    el.textContent = '0:' + String(sec).padStart(2, '0');
+    // Grows and turns red as the clock runs out.
+    const u = clamp(1 - t / 15, 0, 1);
+    el.style.fontSize = Math.round((window.innerWidth <= 760 ? 17 : 30) * (1 + u * u * 0.9)) + 'px';
+    el.style.color = 'rgb(255,' + Math.round(255 - u * 185) + ',' + Math.round(255 - u * 195) + ')';
+    box.classList.toggle('urgent', t <= 10);
+  }
+
   function updateHUD() {
     const bal = $('#hud-balance');
     bal.textContent = money(G.balance);
     bal.classList.toggle('neg', G.balance < 0);
     $('#hud-round').textContent = G.scen ? G.scen.label : 'WorkReach';
-    $('#hud-clock').textContent = G.state === 'search' || G.state === 'ride' ? clock12(Math.min(G.clock, DAY_END)) : G.state === 'month' ? 'Working' : '—';
+    updateClock();
     const badge = $('#hud-badge');
     if (G.job) {
       badge.textContent = G.job.formal ? 'Formal · IMSS' : 'Informal';
@@ -1442,6 +1474,7 @@
     G.interviews = [];
     G.searchFares = 0;
     G.clock = DAY_START;
+    G.timeLeft = SEARCH_SECONDS;
     G.month = null;
     G.ride = null;
     G.tutorial = null;
@@ -1452,12 +1485,15 @@
     updateHUD();
     log('round_start', { detail: scen.prompt, headlines: scen.headlines || null });
     const rules = '<ul>' + scen.rules.map(r => '<li>' + esc(r) + '</li>').join('') + '</ul>';
+    const warn = scen.disease
+      ? '<div class="warn"><b>Know the risk before you choose.</b> Even staying close to home, your household starts at about ' + Math.round(infectionRisk(scen, null, null).household * 100) + '% for the month. The farther you travel on crowded transit, the more likely you are to get infected: a 1-hour daily commute brings it to about ' + Math.round(infectionRisk(scen, null, { mode: 'metro', time: 30 }).household * 100) + '%, and a 3-hour one to about ' + Math.round(infectionRisk(scen, null, { mode: 'metro', time: 90 }).household * 100) + '%. If someone gets sick, care costs ' + money(scen.disease.careCost) + ' with IMSS, or ' + money(scen.disease.careCost * scen.disease.noIMSSMult) + ' plus ' + scen.disease.lostDays + ' unpaid days without it.</div>'
+      : '';
     const first = scen.id === 'R1'
-      ? '<p class="note">Walk with the arrow keys or WASD, or click the map. Press SPACE or E next to a building or on a station sign to interact, and M to see the whole city. Every step uses search time, and the job hunt ends at 8 PM.</p>'
+      ? '<p class="note">Walk with the arrow keys or WASD, or click the map. Press SPACE or E next to a building or on a station sign to interact. The clock only runs while you are on the street: you have 30 seconds, and each formal interview takes 3 more.</p>'
       : '';
     showPanel({
       title: esc(scen.title),
-      body: '<div class="quote">' + esc(scen.prompt) + '</div>' + rules + first,
+      body: '<div class="quote">' + esc(scen.prompt) + '</div>' + rules + warn + first,
       buttons: [{ label: 'Choose where to live ▶', onClick: housingPanel }]
     });
   }
@@ -1499,7 +1535,7 @@
     G.state = 'search';
     if (G.scen.id === 'R1') G.tutorial = { until: G.time + 14, steps: G.player.stepCount };
     updateHUD();
-    setPrompt('<b>Job hunt</b> Gold briefcases are formal jobs, green baskets are informal. Press <kbd>M</kbd> for the city map.');
+    setPrompt('<b>30 seconds!</b> Gold briefcases are formal jobs, green baskets are informal.');
   }
 
   /* ==========================================================
@@ -1527,9 +1563,7 @@
     p.moving = false;
     p.stepCount++;
     if (p.stepCount % 2 === 0) Snd.sfx('step');
-    G.clock += STEP_MIN;
     updateHUD();
-    if (G.clock >= DAY_END) { p.path = []; p.pending = null; endOfDay(); return; }
     if (!p.path.length) {
       if (p.pending) { const target = p.pending; p.pending = null; interactWith(target); }
       else refreshNearbyPrompt();
@@ -1640,7 +1674,6 @@
   }
 
   function takeInformal(h) {
-    G.clock += 15;
     const wage = Math.round(wageFor(h) * (1 + (G.rng() * 2 - 1) * (h.variable || 0.08)) / 10) * 10;
     log('job_offer', { employer: h.id, tier: h.tier, formal: false, wage, passed: true });
     acceptJob(h, wage, false);
@@ -1648,13 +1681,12 @@
 
   function offerPanel(h, score) {
     const wage = wageFor(h);
-    G.clock += 30;
     updateHUD();
     log('job_offer', { employer: h.id, tier: h.tier, formal: true, wage, task_score: score, passed: true });
     const e = estimate(h);
     showPanel({
       title: 'Offer from ' + esc(h.name),
-      body: '<p>You passed! Contract paperwork took 30 more minutes.</p>' +
+      body: '<p>You passed!</p>' +
         '<dl class="kv"><dt>Wage</dt><dd>' + money(wage) + '/month</dd><dt>Benefits</dt><dd>IMSS health coverage, paid sick leave, daycare access</dd>' +
         '<dt>Commute</dt><dd>' + Math.round(e.c.time * 2) + ' min/day</dd><dt>Est. month</dt><dd class="' + (e.net >= 0 ? 'pos' : 'neg') + '"><b>' + money(e.net) + '</b></dd></dl>' +
         '<p class="note">If you keep looking, this offer expires.</p>',
@@ -1664,7 +1696,7 @@
           label: 'Keep searching', cls: 'alt', onClick: () => {
             log('offer_declined', { employer: h.id, tier: h.tier, formal: true, wage });
             closePanel();
-            if (G.clock >= DAY_END) endOfDay();
+            if (G.timeLeft <= 0) endOfDay();
           }
         }
       ]
@@ -1684,8 +1716,8 @@
     log('search_timeout', { employer: best.id, wage });
     Snd.sfx('fail');
     showPanel({
-      title: '8 PM. The job hunt is over.',
-      body: '<p>You ran out of time today. A neighbor offers you local informal work at <b>' + esc(best.name) + '</b>, paying a bit less than usual.</p>' +
+      title: 'Time is up. The job hunt is over.',
+      body: '<p>You ran out of time. A neighbor offers you local informal work at <b>' + esc(best.name) + '</b>, paying a bit less than usual.</p>' +
         '<dl class="kv"><dt>Wage</dt><dd>' + money(wage) + '/month</dd><dt>Type</dt><dd>Informal · no contract</dd></dl>',
       buttons: [{ label: 'Take the work', onClick: () => acceptJob(best, wage, true) }]
     });
@@ -1708,8 +1740,8 @@
    * Interview mini-game: intro → Start → 3-2-1 → watch → repeat
    * ========================================================== */
   const IV_CFG = {
-    2: { len: 5, show: 650, limit: 10000, pass: 0.8, name: 'Moderate' },
-    3: { len: 7, show: 480, limit: 7000, pass: 1, name: 'Fast & precise' }
+    2: { len: 7, show: 520, limit: 7000, pass: 0.85, name: 'Hard' },
+    3: { len: 9, show: 400, limit: 6000, pass: 1, name: 'Very hard' }
   };
 
   function interviewIntro(h) {
@@ -1745,7 +1777,7 @@
     if (!iv || iv.phase !== 'ready') return;
     iv.phase = 'countdown';
     G.attempts[h.id] = 'started';
-    G.clock += 60;
+    G.timeLeft = Math.max(0, G.timeLeft - INTERVIEW_SECONDS);
     updateHUD();
     const p = iv.el;
     p.querySelector('.panel-actions').style.visibility = 'hidden';
@@ -1856,8 +1888,8 @@
         title: 'Not this time',
         body: '<p>Score: <b>' + Math.round(score * 100) + '%</b> (needed ' + Math.round(iv.cfg.pass * 100) + '%). ' +
           esc(h.name) + ' will not call back this month.</p>' +
-          '<p class="note">It is ' + clock12(Math.min(G.clock, DAY_END)) + '. You can try another employer, or take informal or lower-tier work nearby.</p>',
-        buttons: [{ label: 'Back to the street', onClick: () => { closePanel(); if (G.clock >= DAY_END) endOfDay(); } }]
+          '<p class="note">' + (G.timeLeft > 0 ? Math.ceil(G.timeLeft) + ' seconds left.' : 'You are out of time.') + ' You can try another employer, or take informal or lower-tier work nearby.</p>',
+        buttons: [{ label: 'Back to the street', onClick: () => { closePanel(); if (G.timeLeft <= 0) endOfDay(); } }]
       });
     }, 900);
   }
@@ -1903,14 +1935,13 @@
     const rd = G.ride;
     G.player.x = rd.to.x; G.player.y = rd.to.y;
     G.player.rx = rd.to.x; G.player.ry = rd.to.y;
-    G.clock += rd.r.time;
     G.balance -= rd.fare;
     G.searchFares += rd.fare;
     log('transit_ride', { from: rd.from.name, to: rd.to.name, minutes: Math.round(rd.r.time), fare: +rd.fare.toFixed(2), lines: rd.r.lines.join('+') });
     G.ride = null;
     G.state = 'search';
     updateHUD();
-    if (G.clock >= DAY_END) { endOfDay(); return; }
+    if (G.timeLeft <= 0) { endOfDay(); return; }
     refreshNearbyPrompt();
   }
 
@@ -2014,7 +2045,7 @@
       commute_min_day: Math.round(job.commute.time * 2), fare_per_trip: +job.commute.fare.toFixed(2), route: job.commute.desc,
       interviews: G.interviews.length, interviews_passed: G.interviews.filter(x => x.passed).length,
       formal_applications: G.interviews.length, search_fares: Math.round(G.searchFares),
-      search_minutes: Math.round(Math.min(G.clock, DAY_END) - DAY_START), balance_after: Math.round(G.balance),
+      search_seconds: +(SEARCH_SECONDS - Math.max(0, G.timeLeft)).toFixed(1), balance_after: Math.round(G.balance),
       infection_risk: G.scen.disease ? +infectionRisk(G.scen, job.hub.kind, job.commute).household.toFixed(3) : null,
       infected: G.scen.disease ? L.shocks.some(x => x.disease) : null
     };
@@ -2127,7 +2158,13 @@
       '<div class="paper-box"><h3 style="margin-top:0">What the research says</h3>' +
       '<p>In the WorkReach model (Langle-Chimal, Knoblauch &amp; González, <i>Nature Communications</i>, 2026), workers in four cities in the United States, Mexico and Brazil consistently travel farther to reach economically complex areas, while the pull of informality differs from region to region. Measuring access by how valuable opportunities are, not only how close they are, reveals gaps that distance-based metrics miss.</p>' +
       '<p class="note">This game is a simplified illustration, not the estimated model. <a href="https://www.nature.com/articles/s41467-026-78293-3" target="_blank" rel="noopener">Read the paper</a>.</p></div>' +
-      '<p class="note" style="margin-top:12px">Your play data stays in this browser. Nothing is sent anywhere unless you download it and share it.</p>';
+      '<p class="note" style="margin-top:12px">Your play data stays in this browser. Nothing is sent anywhere unless you download it and share it.</p>' +
+      '<div class="feedback" id="feedback"><h3>Suggestion box</h3>' +
+      '<p class="note">For now no game data is stored, but we would really appreciate any feedback to improve the game: what was confusing, too easy or too hard, or what felt true (or not) about looking for work in the city.</p>' +
+      '<label for="fb-text" class="note">Your feedback</label>' +
+      '<textarea id="fb-text" maxlength="1500" placeholder="Write your suggestions here…"></textarea>' +
+      '<div class="row"><button type="button" class="btn good" id="fb-send">Send feedback ✉</button>' +
+      '<span class="note" id="fb-status">Opens your email app with the message ready to send.</span></div></div>';
 
     log('debrief_viewed', { formal_baseline: fBase, formal_caregiver: fCare });
     showPanel({
@@ -2140,6 +2177,18 @@
         { label: 'Endless sandbox ▶', cls: 'good', onClick: () => { closePanel(); G.sandboxN++; startRound(makeSandbox(G.sandboxN)); } },
         { label: 'Play again', cls: 'alt', onClick: restart }
       ]
+    });
+    const pnl = $('#panel');
+    pnl.querySelector('#fb-send').addEventListener('click', () => {
+      const text = pnl.querySelector('#fb-text').value.trim();
+      const status = pnl.querySelector('#fb-status');
+      if (!text) { status.textContent = 'Write something first, then press send.'; pnl.querySelector('#fb-text').focus(); return; }
+      const to = ['ollin', 'berkeley.edu'].join('@');
+      const rounds = G.results.map(r => r.round + ': ' + (r.formal ? 'formal' : 'informal')).join(', ') || 'none';
+      const bodyTxt = text + '\n\n---\nWorkReach: The Game v' + VERSION + ' · rounds played: ' + rounds;
+      log('feedback_sent', { detail: text.length + ' chars' });
+      window.location.href = 'mailto:' + to + '?subject=' + encodeURIComponent('WorkReach game feedback') + '&body=' + encodeURIComponent(bodyTxt);
+      status.innerHTML = 'Thank you! If no email window opened, send it to <b>' + to + '</b>.';
     });
   }
 
@@ -2163,7 +2212,7 @@
     if (kind === 'json') {
       const payload = {
         game: 'WorkReach: The Game', version: VERSION, session_id: G.sessionId, started_at: G.startedAt, exported_at: new Date().toISOString(),
-        parameters: { trips_per_month: TRIPS, fatigue_cost_per_min: FATIGUE, search_window: [clock(DAY_START), clock(DAY_END)], rents: Object.fromEntries(Object.values(ZONES).map(z => [z.id, z.rent])) },
+        parameters: { trips_per_month: TRIPS, fatigue_cost_per_min: FATIGUE, search_seconds: SEARCH_SECONDS, interview_seconds: INTERVIEW_SECONDS, rents: Object.fromEntries(Object.values(ZONES).map(z => [z.id, z.rent])) },
         rounds: G.results, events: G.events
       };
       blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
@@ -2199,17 +2248,17 @@
     showPanel({
       title: 'How to play',
       body:
-        '<p>Each round is one month in Mexico City. Choose where to live, explore the city to find work before 8 PM, then live with the consequences in your ledger.</p>' +
+        '<p>Each round is one month in Mexico City. Choose where to live, explore the city and find work within 30 seconds, then live with the consequences in your ledger.</p>' +
         '<dl class="kv">' +
         '<dt>Walk</dt><dd><kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> or <kbd>WASD</kbd>, or click / tap where you want to go</dd>' +
         '<dt>Interact</dt><dd><kbd>Space</kbd> or <kbd>E</kbd> next to a building or on a station sign</dd>' +
-        '<dt>City map</dt><dd><kbd>M</kbd> or the MAP button. Click a job on the map to walk there</dd>' +
+        '<dt>Job names</dt><dd><kbd>M</kbd> or the MAP button labels every employer. Click a job to walk there</dd>' +
         '<dt>Formal jobs</dt><dd>Gold briefcase bubble. Interview mini-game, taxes, IMSS protection</dd>' +
         '<dt>Informal jobs</dt><dd>Green basket bubble. Instant hire, no taxes, exposed to shocks</dd>' +
         '<dt>Transit</dt><dd>Station signs (the M squares) on the colored lines</dd>' +
         '<dt>Friction</dt><dd>The box on the right shows the daily commute if you worked where you stand</dd>' +
         '<dt>Menus</dt><dd>Arrow keys move between options, <kbd>Enter</kbd> confirms, <kbd>Esc</kbd> closes</dd>' +
-        '<dt>Sound</dt><dd><kbd>N</kbd> or the SND button</dd>' +
+        '<dt>Sound</dt><dd><kbd>N</kbd> or the MUTE button</dd>' +
         '</dl>' +
         '<p class="note">Net = wage − rent − commute fares − commute time − shocks (and taxes for formal jobs).</p>',
       buttons: [{ label: 'Back', onClick: closePanel }],
@@ -2239,6 +2288,10 @@
   }
 
   window.addEventListener('keydown', e => {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) {
+      if (e.code === 'Escape') e.target.blur();
+      return;
+    }
     if (e.code === 'KeyN' && !e.repeat) { toggleSound(); return; }
     if (G.state === 'title') {
       if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); startGame(); }
@@ -2285,6 +2338,7 @@
   let view = { left: 0, top: 0, zoom: 3 };
 
   function baseZoom() {
+    if (cssW > 760) return overviewZoom();
     const across = cssW < 600 ? 10 : cssW < 1000 ? 14 : 19;
     const down = cssH < 600 ? 10 : 12;
     return Math.max(Math.min(cssW / (across * TILE), cssH / (down * TILE)), cssW / WORLD_W, cssH / WORLD_H);
@@ -2367,6 +2421,7 @@
   function toggleSound() {
     Snd.setMuted(!Snd.muted);
     $('#btn-sound').setAttribute('aria-pressed', String(!Snd.muted));
+    $('#btn-sound').textContent = Snd.muted ? '🔇 UNMUTE' : '🔊 MUTE';
     if (!Snd.muted) { Snd.init(); if (G.state !== 'title') Snd.startMusic(); }
   }
   $('#btn-sound').addEventListener('click', e => { e.stopPropagation(); toggleSound(); });
@@ -2389,6 +2444,16 @@
   function update(dt) {
     G.time += dt;
     const p = G.player;
+    if (!G.job && ((G.state === 'search' && !G.panel) || G.state === 'ride')) {
+      const before = Math.ceil(G.timeLeft);
+      G.timeLeft = Math.max(0, G.timeLeft - dt);
+      G.clock = DAY_START + (1 - G.timeLeft / SEARCH_SECONDS) * (DAY_END - DAY_START);
+      const now = Math.ceil(G.timeLeft);
+      if (now !== before) { updateClock(); if (now <= 5 && now > 0) Snd.sfx('count'); }
+      else updateClock();
+      Snd.setTempo(G.timeLeft < 10 ? 168 : 100);
+      if (G.timeLeft <= 0 && G.state === 'search' && !p.moving) { p.path = []; p.pending = null; endOfDay(); }
+    } else Snd.setTempo(100);
     if (G.state === 'search' && !G.panel) {
       if (p.moving) {
         p.prog += dt / STEP_TIME;
@@ -2521,8 +2586,8 @@
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.lineJoin = 'round';
-    const label = (text, x, y, size, color, weight = 700) => {
-      ctx.font = weight + ' ' + px(size) + 'px "Pixelify Sans", sans-serif';
+    const label = (text, x, y, size, color, weight = 700, family = '"Pixelify Sans", sans-serif') => {
+      ctx.font = weight + ' ' + px(size) + 'px ' + family;
       ctx.lineWidth = px(4);
       ctx.strokeStyle = 'rgba(20,20,20,0.85)';
       ctx.strokeText(text, x, y);
@@ -2530,7 +2595,7 @@
       ctx.fillText(text, x, y);
     };
     if (G.state !== 'title') {
-      const big = G.overview || G.state === 'month' || G.state === 'intro' || G.state === 'housing' || G.state === 'debrief';
+      const big = G.overview || view.zoom <= overviewZoom() * 1.05 || G.state === 'month' || G.state === 'intro' || G.state === 'housing' || G.state === 'debrief';
       DISTRICT_LABELS.forEach(d => label(d.text, d.x * TILE, d.y * TILE, big ? 13 : 16, '#fffaf1'));
       if (!big) {
         Object.entries(PARK_NAMES).forEach(([k2, name]) => {
@@ -2538,9 +2603,11 @@
           label(name, bx * TILE + 16, by * TILE + 16, 12, '#e2f5d0', 500);
         });
       } else {
-        label('CBD', 6.5 * TILE, 3 * TILE, 22, '#9cc1ff');
-        label('INTERMEDIATE RING', 19 * TILE, 3 * TILE, 18, '#ffc8a8');
-        label('PERIPHERY', 31.5 * TILE, 3 * TILE, 20, '#ffb3dc');
+        const INTER = 'Inter, system-ui, sans-serif';
+        label('CBD', 6.5 * TILE, 2.6 * TILE, 26, '#9cc1ff', 800, INTER);
+        label('Central Business District', 6.5 * TILE, 2.6 * TILE + px(22), 13, '#dfe9ff', 600, INTER);
+        label('INTERMEDIATE RING', 19 * TILE, 2.6 * TILE, 18, '#ffc8a8', 800, INTER);
+        label('PERIPHERY', 31.5 * TILE, 2.6 * TILE, 20, '#ffb3dc', 800, INTER);
         if (G.overview) HUBS.forEach(h => label(h.name, h.bx * TILE + 16, h.by * TILE + 36, 11, h.formal ? '#ffe08a' : '#bff0c4', 500));
       }
       if (G.hover && G.state === 'search' && !G.panel) {
