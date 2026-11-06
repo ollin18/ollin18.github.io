@@ -8,290 +8,293 @@
 <title>WorkReach: The Game</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Pixelify+Sans:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #1a1423;
-    --bg2: #241a30;
-    --panel: #2b1f36;
-    --panel-edge: #f6e7cf;
-    --ink: #f6e7cf;
-    --muted: #b9a58f;
-    --terra: #d0643a;
-    --terra-dark: #8f3a22;
-    --gold: #ffcc4d;
-    --green: #5fb35a;
-    --green-dark: #2f6b36;
-    --pink: #f0609e;
-    --cyan: #36c5d6;
-    --red: #e8443a;
-    --blue: #5b8cff;
-    --pixel: "Press Start 2P", ui-monospace, monospace;
-    --term: "VT323", ui-monospace, monospace;
+    --ink: #1f1d1a;
+    --paper: #fffaf1;
+    --paper-2: #f3eadb;
+    --line: #2b2925;
+    --orange: #e8743b;
+    --orange-dark: #b9541f;
+    --gold: #f2b632;
+    --green: #3f9b4b;
+    --red: #d64035;
+    --cyan: #2aa8b8;
+    --muted: #6b645a;
+    --hud: rgba(38, 38, 42, 0.88);
+    --hud-edge: #5a5a60;
+    --pixel: "Pixelify Sans", ui-rounded, system-ui, sans-serif;
+    --ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); }
-  body {
-    font-family: var(--term);
-    font-size: 22px;
-    line-height: 1.15;
-    overflow: hidden;
-    -webkit-font-smoothing: none;
-    touch-action: manipulation;
-  }
+  html, body { margin: 0; height: 100%; background: #24331f; color: var(--ink); }
+  body { font-family: var(--ui); font-size: 16px; line-height: 1.45; overflow: hidden; touch-action: manipulation; }
   button { font: inherit; color: inherit; }
 
-  #app { position: fixed; inset: 0; display: flex; flex-direction: column; }
+  #stage { position: fixed; inset: 0; overflow: hidden; background: #24331f; }
+  #screen { position: absolute; inset: 0; width: 100%; height: 100%; display: block; image-rendering: pixelated; cursor: pointer; outline: none; }
 
-  /* HUD */
-  #hud {
-    display: flex; flex-wrap: wrap; align-items: stretch; gap: 6px;
-    padding: 8px 10px; background: var(--bg2);
-    border-bottom: 4px solid #000; box-shadow: 0 4px 0 var(--terra-dark);
-    position: relative; z-index: 3;
+  /* HUD, styled like on-screen game boxes */
+  .hud { position: absolute; z-index: 3; display: flex; gap: 8px; pointer-events: none; }
+  .hud > * { pointer-events: auto; }
+  #hud-top { top: 12px; left: 12px; right: 12px; align-items: flex-start; }
+  #hud-left { left: 12px; bottom: 12px; flex-direction: column; width: 190px; }
+  #hud-right { right: 12px; bottom: 12px; width: 200px; flex-direction: column; }
+  .box.infection { border-color: var(--red); border-width: 3px; }
+  .box.infection .k { border-bottom-color: var(--red); }
+  .box.infection .v { color: #ffd166; }
+  .box[hidden] { display: none; }
+  .box {
+    background: var(--hud); color: #fff; border: 2px solid var(--hud-edge); border-radius: 4px;
+    padding: 8px 12px; box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
   }
-  .hud-cell {
-    display: flex; flex-direction: column; justify-content: center; gap: 4px;
-    padding: 4px 10px; background: #150f1c; border: 2px solid #3d2d4a; min-width: 110px;
+  .box .k { font-size: 13px; color: #d9d6cf; }
+  .box .v { font-family: var(--pixel); font-size: 22px; font-weight: 700; line-height: 1.2; }
+  .box .v.neg { color: #ff8a80; }
+  .box .s { font-size: 12px; color: #c9c5bc; margin-top: 2px; }
+  .box.clock .v { font-size: 30px; }
+  .box.friction { text-align: center; padding: 0; overflow: hidden; }
+  .box.friction .k { padding: 8px 10px; border-bottom: 2px solid var(--hud-edge); color: #fff; font-weight: 600; }
+  .box.friction .v { font-size: 26px; padding: 10px 8px 2px; color: var(--gold); }
+  .box.friction .s { padding: 0 10px 10px; }
+  .meter { height: 6px; background: rgba(255, 255, 255, 0.15); margin: 0 12px 8px; border-radius: 3px; overflow: hidden; }
+  #hud-friction-bar { height: 100%; width: 0; background: var(--green); transition: width .25s, background .25s; }
+  .chip {
+    background: var(--hud); color: #fff; border: 2px solid var(--hud-edge); border-radius: 4px;
+    padding: 6px 10px; font-family: var(--pixel); font-size: 16px; font-weight: 700; white-space: nowrap;
   }
-  .hud-cell.wide { min-width: 190px; flex: 1 1 190px; }
-  .lbl { font-family: var(--pixel); font-size: 8px; color: var(--muted); letter-spacing: 1px; }
-  .val { font-family: var(--pixel); font-size: 12px; color: var(--ink); white-space: nowrap; }
-  .val.small { font-size: 9px; }
-  .val.neg { color: var(--red); }
-  .meter { height: 8px; background: #000; border: 2px solid #3d2d4a; position: relative; }
-  #hud-friction-bar { height: 100%; width: 0; background: var(--green); transition: width .2s steps(6), background .2s; }
-  .badge { font-family: var(--pixel); font-size: 9px; padding: 4px 6px; border: 2px solid currentColor; align-self: flex-start; }
-  .badge.none { color: var(--muted); }
-  .badge.formal { color: var(--gold); }
-  .badge.informal { color: var(--pink); }
-  .hud-tools { display: flex; gap: 6px; margin-left: auto; align-items: center; }
+  .chip.formal { color: var(--gold); border-color: var(--gold); }
+  .chip.informal { color: #ff9ac2; border-color: #ff9ac2; }
+  .chip.none { color: #d9d6cf; }
+  .tools { margin-left: auto; display: flex; gap: 6px; }
   .tool {
-    font-family: var(--pixel); font-size: 9px; padding: 8px; min-width: 40px; cursor: pointer;
-    background: #150f1c; border: 2px solid #3d2d4a; color: var(--ink);
+    background: var(--hud); color: #fff; border: 2px solid var(--hud-edge); border-radius: 4px; cursor: pointer;
+    padding: 6px 10px; font-family: var(--pixel); font-size: 15px; font-weight: 700; min-width: 44px;
   }
-  .tool[aria-pressed="false"] { color: var(--muted); }
-  .tool:hover, .tool:focus-visible { border-color: var(--gold); outline: none; }
+  .tool[aria-pressed="false"] { color: #9b978f; }
+  .tool:hover, .tool:focus-visible { border-color: var(--orange); outline: none; }
 
-  /* Stage */
-  #stage {
-    flex: 1; min-height: 0; position: relative; display: flex; align-items: center; justify-content: center;
-    background:
-      radial-gradient(circle at 50% 40%, #2a1e36 0%, var(--bg) 70%);
-  }
-  #screen { display: block; image-rendering: pixelated; image-rendering: crisp-edges; cursor: pointer; border: 4px solid #000; box-shadow: 0 0 0 4px #3d2d4a, 0 12px 0 4px #000; }
   #prompt {
-    position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%);
-    max-width: min(760px, calc(100% - 20px)); width: max-content;
-    background: rgba(21, 15, 28, 0.94); border: 3px solid var(--ink); box-shadow: 4px 4px 0 #000;
-    padding: 8px 12px; display: none; align-items: center; gap: 12px; z-index: 2;
+    position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 4;
+    max-width: min(620px, calc(100% - 440px)); width: max-content;
+    background: var(--paper); color: var(--ink); border: 3px solid var(--orange); border-radius: 6px;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35); padding: 8px 12px; display: none; align-items: center; gap: 12px;
   }
   #prompt.show { display: flex; }
-  #prompt .ptxt { font-size: 22px; }
-  #prompt .ptxt b { font-family: var(--pixel); font-size: 10px; color: var(--gold); font-weight: normal; }
+  #prompt .ptxt b { font-family: var(--pixel); color: var(--orange-dark); margin-right: 4px; }
   #prompt .pbtn {
-    font-family: var(--pixel); font-size: 10px; padding: 8px 10px; background: var(--terra); border: 3px solid #000;
-    box-shadow: 3px 3px 0 #000; cursor: pointer; white-space: nowrap;
+    font-family: var(--pixel); font-weight: 700; font-size: 15px; padding: 6px 12px; background: var(--orange); color: #fff;
+    border: 2px solid var(--orange-dark); border-radius: 4px; cursor: pointer; white-space: nowrap;
   }
 
   /* Panels */
-  #overlay {
-    position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center;
-    background: rgba(10, 6, 14, 0.62); padding: 12px;
-  }
+  #overlay { position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.5); padding: 14px; }
   #overlay[hidden] { display: none; }
   .panel {
-    width: min(640px, 100%); max-height: calc(100vh - 24px); overflow: auto;
-    background: var(--panel); border: 4px solid var(--panel-edge); box-shadow: 0 0 0 4px #000, 8px 8px 0 4px #000;
-    padding: 18px 20px 16px; position: relative;
+    width: min(640px, 100%); max-height: calc(100vh - 28px); overflow: auto; position: relative;
+    background: var(--paper); color: var(--ink); border: 3px solid var(--line); border-radius: 8px;
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35); padding: 20px 22px 18px;
   }
-  .panel.wide { width: min(900px, 100%); }
-  .panel h2 { font-family: var(--pixel); font-size: 14px; line-height: 1.5; margin: 0 0 12px; color: var(--gold); text-shadow: 2px 2px 0 #000; }
-  .panel h3 { font-family: var(--pixel); font-size: 10px; line-height: 1.5; margin: 16px 0 8px; color: var(--cyan); }
+  .panel.wide { width: min(940px, 100%); }
+  .panel h2 { font-family: var(--pixel); font-size: 26px; font-weight: 700; line-height: 1.15; margin: 0 0 12px; color: var(--orange-dark); }
+  .panel h3 { font-family: var(--pixel); font-size: 18px; margin: 18px 0 8px; color: var(--ink); }
   .panel p { margin: 0 0 10px; }
-  .panel .quote { border-left: 6px solid var(--terra); background: #1d1526; padding: 10px 12px; margin: 0 0 12px; font-size: 24px; }
-  .panel .note { color: var(--muted); font-size: 19px; }
-  .panel-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .panel ul { margin: 0 0 10px; padding-left: 20px; }
+  .quote { border-left: 6px solid var(--orange); background: var(--paper-2); padding: 10px 14px; margin: 0 0 12px; font-size: 17px; font-weight: 600; border-radius: 0 4px 4px 0; }
+  .note { color: var(--muted); font-size: 14px; }
+  .panel-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
   .btn {
-    font-family: var(--pixel); font-size: 10px; line-height: 1.4; padding: 10px 14px; cursor: pointer;
-    background: var(--terra); color: var(--ink); border: 3px solid #000; box-shadow: 4px 4px 0 #000;
+    font-family: var(--pixel); font-size: 17px; font-weight: 700; padding: 9px 16px; cursor: pointer;
+    background: var(--orange); color: #fff; border: 2px solid var(--orange-dark); border-radius: 5px; box-shadow: 0 3px 0 var(--orange-dark);
   }
-  .btn:hover { filter: brightness(1.12); }
-  .btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000; }
-  .btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
-  .btn.alt { background: #45355a; }
-  .btn.good { background: var(--green-dark); }
-  .btn.gold { background: #a87b12; }
+  .btn:hover { filter: brightness(1.06); }
+  .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--orange-dark); }
+  .btn:focus-visible, .card:focus-visible, .st-btn:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+  .btn.alt { background: #fff; color: var(--ink); border-color: var(--line); box-shadow: 0 3px 0 var(--line); }
+  .btn.good { background: var(--green); border-color: #2b6f35; box-shadow: 0 3px 0 #2b6f35; }
+  .btn.gold { background: var(--gold); color: var(--ink); border-color: #b5841a; box-shadow: 0 3px 0 #b5841a; }
   .btn[disabled] { opacity: .45; cursor: not-allowed; }
+  .keys { font-size: 13px; color: var(--muted); margin-top: 10px; }
+  kbd { font-family: var(--ui); font-size: 12px; background: #fff; border: 1px solid #bbb; border-bottom-width: 2px; border-radius: 3px; padding: 0 4px; color: var(--ink); }
 
-  .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
   .card {
-    text-align: left; background: #1d1526; border: 3px solid #4a3a5c; padding: 12px; cursor: pointer;
-    display: flex; flex-direction: column; gap: 6px; box-shadow: 4px 4px 0 #000;
+    text-align: left; background: #fff; border: 2px solid var(--line); border-radius: 6px; padding: 12px; cursor: pointer;
+    display: flex; flex-direction: column; gap: 6px; box-shadow: 0 3px 0 var(--line);
   }
-  .card:hover, .card:focus-visible { border-color: var(--gold); outline: none; }
-  .card .ct { font-family: var(--pixel); font-size: 10px; line-height: 1.5; }
-  .card .cd { color: var(--muted); font-size: 19px; }
-  .card .rent { font-family: var(--pixel); font-size: 11px; color: var(--gold); }
-  .card .tag { font-family: var(--pixel); font-size: 8px; color: var(--cyan); }
+  .card:hover { border-color: var(--orange); }
+  .card .ct { font-family: var(--pixel); font-size: 19px; font-weight: 700; line-height: 1.1; }
+  .card .swatch { height: 6px; border-radius: 3px; }
+  .card .cd { color: var(--muted); font-size: 14px; }
+  .card .rent { font-family: var(--pixel); font-size: 18px; font-weight: 700; }
+  .card .tag { font-size: 13px; font-weight: 600; color: #11717e; }
 
-  table.ledger { width: 100%; border-collapse: collapse; font-size: 21px; }
-  table.ledger td { padding: 4px 6px; border-bottom: 1px dashed #4a3a5c; vertical-align: top; }
-  table.ledger td.amt { text-align: right; font-family: var(--pixel); font-size: 10px; white-space: nowrap; padding-top: 7px; }
-  table.ledger tr.total td { border-top: 3px solid var(--ink); border-bottom: none; font-size: 24px; }
-  table.ledger tr.total td.amt { font-size: 12px; }
+  table.ledger { width: 100%; border-collapse: collapse; }
+  table.ledger td { padding: 6px 6px; border-bottom: 1px solid #e3d8c6; vertical-align: top; }
+  table.ledger td.amt { text-align: right; font-family: var(--pixel); font-size: 18px; font-weight: 700; white-space: nowrap; }
+  table.ledger tr.total td { border-top: 3px solid var(--line); border-bottom: none; font-weight: 700; font-size: 18px; }
+  table.ledger tr.total td.amt { font-size: 22px; }
   .pos { color: var(--green); }
   .neg { color: var(--red); }
   .zero { color: var(--muted); }
 
-  table.grid { width: 100%; border-collapse: collapse; font-size: 19px; }
-  table.grid th { font-family: var(--pixel); font-size: 8px; color: var(--muted); text-align: left; padding: 6px; border-bottom: 3px solid #4a3a5c; }
-  table.grid td { padding: 6px; border-bottom: 1px dashed #4a3a5c; }
+  table.grid { width: 100%; border-collapse: collapse; font-size: 15px; }
+  table.grid th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); padding: 6px; border-bottom: 2px solid var(--line); }
+  table.grid td { padding: 6px; border-bottom: 1px solid #e3d8c6; }
   .table-wrap { overflow-x: auto; }
 
-  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 6px 0 4px; }
-  .stat { background: #1d1526; border: 3px solid #4a3a5c; padding: 10px; }
-  .stat .k { font-family: var(--pixel); font-size: 8px; color: var(--muted); line-height: 1.5; }
-  .stat .v { font-family: var(--pixel); font-size: 14px; margin: 8px 0 6px; color: var(--gold); }
-  .stat .s { font-size: 18px; color: var(--muted); }
-  .paper { border: 3px dashed var(--cyan); padding: 10px 12px; margin-top: 14px; }
-  .paper a { color: var(--cyan); }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 6px 0 4px; }
+  .stat { background: #fff; border: 2px solid var(--line); border-radius: 6px; padding: 12px; }
+  .stat .k { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; font-weight: 700; color: var(--muted); }
+  .stat .v { font-family: var(--pixel); font-size: 28px; font-weight: 700; margin: 6px 0; color: var(--orange-dark); }
+  .stat .s { font-size: 14px; color: var(--muted); }
+  .paper-box { border: 2px dashed var(--cyan); border-radius: 6px; padding: 12px 14px; margin-top: 16px; background: #f2fbfc; }
+  .paper-box a { color: #11717e; font-weight: 600; }
 
-  .stations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; max-height: 46vh; overflow: auto; padding-right: 4px; }
+  .stations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; max-height: 46vh; overflow: auto; padding: 2px 4px 2px 2px; }
   .st-btn {
     display: flex; justify-content: space-between; gap: 8px; align-items: center; text-align: left;
-    background: #1d1526; border: 2px solid #4a3a5c; padding: 6px 8px; cursor: pointer; font-size: 20px;
+    background: #fff; border: 2px solid #d3c7b4; border-radius: 5px; padding: 7px 9px; cursor: pointer;
   }
-  .st-btn:hover, .st-btn:focus-visible { border-color: var(--gold); outline: none; }
-  .st-btn small { font-family: var(--pixel); font-size: 8px; color: var(--muted); white-space: nowrap; }
-  .chip { display: inline-block; font-family: var(--pixel); font-size: 8px; padding: 3px 5px; margin: 0 4px 4px 0; border: 2px solid #000; color: #000; }
+  .st-btn:hover { border-color: var(--orange); }
+  .st-btn small { font-weight: 700; color: var(--muted); white-space: nowrap; }
+  .zone-tag { font-size: 11px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: #fff; margin-left: 4px; }
+  .chipline { display: inline-block; font-size: 13px; font-weight: 700; padding: 3px 8px; margin: 0 6px 6px 0; border-radius: 4px; color: #fff; }
 
-  .kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 6px 0 10px; font-size: 21px; }
-  .kv dt { color: var(--muted); }
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; margin: 6px 0 10px; }
+  .kv dt { color: var(--muted); font-weight: 600; }
   .kv dd { margin: 0; }
-  .stars { color: var(--gold); font-family: var(--pixel); font-size: 10px; }
+  .stars { color: var(--gold); font-size: 18px; letter-spacing: 2px; }
 
   /* Interview mini-game */
-  .iv { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 4px 0; }
-  .iv-status { font-family: var(--pixel); font-size: 12px; color: var(--gold); min-height: 18px; text-align: center; }
-  .pad { display: grid; grid-template-columns: repeat(3, 72px); grid-template-rows: repeat(3, 72px); gap: 6px; }
+  .iv { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 6px 0 2px; }
+  .iv-status { font-family: var(--pixel); font-size: 22px; font-weight: 700; color: var(--orange-dark); min-height: 30px; text-align: center; }
+  .iv-status.count { font-size: 56px; line-height: 1; min-height: 60px; color: var(--ink); }
+  .pad { display: grid; grid-template-columns: repeat(3, 76px); grid-template-rows: repeat(3, 76px); gap: 8px; }
   .pad button {
-    font-family: var(--pixel); font-size: 22px; border: 4px solid #000; box-shadow: 4px 4px 0 #000; cursor: pointer;
-    background: #45355a; color: var(--ink); transition: background .05s;
+    font-size: 30px; border: 3px solid var(--line); border-radius: 8px; box-shadow: 0 4px 0 var(--line); cursor: pointer;
+    background: #fff; color: var(--ink); position: relative;
   }
+  .pad button .stepno {
+    position: absolute; top: -10px; right: -10px; min-width: 26px; height: 26px; border-radius: 13px; padding: 0 6px;
+    background: var(--ink); color: #fff; font-family: var(--pixel); font-size: 15px; line-height: 26px; display: none;
+  }
+  .pad button.lit .stepno { display: block; }
+  .iv-progress span.seen { background: var(--gold); }
   .pad button[data-dir="up"] { grid-column: 2; grid-row: 1; }
   .pad button[data-dir="left"] { grid-column: 1; grid-row: 2; }
   .pad button[data-dir="right"] { grid-column: 3; grid-row: 2; }
   .pad button[data-dir="down"] { grid-column: 2; grid-row: 3; }
-  .pad .core { grid-column: 2; grid-row: 2; background: #150f1c; border: 4px solid #000; display: flex; align-items: center; justify-content: center; font-family: var(--pixel); font-size: 10px; color: var(--muted); }
-  .pad button.lit { background: var(--gold); color: #000; }
-  .pad button.ok { background: var(--green); color: #000; }
-  .pad button.bad { background: var(--red); }
-  .pad button:disabled { cursor: default; }
+  .pad .core { grid-column: 2; grid-row: 2; display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--gold); font-family: var(--pixel); font-weight: 700; }
+  .pad .core.step { font-size: 30px; color: var(--ink); }
+  .pad button.lit { background: var(--gold); }
+  .pad button.ok { background: #8fd694; }
+  .pad button.bad { background: #f08a80; }
+  .pad button:disabled { cursor: default; opacity: 1; }
   .iv-progress { display: flex; gap: 6px; }
-  .iv-progress span { width: 14px; height: 14px; border: 2px solid var(--ink); background: transparent; }
+  .iv-progress span { width: 16px; height: 16px; border: 2px solid var(--line); border-radius: 3px; background: #fff; }
   .iv-progress span.done { background: var(--green); }
   .iv-progress span.miss { background: var(--red); }
-  .timer { width: min(320px, 100%); height: 10px; border: 2px solid var(--ink); background: #000; }
+  .timer { width: min(320px, 100%); height: 10px; border: 2px solid var(--line); border-radius: 5px; background: #fff; overflow: hidden; }
   .timer > div { height: 100%; width: 100%; background: var(--cyan); }
 
   /* Title */
   #title {
-    position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; text-align: center;
-    background:
-      linear-gradient(180deg, rgba(26, 20, 35, 0.55) 0%, rgba(26, 20, 35, 0.86) 60%, rgba(26, 20, 35, 0.97) 100%);
-    cursor: pointer; padding: 20px;
+    position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.7) 100%); cursor: pointer; color: #fff;
   }
   #title[hidden] { display: none; }
-  .title-inner { max-width: 900px; }
-  .kicker { font-family: var(--pixel); font-size: 9px; color: var(--cyan); letter-spacing: 3px; margin-bottom: 26px; }
-  #title h1 { margin: 0; font-family: var(--pixel); font-weight: normal; line-height: 1.1; }
-  #title .t1 {
-    display: block; font-size: clamp(30px, 8vw, 84px); color: var(--gold);
-    text-shadow: 4px 4px 0 var(--terra), 8px 8px 0 var(--terra-dark), 12px 12px 0 #000;
-    animation: rise 1.1s steps(10) both, glow 2.4s ease-in-out 1.1s infinite;
-  }
-  #title .t2 {
-    display: inline-block; margin-top: 22px; font-size: clamp(14px, 3vw, 28px); color: var(--ink);
-    background: var(--terra); padding: 10px 16px; border: 4px solid #000; box-shadow: 6px 6px 0 #000;
-    animation: rise 1.1s steps(10) .25s both;
-  }
-  #title .sub { font-size: clamp(22px, 3vw, 32px); margin: 28px auto 0; max-width: 680px; color: var(--ink); animation: fade 1s steps(6) .7s both; }
-  #title .press { font-family: var(--pixel); font-size: clamp(10px, 1.6vw, 14px); margin-top: 38px; color: var(--ink); animation: blink 1.1s steps(2, start) infinite; }
-  #title .foot { margin-top: 26px; color: var(--muted); font-size: 20px; }
-  @keyframes rise { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
-  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes blink { to { visibility: hidden; } }
-  @keyframes glow {
-    0%, 100% { filter: drop-shadow(0 0 0 rgba(255, 204, 77, 0)); }
-    50% { filter: drop-shadow(0 0 14px rgba(255, 204, 77, 0.55)); }
-  }
+  .title-card { background: rgba(30, 30, 34, 0.82); border: 3px solid #fff; border-radius: 10px; padding: 34px 40px 30px; max-width: 760px; box-shadow: 0 8px 0 rgba(0, 0, 0, 0.4); }
+  .kicker { font-family: var(--pixel); font-size: 16px; color: var(--gold); letter-spacing: 3px; margin-bottom: 10px; }
+  #title h1 { margin: 0; font-family: var(--pixel); font-weight: 700; line-height: 1; }
+  #title .t1 { display: block; font-size: clamp(46px, 9vw, 96px); color: #fff; text-shadow: 4px 4px 0 var(--orange), 8px 8px 0 #000; animation: rise .9s cubic-bezier(.2, .9, .3, 1.2) both; }
+  #title .t2 { display: inline-block; margin-top: 18px; font-size: clamp(20px, 3vw, 30px); background: var(--orange); color: #fff; padding: 6px 16px; border-radius: 5px; animation: rise .9s .15s cubic-bezier(.2, .9, .3, 1.2) both; }
+  #title .sub { font-size: clamp(16px, 2.2vw, 20px); margin: 22px auto 0; max-width: 560px; color: #f1ece2; }
+  #title .press { font-family: var(--pixel); font-size: 22px; font-weight: 700; margin-top: 26px; color: var(--gold); animation: pulse 1.2s ease-in-out infinite; }
+  #title .foot { margin-top: 12px; color: #cfc9be; font-size: 14px; }
+  @keyframes rise { from { transform: translateY(24px) scale(.96); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes pulse { 50% { opacity: .35; } }
 
-  /* CRT */
-  #crt { position: fixed; inset: 0; pointer-events: none; z-index: 30; display: none; }
-  body.crt #crt {
-    display: block;
-    background:
-      repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px 3px),
-      radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, 0.5) 100%);
-    mix-blend-mode: multiply;
-  }
-  body.crt #screen { filter: saturate(1.15) contrast(1.05); }
-  body.crt .panel h2, body.crt .val, body.crt #title .press { text-shadow: 0 0 6px rgba(255, 204, 77, 0.45), 2px 2px 0 #000; }
-
-  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-
-  @media (max-width: 720px) {
-    body { font-size: 20px; }
-    #hud { gap: 4px; padding: 6px; }
-    .hud-cell { min-width: 0; flex: 1 1 30%; padding: 4px 6px; }
-    .hud-cell.wide { flex: 1 1 60%; }
-    .val { font-size: 10px; }
-    .hud-tools { margin-left: 0; }
+  @media (max-width: 760px) {
+    #hud-top { top: 8px; left: 8px; right: 8px; flex-wrap: nowrap; gap: 5px; }
+    .chip { font-size: 13px; padding: 4px 7px; min-width: 0; overflow: hidden; text-overflow: ellipsis; flex: 0 1 auto; }
+    .tools { flex: none; gap: 4px; }
+    .tool { font-size: 13px; padding: 4px 8px; min-width: 38px; }
+    #hud-left { bottom: 8px; left: 8px; width: auto; flex-direction: row; gap: 6px; align-items: flex-end; }
+    #hud-left .box { padding: 4px 8px; }
+    #hud-left .box .k { font-size: 11px; }
+    #hud-left .box .v, .box.clock .v { font-size: 17px; }
+    #hud-left .box .s { display: none; }
+    #hud-right { bottom: 8px; right: 8px; width: 112px; gap: 6px; }
+    .box.friction .k { font-size: 11px; padding: 4px 6px; }
+    .box.friction .v { font-size: 17px; padding: 4px 4px 0; }
+    .box.friction .s { display: none; }
+    .meter { margin: 2px 8px 6px; }
+    #prompt { max-width: calc(100% - 16px); bottom: auto; top: 50px; font-size: 14px; }
     .cards, .stats { grid-template-columns: minmax(0, 1fr); }
     .stations { grid-template-columns: minmax(0, 1fr); }
-    .pad { grid-template-columns: repeat(3, 64px); grid-template-rows: repeat(3, 64px); }
-    #prompt { bottom: 6px; }
-    #prompt .ptxt { font-size: 19px; }
+    .pad { grid-template-columns: repeat(3, 66px); grid-template-rows: repeat(3, 66px); }
+    .panel { padding: 16px; }
+    .panel h2 { font-size: 22px; }
+    .title-card { padding: 24px 18px; }
+  }
+  @media (max-width: 420px) {
+    #hud-left .box:nth-child(3) { display: none; }
   }
   @media (prefers-reduced-motion: reduce) {
-    #title .t1, #title .t2, #title .sub { animation: none; }
-    #title .press { animation: none; }
+    #title .t1, #title .t2, #title .press { animation: none; }
   }
 </style>
 </head>
-<body class="crt">
-<div id="app">
-  <header id="hud" aria-label="Game status">
-    <div class="hud-cell"><span class="lbl">NET BALANCE</span><span id="hud-balance" class="val">$0</span></div>
-    <div class="hud-cell"><span class="lbl">SCENARIO</span><span id="hud-round" class="val small">TITLE</span></div>
-    <div class="hud-cell"><span class="lbl">SEARCH CLOCK</span><span id="hud-clock" class="val">08:00</span></div>
-    <div class="hud-cell wide"><span class="lbl">COMMUTE FRICTION</span><div class="meter"><div id="hud-friction-bar"></div></div><span id="hud-friction" class="val small">Choose a home first</span></div>
-    <div class="hud-cell"><span class="lbl">BENEFITS</span><span id="hud-badge" class="badge none">SEEKING</span></div>
-    <div class="hud-tools">
-      <button class="tool" id="btn-sound" aria-pressed="true" title="Sound (M)">SND</button>
-      <button class="tool" id="btn-crt" aria-pressed="true" title="CRT effect (C)">CRT</button>
+<body>
+<main id="stage">
+  <canvas id="screen" tabindex="0" aria-label="Map of Mexico City with job sites and transit lines. Use arrow keys or WASD to walk, Space or E to interact, M for the city map, or click to walk."></canvas>
+
+  <div class="hud" id="hud-top">
+    <div class="chip" id="hud-round">WorkReach</div>
+    <div class="chip none" id="hud-badge">Seeking work</div>
+    <div class="tools">
+      <button class="tool" id="btn-map" aria-pressed="false" title="City map (M)">MAP</button>
+      <button class="tool" id="btn-sound" aria-pressed="true" title="Sound (N)">SND</button>
       <button class="tool" id="btn-help" title="How to play (H)">?</button>
     </div>
-  </header>
-  <main id="stage">
-    <canvas id="screen" tabindex="0" aria-label="Map of Mexico City with job sites and transit lines. Use arrow keys or WASD to walk, Space or E to interact, or click to walk."></canvas>
-    <div id="prompt" role="status" aria-live="polite"><span class="ptxt"></span></div>
-  </main>
-</div>
+  </div>
+
+  <div class="hud" id="hud-left">
+    <div class="box clock"><div class="v" id="hud-clock">8:00am</div></div>
+    <div class="box"><div class="k">Net balance</div><div class="v" id="hud-balance">$0</div></div>
+    <div class="box"><div class="k">Expected month</div><div class="v" id="hud-expected">—</div><div class="s" id="hud-expected-sub">Walk up to a job</div></div>
+  </div>
+
+  <div class="hud" id="hud-right">
+    <div class="box friction infection" id="hud-infection" hidden>
+      <div class="k">Infection probability</div>
+      <div class="v" id="hud-infect">—</div>
+      <div class="s" id="hud-infect-sub">household, this month</div>
+    </div>
+    <div class="box friction">
+      <div class="k">Commute friction</div>
+      <div class="v" id="hud-friction">—</div>
+      <div class="meter"><div id="hud-friction-bar"></div></div>
+      <div class="s" id="hud-friction-sub">Choose a home first</div>
+    </div>
+  </div>
+
+  <div id="prompt" role="status" aria-live="polite"><span class="ptxt"></span></div>
+</main>
 
 <div id="overlay" hidden><div id="panel" class="panel" role="dialog" aria-modal="true"></div></div>
 
 <div id="title" role="button" tabindex="0" aria-label="Start game">
-  <div class="title-inner">
+  <div class="title-card">
     <div class="kicker">A WORKREACH PROJECT</div>
-    <h1><span class="t1">WORKREACH</span><span class="t2">THE GAME</span></h1>
+    <h1><span class="t1">WorkReach</span><span class="t2">THE GAME</span></h1>
     <p class="sub">A Serious Game on Space, Work, and Opportunity in Mexico City</p>
-    <p class="press">PRESS SPACE OR CLICK TO START</p>
-    <p class="foot">Arrows / WASD to walk &middot; SPACE / E to interact &middot; click or tap to walk</p>
+    <p class="press">Press SPACE or click to start</p>
+    <p class="foot">Arrows / WASD to walk · SPACE / E to interact · M for the city map · click or tap to walk</p>
   </div>
 </div>
-<div id="crt"></div>
 
 <script>
 (() => {
@@ -300,16 +303,16 @@
   /* ==========================================================
    * Constants and helpers
    * ========================================================== */
-  const MAP_W = 40, MAP_H = 22, TILE = 8;
-  const BUF_W = MAP_W * TILE, BUF_H = MAP_H * TILE;
+  const MAP_W = 40, MAP_H = 22, TILE = 16;
+  const WORLD_W = MAP_W * TILE, WORLD_H = MAP_H * TILE;
   const DAY_START = 8 * 60, DAY_END = 20 * 60;
   const STEP_MIN = 5;            // search minutes per tile walked
-  const STEP_TIME = 0.12;        // seconds per walking step (animation)
+  const STEP_TIME = 0.14;        // seconds per walking step (animation)
   const TRIPS = 44;              // 22 workdays x 2 trips
   const VOT = 1.0;               // $/min used to pick the best route
   const FATIGUE = 0.6;           // $/min of commuting charged as time cost
   const START_BALANCE = 3000;
-  const VERSION = '1.0.0';
+  const VERSION = '1.1.0';
 
   const $ = sel => document.querySelector(sel);
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -322,8 +325,14 @@
     const h = Math.floor(m / 60), mm = Math.round(m % 60);
     return String(h).padStart(2, '0') + ':' + String(mm).padStart(2, '0');
   };
+  const clock12 = m => {
+    const h = Math.floor(m / 60) % 24, mm = Math.round(m % 60);
+    const h12 = ((h + 11) % 12) + 1;
+    return h12 + ':' + String(mm).padStart(2, '0') + (h < 12 ? 'am' : 'pm');
+  };
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const manhattan = (a, b) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
 
   function mulberry32(seed) {
     let a = seed >>> 0;
@@ -343,19 +352,19 @@
   const ZONES = {
     cbd: {
       id: 'cbd', name: 'Central Business District', short: 'CBD', districts: 'Polanco · Reforma · Santa Fe',
-      rent: 11500, tier: '$$$', label: '#8fb8ff',
+      rent: 11500, tier: '$$$', color: '#4f78c4',
       desc: 'Glass towers and most of the formal, high-pay jobs. Rent is brutal.',
       jobs: 'Formal jobs: many · Informal: few'
     },
     int: {
       id: 'int', name: 'Intermediate Ring', short: 'Ring', districts: 'Cuauhtémoc · Benito Juárez · Coyoacán',
-      rent: 6800, tier: '$$', label: '#ffc08a',
+      rent: 6800, tier: '$$', color: '#c8553d',
       desc: 'Mixed-use neighborhoods with a bit of everything, medium rent, decent transit.',
       jobs: 'Formal jobs: some · Informal: some'
     },
     per: {
       id: 'per', name: 'Periphery (East & South)', short: 'Periphery', districts: 'Iztapalapa · Neza · Tláhuac',
-      rent: 3200, tier: '$', label: '#ff9fb4',
+      rent: 3200, tier: '$', color: '#c2489a',
       desc: 'Affordable self-built homes. Lots of informal work, few formal jobs, long trips to the center.',
       jobs: 'Formal jobs: few · Informal: many'
     }
@@ -395,9 +404,9 @@
   for (let bx = 4; bx <= 10; bx += 3) HILLS.push([bx, 19]);
 
   const DISTRICT_LABELS = [
-    { text: 'SANTA FE', x: 5, y: 13.6 }, { text: 'POLANCO', x: 4.6, y: 0.7 }, { text: 'REFORMA', x: 11, y: 10.3 },
-    { text: 'CUAUHTÉMOC', x: 18.5, y: 0.7 }, { text: 'BENITO JUÁREZ', x: 19, y: 15.4 }, { text: 'COYOACÁN', x: 17, y: 21.5 },
-    { text: 'NEZA', x: 36.5, y: 0.7 }, { text: 'IZTAPALAPA', x: 33, y: 9.5 }, { text: 'TLÁHUAC', x: 35, y: 21.5 }
+    { text: 'Santa Fe', x: 5, y: 13.5 }, { text: 'Polanco', x: 4.5, y: 0.5 }, { text: 'Reforma', x: 12, y: 6.5 },
+    { text: 'Cuauhtémoc', x: 18.5, y: 0.5 }, { text: 'Benito Juárez', x: 19, y: 15.5 }, { text: 'Coyoacán', x: 17, y: 21.5 },
+    { text: 'Neza', x: 37.5, y: 0.5 }, { text: 'Iztapalapa', x: 32.5, y: 9.5 }, { text: 'Tláhuac', x: 35, y: 21.5 }
   ];
 
   const FARE = { metro: 5, metrobus: 6, express: 5 };
@@ -405,22 +414,22 @@
   const TRANSFER_MIN = 4;
   const LINES = [
     {
-      id: 'M1', name: 'Metro Line 1', system: 'metro', color: '#f0609e', speed: 1.9,
+      id: 'M1', name: 'Metro Line 1', system: 'metro', color: '#e8559a', speed: 1.9,
       stops: [[3, 9, 'Observatorio'], [6, 9, 'Tacubaya'], [9, 9, 'Chapultepec'], [12, 9, 'Sevilla'], [15, 9, 'Insurgentes'],
         [18, 9, 'Salto del Agua'], [21, 9, 'Pino Suárez'], [24, 9, 'Merced'], [27, 9, 'San Lázaro'], [30, 9, 'Moctezuma'],
         [33, 9, 'Zaragoza'], [36, 9, 'Pantitlán']]
     },
     {
-      id: 'MB1', name: 'Metrobús Insurgentes', system: 'metrobus', color: '#e8443a', speed: 2.4,
+      id: 'MB1', name: 'Metrobús Insurgentes', system: 'metrobus', color: '#d64035', speed: 2.4,
       stops: [[15, 3, 'Buenavista'], [15, 6, 'Reforma'], [15, 9, 'Insurgentes'], [15, 12, 'Polyforum'], [15, 15, 'Félix Cuevas'], [15, 18, 'Ciudad Universitaria']]
     },
     {
-      id: 'M8', name: 'Metro Line 8', system: 'metro', color: '#5fb35a', speed: 1.9,
+      id: 'M8', name: 'Metro Line 8', system: 'metro', color: '#3f9b4b', speed: 1.9,
       stops: [[18, 3, 'Garibaldi'], [18, 6, 'Bellas Artes'], [18, 9, 'Salto del Agua'], [18, 12, 'Chabacano'], [21, 12, 'La Viga'],
         [24, 12, 'Iztacalco'], [27, 12, 'Apatlaco'], [30, 12, 'Atlalilco'], [30, 15, 'Constitución']]
     },
     {
-      id: 'EXP', name: 'Línea Oriente Express', system: 'express', color: '#36c5d6', speed: 1.1, express: true,
+      id: 'EXP', name: 'Línea Oriente Express', system: 'express', color: '#2aa8b8', speed: 1.1, express: true,
       stops: [[36, 18, 'Tláhuac'], [30, 18, 'Periférico Oriente'], [24, 18, 'Culhuacán'], [18, 18, 'Coyoacán'], [15, 18, 'Ciudad Universitaria'],
         [12, 18, 'Mixcoac'], [12, 15, 'Barranca del Muerto'], [12, 12, 'San Pedro de los Pinos'], [12, 9, 'Sevilla']]
     }
@@ -428,7 +437,7 @@
 
   const SCENARIOS = [
     {
-      id: 'R1', label: 'R1 · BASELINE', title: 'Round 1 · Baseline',
+      id: 'R1', label: 'Round 1 · Baseline', title: 'Round 1 · Baseline',
       prompt: 'You are an individual job seeker in CDMX. Maximize your savings for the month.',
       rules: ['Pick where to live, then explore the city and land a job before 8 PM.', 'Formal jobs need an interview. Informal jobs hire on the spot.'],
       rentMult: { cbd: 1, int: 1, per: 1 }, fareMult: 1, perFareMult: 1, express: false,
@@ -436,17 +445,18 @@
       wageMult: { formal: 1, informal: 1, tier3: 1 }, homeExtra: {}
     },
     {
-      id: 'R2', label: 'R2 · CAREGIVER', title: 'Round 2 · Head of Household',
-      prompt: 'You are now the primary caregiver and head of household with two dependents. Your family urgently requires IMSS (social security and health coverage), which only formal employment provides.',
-      rules: ['Dependents add household costs, and every hour commuting is an hour away from them (time costs double).', 'Without IMSS, a family health emergency must be paid out of pocket.'],
+      id: 'R2', label: 'Round 2 · Coronavirus', title: 'Round 2 · Head of Household in an Epidemic',
+      prompt: 'You are the head of household with two dependents. A new disease called coronavirus is spreading through the city. If you or your dependents catch it, you will have to pay for medical care, and without social security (IMSS) it costs four times as much.',
+      rules: ['Watch the Infection probability box: crowded transit and jobs that face the public raise it, and it counts your dependents too.', 'With a formal job, IMSS covers most of the treatment and you keep your pay while sick. Informal workers pay 4× more and lose their sick days.', 'Dependents add household costs, and time commuting is time away from them (time costs double).'],
       rentMult: { cbd: 1, int: 1, per: 1 }, fareMult: 1, perFareMult: 1, express: false,
-      caregiver: true, household: 3500, childcareInformal: 1400, fatigueMult: 2, forcedInformalShock: true, informalShockP: 0,
+      caregiver: true, household: 3500, childcareInformal: 1400, fatigueMult: 2, forcedInformalShock: false, informalShockP: 0,
+      disease: { base: 0.05, transitPerMin: 0.0011, dependents: 2, depP: 0.04, careCost: 2500, noIMSSMult: 4, lostDays: 5 },
       wageMult: { formal: 1, informal: 1, tier3: 1 }, homeExtra: {}
     },
     {
-      id: 'R3', label: 'R3 · NEW TRANSIT', title: 'Round 3 · Transit & Rent Shock',
+      id: 'R3', label: 'Round 3 · New transit', title: 'Round 3 · Transit & Rent Shock',
       prompt: 'The city has launched an expanded rapid transit line cutting commute costs from the periphery by 50%, but inflation has raised CBD rent by 20%.',
-      rules: ['The cyan Línea Oriente Express now runs from Tláhuac to Sevilla.', 'Trips that start or end in the periphery cost half.'],
+      rules: ['The teal Línea Oriente Express now runs from Tláhuac to Sevilla.', 'Trips that start or end in the periphery cost half.'],
       rentMult: { cbd: 1.2, int: 1, per: 1 }, fareMult: 1, perFareMult: 0.5, express: true,
       caregiver: false, household: 0, childcareInformal: 0, fatigueMult: 1, forcedInformalShock: false, informalShockP: 0.4,
       wageMult: { formal: 1, informal: 1, tier3: 1 }, homeExtra: {}
@@ -463,6 +473,7 @@
     { text: 'Economic slowdown: informal earnings drop 15%.', apply: s => { s.wageMult.informal *= 0.85; } },
     { text: 'Minimum wage hike: formal salaries up 8%.', apply: s => { s.wageMult.formal *= 1.08; } },
     { text: 'Rainy season: informal workers face more shocks.', apply: s => { s.informalShockP = Math.min(0.9, s.informalShockP + 0.3); } },
+    { text: 'A coronavirus wave hits the city: medical care costs 4× more without IMSS.', apply: s => { s.disease = { base: 0.05, transitPerMin: 0.0011, dependents: 1, depP: 0.04, careCost: 2500, noIMSSMult: 4, lostDays: 5 }; } },
     { text: 'You take in a relative who needs care.', apply: s => { s.caregiver = true; s.household += 2200; s.childcareInformal = 1400; s.fatigueMult = 2; } }
   ];
 
@@ -475,6 +486,24 @@
   ];
 
   const taxRate = w => (w <= 11000 ? 0.07 : w <= 20000 ? 0.11 : 0.15);
+
+  // Exposure to the public by kind of workplace (epidemic rounds).
+  const JOB_EXPOSURE = { tower: 0.02, office: 0.04, hospital: 0.16, warehouse: 0.07, stand: 0.12, delivery: 0.13, construction: 0.05, workshop: 0.05 };
+  const GENERIC_EXPOSURE = 0.06;
+
+  // Probability that someone in the household gets infected this month.
+  function infectionRisk(scen, kind, com) {
+    const d = scen.disease;
+    if (!d) return null;
+    const crowded = com && com.mode !== 'walk' ? com.time * 2 : 0;
+    const you = clamp(d.base + (kind ? JOB_EXPOSURE[kind] : GENERIC_EXPOSURE) + crowded * d.transitPerMin, 0, 0.9);
+    const household = 1 - (1 - you) * Math.pow(1 - d.depP - you * 0.25, d.dependents);
+    return { you, household: clamp(household, 0, 0.95), crowdedMin: Math.round(crowded) };
+  }
+  function careCost(scen, formal, wage) {
+    const d = scen.disease;
+    return formal ? d.careCost : d.careCost * d.noIMSSMult + Math.round(wage / 22 * d.lostDays);
+  }
 
   /* ==========================================================
    * Map grid
@@ -507,6 +536,7 @@
     const bx = x - ((x - 1) % 3), by = y - ((y - 1) % 3);
     return blocks.get(bx + ',' + by) || null;
   };
+  const nearBlock = (p, b) => p.x >= b.bx - 1 && p.x <= b.bx + 2 && p.y >= b.by - 1 && p.y <= b.by + 2;
 
   function bfs(from, to) {
     if (!walkable(to.x, to.y)) return null;
@@ -740,9 +770,12 @@
       switch (name) {
         case 'step': this.tone(n(40), t, 0.03, { type: 'triangle', vol: 0.05 }); break;
         case 'select': this.tone(n(76), t, 0.05, { vol: 0.08 }); this.tone(n(83), t + 0.05, 0.07, { vol: 0.08 }); break;
+        case 'move': this.tone(n(79), t, 0.03, { vol: 0.05 }); break;
         case 'open': this.tone(n(67), t, 0.06, { vol: 0.08 }); this.tone(n(72), t + 0.06, 0.08, { vol: 0.08 }); break;
         case 'coin': this.tone(n(83), t, 0.07, { vol: 0.1 }); this.tone(n(88), t + 0.07, 0.2, { vol: 0.1 }); break;
         case 'error': this.tone(n(50), t, 0.25, { type: 'sawtooth', vol: 0.1, slide: n(38) }); break;
+        case 'count': this.tone(n(72), t, 0.12, { vol: 0.12 }); break;
+        case 'go': this.tone(n(84), t, 0.25, { vol: 0.12 }); break;
         case 'pass': [72, 76, 79, 84].forEach((m, i) => this.tone(n(m), t + i * 0.09, 0.14, { vol: 0.1 })); break;
         case 'fail': [67, 63, 60, 55].forEach((m, i) => this.tone(n(m), t + i * 0.12, 0.16, { type: 'triangle', vol: 0.14 })); break;
         case 'train': [76, 72, 79].forEach((m, i) => this.tone(n(m), t + i * 0.16, 0.22, { type: 'sine', vol: 0.12 })); break;
@@ -753,8 +786,8 @@
     },
     padTone(dir) {
       if (!this.ctx || this.muted) return;
-      const f = { up: 659.25, right: 523.25, down: 392.0, left: 440.0 }[dir];
-      this.tone(f, this.ctx.currentTime, 0.18, { vol: 0.12 });
+      const fr = { up: 659.25, right: 523.25, down: 392.0, left: 440.0 }[dir];
+      this.tone(fr, this.ctx.currentTime, 0.18, { vol: 0.12 });
     },
     startMusic() {
       if (!this.ctx || this.playing) return;
@@ -765,12 +798,12 @@
     },
     setMood(m) {
       this.mood = m;
-      if (this.music) this.music.gain.setTargetAtTime(m === 'title' ? 0.24 : 0.11, this.ctx.currentTime, 0.4);
+      if (this.music) this.music.gain.setTargetAtTime(m === 'title' ? 0.24 : 0.1, this.ctx.currentTime, 0.4);
     },
     schedule() {
-      const spb = 60 / 104 / 4;
-      const chords = [[57, 60, 64], [53, 57, 60], [55, 60, 64], [55, 59, 62]];
-      const bass = [45, 41, 48, 43];
+      const spb = 60 / 100 / 4;
+      const chords = [[60, 64, 67], [57, 60, 64], [53, 57, 60], [55, 59, 62]];
+      const bass = [48, 45, 41, 43];
       const arp = [0, 1, 2, 1, 0, 2, 1, 2, 0, 1, 2, 1, 2, 1, 0, 1];
       const n = m => 440 * Math.pow(2, (m - 69) / 12);
       while (this.nextT < this.ctx.currentTime + 0.12) {
@@ -778,7 +811,7 @@
         const ch = chords[bar];
         if (s % 4 === 0) this.tone(n(bass[bar]), this.nextT, spb * 3.6, { type: 'triangle', vol: 0.32, dest: this.music });
         if (this.mood === 'title' || s % 2 === 0) {
-          this.tone(n(ch[arp[s]] + 12), this.nextT, spb * 0.9, { type: 'square', vol: 0.07, dest: this.music });
+          this.tone(n(ch[arp[s]] + 12), this.nextT, spb * 0.9, { type: 'square', vol: 0.06, dest: this.music });
         }
         if (this.mood === 'title' && s % 4 === 2) this.noise(this.nextT, 0.04, 0.05, this.music);
         if (this.mood === 'title' && (this.step % 64) === 56) this.tone(n(ch[2] + 24), this.nextT, spb * 6, { type: 'square', vol: 0.05, dest: this.music });
@@ -789,271 +822,385 @@
   };
 
   /* ==========================================================
-   * Rendering: canvases
+   * Pixel art (16 px tiles, 3/4 top-down view)
    * ========================================================== */
   const canvas = $('#screen');
   const ctx = canvas.getContext('2d');
-  const buf = document.createElement('canvas');
-  buf.width = BUF_W; buf.height = BUF_H;
-  const b = buf.getContext('2d');
-  const mapCanvas = document.createElement('canvas');
-  mapCanvas.width = BUF_W; mapCanvas.height = BUF_H;
-  const m = mapCanvas.getContext('2d');
-  let scale = 3, dpr = 1;
+  const frameCv = document.createElement('canvas');
+  frameCv.width = WORLD_W; frameCv.height = WORLD_H;
+  const f = frameCv.getContext('2d');
+  const mapCv = document.createElement('canvas');
+  mapCv.width = WORLD_W; mapCv.height = WORLD_H;
+  const m = mapCv.getContext('2d');
 
   const P = (c2, x, y, w, h, col) => { c2.fillStyle = col; c2.fillRect(x, y, w, h); };
+  function disc(c2, cx, cy, r, col) {
+    c2.fillStyle = col;
+    for (let dy = -r; dy <= r; dy++) {
+      const w = Math.floor(Math.sqrt(r * r - dy * dy + r * 0.6));
+      c2.fillRect(cx - w, cy + dy, w * 2 + 1, 1);
+    }
+  }
+  function speckle(c2, x, y, w, h, cols, n, r) {
+    for (let i = 0; i < n; i++) P(c2, x + Math.floor(r() * w), y + Math.floor(r() * h), 1, 1, pick(r, cols));
+  }
+  function shadow(c2, x, y, w, h) { P(c2, x, y, w, h, 'rgba(0,0,0,0.25)'); }
 
-  const PAL = {
-    road: { cbd: '#3b3f52', int: '#4a4152', per: '#6b5844' },
-    side: { cbd: '#8b8fa3', int: '#b49d86', per: '#9a8164' },
-    mark: { cbd: '#c9c9d6', int: '#d6c3a8', per: '#b59c7a' }
-  };
+  function tree(c2, x, y, big) {
+    const s = big ? 7 : 5;
+    P(c2, x - s + 1, y + 1, s * 2 - 1, 3, 'rgba(0,0,0,0.22)');
+    P(c2, x - 1, y - 3, 3, 5, '#6b4226');
+    P(c2, x, y - 3, 1, 5, '#8a5a36');
+    disc(c2, x, y - 4 - s, s + 1, '#24502a');
+    disc(c2, x, y - 4 - s, s, '#3c7d33');
+    disc(c2, x - 1, y - 5 - s, s - 2, '#4f9a3d');
+    disc(c2, x - 2, y - 6 - s, Math.max(1, s - 4), '#7cc152');
+  }
+  function pine(c2, x, y) {
+    P(c2, x - 4, y + 1, 9, 2, 'rgba(0,0,0,0.22)');
+    P(c2, x - 1, y - 2, 2, 3, '#5a3a22');
+    for (let i = 0; i < 4; i++) {
+      const w = 2 + i * 2;
+      P(c2, x - w, y - 3 - (3 - i) * 3, w * 2, 3, i % 2 ? '#1f5a3a' : '#2b6e46');
+    }
+    P(c2, x - 1, y - 14, 2, 2, '#3d8a58');
+  }
 
-  function drawRoads(c2) {
-    for (let y = 0; y < MAP_H; y++) {
-      for (let x = 0; x < MAP_W; x++) {
-        if (grid[y][x] !== ROAD) continue;
-        const z = zoneOf(x);
-        P(c2, x * TILE, y * TILE, TILE, TILE, PAL.road[z]);
-        const hRoad = y % 3 === 0, vRoad = x % 3 === 0;
-        if (hRoad && !vRoad && (x % 2 === 0)) P(c2, x * TILE + 2, y * TILE + 4, 3, 1, PAL.mark[z]);
-        if (vRoad && !hRoad && (y % 2 === 0)) P(c2, x * TILE + 4, y * TILE + 2, 1, 3, PAL.mark[z]);
-        if (z === 'per' && ((x * 7 + y * 13) % 5 === 0)) P(c2, x * TILE + 1, y * TILE + 6, 1, 1, '#7d684f');
+  const GROUND = { cbd: '#cfcac0', int: '#d9c7a6', per: '#86b257' };
+
+  function drawRoadTile(c2, x, y, r) {
+    const X = x * TILE, Y = y * TILE, z = zoneOf(x);
+    const hRoad = y % 3 === 0, vRoad = x % 3 === 0;
+    const blockedAt = (dx, dy) => inMap(x + dx, y + dy) && grid[y + dy][x + dx] !== ROAD;
+    if (z === 'per') {
+      P(c2, X, Y, 16, 16, '#bb8b58');
+      speckle(c2, X, Y, 16, 16, ['#a7794a', '#cfa06c', '#9a6d40'], 10, r);
+      if (hRoad && !vRoad) { P(c2, X, Y + 5, 16, 1, '#9c6f42'); P(c2, X, Y + 10, 16, 1, '#9c6f42'); }
+      if (vRoad && !hRoad) { P(c2, X + 5, Y, 1, 16, '#9c6f42'); P(c2, X + 10, Y, 1, 16, '#9c6f42'); }
+      const tuft = (ex, ey, w, h) => { for (let i = 0; i < 3; i++) P(c2, X + ex + Math.floor(r() * w), Y + ey + Math.floor(r() * h), 2, 1, '#6aa84f'); };
+      if (blockedAt(0, -1)) tuft(0, 0, 14, 2);
+      if (blockedAt(0, 1)) tuft(0, 14, 14, 2);
+      if (blockedAt(-1, 0)) tuft(0, 0, 2, 14);
+      if (blockedAt(1, 0)) tuft(14, 0, 2, 14);
+      return;
+    }
+    P(c2, X, Y, 16, 16, '#5d606b');
+    speckle(c2, X, Y, 16, 16, ['#666a76', '#545762', '#6e7280'], 12, r);
+    if (blockedAt(0, -1)) P(c2, X, Y, 16, 2, '#9b9ea8');
+    if (blockedAt(0, 1)) { P(c2, X, Y + 14, 16, 2, '#9b9ea8'); P(c2, X, Y + 13, 16, 1, '#4a4c56'); }
+    if (blockedAt(-1, 0)) P(c2, X, Y, 2, 16, '#9b9ea8');
+    if (blockedAt(1, 0)) P(c2, X + 14, Y, 2, 16, '#9b9ea8');
+    if (hRoad && !vRoad && x % 2 === 0) P(c2, X + 3, Y + 7, 10, 2, '#efe3b6');
+    if (vRoad && !hRoad && y % 2 === 0) P(c2, X + 7, Y + 3, 2, 10, '#efe3b6');
+    if (hRoad && vRoad) {
+      for (let i = 0; i < 4; i++) { P(c2, X + 2 + i * 3, Y + 1, 2, 2, '#e9e7e2'); P(c2, X + 2 + i * 3, Y + 13, 2, 2, '#e9e7e2'); }
+    }
+  }
+
+  function blockGround(c2, ox, oy, zone, r) {
+    P(c2, ox, oy, 32, 32, GROUND[zone]);
+    if (zone === 'per') { speckle(c2, ox, oy, 32, 32, ['#9cc46a', '#77a24a', '#b0a06a'], 24, r); return; }
+    const line = zone === 'cbd' ? '#bdb7ab' : '#c9b590';
+    for (let i = 0; i < 32; i += 8) { P(c2, ox + i, oy, 1, 32, line); P(c2, ox, oy + i, 32, 1, line); }
+  }
+
+  function drawTower(c2, ox, oy, r, opts = {}) {
+    const x0 = ox + 4, y0 = oy + 2, w = 24, H = 27;
+    const roofH = 8 + Math.floor(r() * 5);
+    shadow(c2, x0 + w, y0 + 4, 3, H - 2);
+    shadow(c2, x0 + 3, y0 + H, w, 2);
+    P(c2, x0 - 1, y0 - 1, w + 2, H + 2, '#1f2d40');
+    P(c2, x0, y0, w, roofH, '#8a95ab');
+    P(c2, x0, y0, w, 1, '#b4bed0');
+    P(c2, x0, y0 + roofH - 1, w, 1, '#5d6880');
+    P(c2, x0 + 3, y0 + 2, 5, 3, '#c9d0dc'); P(c2, x0 + 3, y0 + 4, 5, 1, '#8d96a8');
+    if (opts.helipad) { disc(c2, x0 + w - 7, y0 + Math.floor(roofH / 2), 3, '#f2c14e'); P(c2, x0 + w - 8, y0 + Math.floor(roofH / 2) - 1, 3, 3, '#8a95ab'); }
+    P(c2, x0, y0 + roofH, w, H - roofH, '#416390');
+    for (let yy = y0 + roofH + 2; yy < y0 + H - 6; yy += 4) {
+      for (let xx = x0 + 2; xx < x0 + w - 2; xx += 4) {
+        P(c2, xx, yy, 3, 2, r() < 0.2 ? '#ffe08a' : '#a9dcff');
+        P(c2, xx, yy, 1, 1, '#eaf7ff');
       }
     }
-  }
-
-  function drawBlockBase(c2, ox, oy, zone) {
-    P(c2, ox, oy, 16, 16, PAL.side[zone]);
-  }
-
-  function drawTower(c2, ox, oy, r, gold) {
-    const h = 3 + Math.floor(r() * 4);
-    P(c2, ox + 1, oy + 1, 14, 14, '#262b3d');
-    P(c2, ox + 2, oy + 1, 12, h, '#6c7fa6');
-    P(c2, ox + 2, oy + 1, 12, 1, '#a3b5d9');
-    P(c2, ox + 2, oy + 1 + h, 12, 13 - h, '#2c4670');
-    for (let yy = oy + 2 + h; yy < oy + 14; yy += 2) {
-      for (let xx = ox + 3; xx < ox + 13; xx += 2) P(c2, xx, yy, 1, 1, r() < 0.22 ? '#ffd36b' : '#8fd3ff');
+    P(c2, x0 + w - 3, y0 + roofH, 3, H - roofH, 'rgba(0,0,0,0.2)');
+    P(c2, x0 + w / 2 - 4, y0 + H - 6, 8, 6, '#203450');
+    P(c2, x0 + w / 2 - 4, y0 + H - 6, 8, 1, '#7fa6d1');
+    if (opts.gold) {
+      P(c2, x0 + 2, y0 + roofH, w - 4, 2, '#f2b632');
+      P(c2, x0 + w / 2 - 6, y0 + H - 10, 12, 3, '#f2b632');
+      P(c2, x0 + w / 2 - 5, y0 + H - 9, 10, 1, '#fff2c4');
     }
-    P(c2, ox + 13, oy + 1 + h, 1, 13 - h, '#1c2c4a');
-    if (gold) P(c2, ox + 2, oy + 1 + h - 1, 12, 1, '#ffcc4d');
-    if (r() < 0.5) P(c2, ox + 4 + Math.floor(r() * 7), oy, 1, 2, '#e8443a');
   }
 
-  function drawPlaza(c2, ox, oy, r) {
-    P(c2, ox + 1, oy + 1, 14, 14, '#cfc6b2');
-    P(c2, ox + 6, oy + 6, 4, 4, '#5b8cff');
-    P(c2, ox + 7, oy + 7, 2, 2, '#bfe3ff');
-    [[2, 2], [11, 2], [2, 11], [11, 11]].forEach(([dx, dy]) => drawTree(c2, ox + dx, oy + dy, r));
+  function drawPlaza(c2, ox, oy) {
+    P(c2, ox + 2, oy + 2, 28, 28, '#e3dccb');
+    for (let i = 2; i < 30; i += 4) { P(c2, ox + i, oy + 2, 1, 28, '#d3cab5'); P(c2, ox + 2, oy + i, 28, 1, '#d3cab5'); }
+    disc(c2, ox + 16, oy + 16, 6, '#9aa3ad');
+    disc(c2, ox + 16, oy + 16, 5, '#5b9bd5');
+    disc(c2, ox + 16, oy + 15, 2, '#bfe3ff');
+    tree(c2, ox + 6, oy + 12);
+    tree(c2, ox + 26, oy + 12);
+    tree(c2, ox + 6, oy + 30);
+    tree(c2, ox + 26, oy + 30);
   }
 
-  function drawTree(c2, x, y) {
-    P(c2, x, y + 1, 3, 2, '#2d6b38');
-    P(c2, x + 1, y, 1, 3, '#2d6b38');
-    P(c2, x, y, 1, 1, '#5fb35a');
-    P(c2, x + 1, y + 3, 1, 1, '#5b3a1e');
-  }
-
-  function drawHouseRow(c2, ox, oy, r, roofTint) {
-    for (const i of [0, 7]) {
-      if (r() < 0.18 && !roofTint) {
-        P(c2, ox + 1 + i, oy + 1, 7, 14, '#7aa35b');
-        drawTree(c2, ox + 3 + i, oy + 4, r);
-        drawTree(c2, ox + 2 + i, oy + 10, r);
+  function drawColonial(c2, ox, oy, r) {
+    for (const i of [0, 15]) {
+      const x0 = ox + 2 + i, y0 = oy + 3;
+      if (r() < 0.18) {
+        P(c2, x0, y0 - 1, 13, 28, '#7fae54');
+        speckle(c2, x0, y0, 13, 26, ['#94c266', '#6a9a45'], 10, r);
+        tree(c2, x0 + 6, y0 + 12);
+        tree(c2, x0 + 6, y0 + 26);
         continue;
       }
-      const wall = roofTint ? '#f6e7cf' : pick(r, ['#f1d3a5', '#e8b78b', '#f4e3c1', '#d9a7c7', '#a9d1c4']);
-      const roof = roofTint || pick(r, ['#c4553a', '#a8432e', '#b8643f']);
-      P(c2, ox + 1 + i, oy + 1, 7, 6, roof);
-      P(c2, ox + 1 + i, oy + 1, 7, 1, '#e98a63');
-      P(c2, ox + 1 + i, oy + 7, 7, 8, wall);
-      P(c2, ox + 2 + i, oy + 9, 2, 2, '#3a2e3f');
-      P(c2, ox + 5 + i, oy + 9, 2, 2, '#3a2e3f');
-      P(c2, ox + 3 + i, oy + 12, 2, 3, '#6b3e26');
-      P(c2, ox + 7 + i, oy + 7, 1, 8, 'rgba(0,0,0,0.18)');
+      const wall = pick(r, ['#f1d3a5', '#e8b78b', '#f4e3c1', '#e7a9b9', '#a9d1c4', '#f6e7cf']);
+      shadow(c2, x0 + 13, y0 + 3, 2, 24);
+      shadow(c2, x0 + 2, y0 + 26, 13, 2);
+      P(c2, x0, y0, 13, 11, '#c4553a');
+      for (let k = 2; k < 11; k += 3) P(c2, x0, y0 + k, 13, 1, '#a5432c');
+      P(c2, x0, y0, 13, 1, '#e3845f');
+      P(c2, x0, y0 + 11, 13, 15, wall);
+      P(c2, x0, y0 + 11, 13, 1, 'rgba(0,0,0,0.18)');
+      P(c2, x0 + 2, y0 + 14, 3, 4, '#3b3f58'); P(c2, x0 + 2, y0 + 14, 3, 1, '#ffffff');
+      P(c2, x0 + 8, y0 + 14, 3, 4, '#3b3f58'); P(c2, x0 + 8, y0 + 14, 3, 1, '#ffffff');
+      P(c2, x0 + 5, y0 + 20, 3, 6, '#7a4a2b'); P(c2, x0 + 7, y0 + 23, 1, 1, '#f2c14e');
+      P(c2, x0 + 1, y0 + 23, 2, 3, '#3c7d33'); P(c2, x0 + 1, y0 + 22, 2, 1, '#e8559a');
+      P(c2, x0 + 12, y0 + 11, 1, 15, 'rgba(0,0,0,0.15)');
     }
   }
 
   function drawSelfBuilt(c2, ox, oy, r) {
-    for (const [i, j] of [[0, 0], [7, 0], [0, 7], [7, 7]]) {
-      const wall = pick(r, ['#9da3a6', '#b86b3c', '#e46a8e', '#3fb5a3', '#f2c14e', '#9da3a6', '#b86b3c']);
-      P(c2, ox + 1 + i, oy + 1 + j, 7, 7, wall);
-      P(c2, ox + 1 + i, oy + 1 + j, 7, 3, '#8c8c8c');
-      P(c2, ox + 1 + i, oy + 1 + j, 7, 1, '#a9a9a9');
-      if (r() < 0.75) { P(c2, ox + 2 + i, oy + 1 + j, 2, 2, '#1b1b1b'); P(c2, ox + 2 + i, oy + 1 + j, 1, 1, '#444'); }
-      if (r() < 0.6) { P(c2, ox + 6 + i, oy + j, 1, 2, '#5b4636'); P(c2, ox + 4 + i, oy + j + 1, 1, 1, '#5b4636'); }
-      P(c2, ox + 3 + i, oy + 5 + j, 2, 2, '#2b2b2b');
-      if (wall === '#9da3a6') for (let k = 0; k < 3; k++) P(c2, ox + 1 + i + k * 2, oy + 4 + j, 1, 1, '#7d8385');
+    for (const [i, j] of [[0, 0], [15, 0], [0, 15], [15, 15]]) {
+      const x0 = ox + 2 + i, y0 = oy + 3 + j;
+      const brick = r() < 0.3;
+      const wall = brick ? '#b5653a' : pick(r, ['#9da3a6', '#e46a8e', '#3fb5a3', '#f2c14e', '#9da3a6', '#8fb3e0', '#f08a4b']);
+      shadow(c2, x0 + 13, y0 + 2, 1, 12);
+      P(c2, x0, y0, 13, 5, '#a9a9a9');
+      P(c2, x0, y0 + 4, 13, 1, '#878787');
+      disc(c2, x0 + 3, y0 + 1, 2, '#1f1f1f');
+      P(c2, x0 + 2, y0, 1, 1, '#5a5a5a');
+      if (r() < 0.7) { P(c2, x0 + 10, y0 - 3, 1, 4, '#6b4f3a'); P(c2, x0 + 12, y0 - 2, 1, 3, '#6b4f3a'); }
+      P(c2, x0, y0 + 5, 13, 8, wall);
+      if (brick) for (let k = 0; k < 4; k++) P(c2, x0, y0 + 6 + k * 2, 13, 1, '#8f4a29');
+      P(c2, x0 + 2, y0 + 7, 3, 3, '#2a2a2a');
+      P(c2, x0 + 7, y0 + 8, 3, 5, '#4a3426');
+      if (r() < 0.35) { P(c2, x0 + 1, y0 + 4, 11, 1, '#ffffff'); P(c2, x0 + 2, y0 + 5, 2, 2, '#e8559a'); P(c2, x0 + 6, y0 + 5, 2, 2, '#2aa8b8'); }
     }
   }
 
   function drawPark(c2, ox, oy, r) {
-    P(c2, ox, oy, 16, 16, '#3e8948');
-    for (let k = 0; k < 10; k++) P(c2, ox + Math.floor(r() * 16), oy + Math.floor(r() * 16), 1, 1, '#5fb35a');
-    P(c2, ox, oy + 7, 16, 2, '#c9b48a');
-    for (let k = 0; k < 4; k++) drawTree(c2, ox + 1 + Math.floor(r() * 12), oy + (k % 2 ? 10 : 1) + Math.floor(r() * 3), r);
+    P(c2, ox, oy, 32, 32, '#5a9e3a');
+    speckle(c2, ox, oy, 32, 32, ['#74b84a', '#4b8a31', '#86c75a'], 40, r);
+    P(c2, ox, oy + 14, 32, 4, '#dcc79a');
+    P(c2, ox + 14, oy, 4, 32, '#dcc79a');
+    tree(c2, ox + 6, oy + 12, true);
+    tree(c2, ox + 25, oy + 12);
+    tree(c2, ox + 7, oy + 30);
+    tree(c2, ox + 25, oy + 30, true);
+    P(c2, ox + 20, oy + 19, 6, 2, '#8a5a36');
   }
 
   function drawHill(c2, ox, oy, r) {
-    P(c2, ox, oy, 16, 16, '#4a5a2e');
-    P(c2, ox + 2, oy + 3, 12, 11, '#5c6b3a');
-    P(c2, ox + 5, oy + 1, 6, 5, '#6d7d45');
-    P(c2, ox + 7, oy, 2, 2, '#8a9a5b');
-    for (let k = 0; k < 12; k++) P(c2, ox + Math.floor(r() * 16), oy + Math.floor(r() * 16), 1, 1, k % 2 ? '#2f3d1d' : '#7b8c4c');
+    P(c2, ox, oy, 32, 32, '#4f7a3a');
+    speckle(c2, ox, oy, 32, 32, ['#5f8a45', '#3f6a30', '#7a8a5a', '#8d8a80'], 40, r);
+    P(c2, ox + 20, oy + 22, 5, 3, '#8d8a80'); P(c2, ox + 20, oy + 22, 5, 1, '#aaa69c');
+    pine(c2, ox + 7, oy + 14);
+    pine(c2, ox + 22, oy + 12);
+    pine(c2, ox + 12, oy + 30);
+    pine(c2, ox + 27, oy + 31);
   }
 
-  function drawStall(c2, ox, oy, r, awning) {
-    P(c2, ox + 1, oy + 1, 14, 14, '#d9c39a');
-    for (let i = 0; i < 14; i++) P(c2, ox + 1 + i, oy + 3, 1, 4, i % 2 ? '#fff3e0' : awning);
-    P(c2, ox + 1, oy + 7, 14, 1, '#00000055');
-    P(c2, ox + 2, oy + 9, 12, 3, '#8b5a2b');
-    for (let i = 0; i < 6; i++) P(c2, ox + 3 + i * 2, oy + 9, 1, 1, pick(r, ['#e8443a', '#ffcc4d', '#5fb35a', '#ff8c42']));
-    P(c2, ox + 2, oy + 12, 1, 3, '#5b3a1e');
-    P(c2, ox + 13, oy + 12, 1, 3, '#5b3a1e');
+  function drawStall(c2, ox, oy, r, awnings) {
+    P(c2, ox + 1, oy + 1, 30, 30, '#d9c39a');
+    for (let row = 0; row < 2; row++) {
+      const y0 = oy + 3 + row * 14, aw = awnings[row % awnings.length];
+      for (let i = 0; i < 28; i++) P(c2, ox + 2 + i, y0, 1, 5, Math.floor(i / 2) % 2 ? '#fff3e0' : aw);
+      P(c2, ox + 2, y0 + 5, 28, 1, 'rgba(0,0,0,0.25)');
+      P(c2, ox + 3, y0 + 7, 26, 4, '#8b5a2b');
+      for (let i = 0; i < 12; i++) P(c2, ox + 4 + i * 2, y0 + 7, 2, 2, pick(r, ['#d64035', '#f2b632', '#3f9b4b', '#f08a4b', '#7a3fb8']));
+    }
+  }
+
+  function drawDelivery(c2, ox, oy) {
+    P(c2, ox + 1, oy + 1, 30, 30, '#d9c39a');
+    P(c2, ox + 3, oy + 3, 26, 12, '#3f9b4b');
+    for (let i = 0; i < 26; i += 4) P(c2, ox + 3 + i, oy + 13, 2, 2, '#fff');
+    P(c2, ox + 5, oy + 6, 22, 5, '#2f7a3a');
+    for (let k = 0; k < 3; k++) {
+      const bx = ox + 4 + k * 9, by = oy + 22;
+      disc(c2, bx, by + 4, 2, '#222'); disc(c2, bx + 6, by + 4, 2, '#222');
+      P(c2, bx, by + 1, 7, 1, '#d64035'); P(c2, bx + 2, by - 3, 4, 4, '#f08a4b');
+    }
   }
 
   function drawWorkshop(c2, ox, oy) {
-    P(c2, ox + 1, oy + 1, 14, 14, '#7b7f86');
-    P(c2, ox + 1, oy + 1, 14, 3, '#5d6168');
-    P(c2, ox + 3, oy + 7, 10, 8, '#2a2a2e');
-    for (let i = 0; i < 4; i++) P(c2, ox + 3, oy + 8 + i * 2, 10, 1, '#3d3d44');
-    P(c2, ox + 1, oy + 12, 2, 2, '#111');
-    P(c2, ox + 13, oy + 11, 2, 2, '#111');
-    P(c2, ox + 4, oy + 4, 8, 2, '#ffcc4d');
+    shadow(c2, ox + 29, oy + 4, 2, 24);
+    P(c2, ox + 2, oy + 2, 27, 26, '#7b7f86');
+    P(c2, ox + 2, oy + 2, 27, 6, '#5d6168');
+    P(c2, ox + 5, oy + 12, 21, 16, '#2a2a2e');
+    for (let i = 0; i < 7; i++) P(c2, ox + 5, oy + 13 + i * 2, 21, 1, '#3d3d44');
+    P(c2, ox + 6, oy + 9, 19, 3, '#f2b632');
+    disc(c2, ox + 3, oy + 28, 2, '#111'); disc(c2, ox + 28, oy + 27, 2, '#111');
+    P(c2, ox + 9, oy + 22, 13, 6, '#d64035'); P(c2, ox + 11, oy + 23, 9, 2, '#9fd8ff');
   }
 
   function drawConstruction(c2, ox, oy) {
-    P(c2, ox + 1, oy + 1, 14, 14, '#a08a6c');
-    P(c2, ox + 2, oy + 7, 12, 8, '#9da3a6');
-    for (let i = 0; i < 6; i++) P(c2, ox + 2 + i * 2, oy + 9 + (i % 2), 1, 1, '#7d8385');
-    for (let i = 0; i < 4; i++) P(c2, ox + 3 + i * 3, oy + 2, 1, 6, '#5b4636');
-    P(c2, ox + 2, oy + 4, 12, 1, '#c97b2c');
-    P(c2, ox + 11, oy + 1, 3, 3, '#e8443a');
+    P(c2, ox + 1, oy + 1, 30, 30, '#a08a6c');
+    P(c2, ox + 3, oy + 12, 26, 18, '#9da3a6');
+    for (let k = 0; k < 6; k++) P(c2, ox + 3, oy + 14 + k * 3, 26, 1, '#868c8f');
+    for (let i = 0; i < 5; i++) P(c2, ox + 4 + i * 6, oy + 3, 1, 10, '#6b4f3a');
+    P(c2, ox + 3, oy + 6, 26, 1, '#c97b2c');
+    P(c2, ox + 3, oy + 10, 26, 1, '#c97b2c');
+    P(c2, ox + 24, oy + 2, 2, 12, '#f2b632'); P(c2, ox + 14, oy + 2, 12, 2, '#f2b632');
+    P(c2, ox + 5, oy + 26, 6, 4, '#c9b48a');
   }
 
   function drawWarehouse(c2, ox, oy) {
-    P(c2, ox + 1, oy + 1, 14, 14, '#9aa3ad');
-    for (let i = 0; i < 7; i++) P(c2, ox + 1 + i * 2, oy + 1, 1, 7, '#7d8690');
-    P(c2, ox + 1, oy + 8, 14, 1, '#ffcc4d');
-    P(c2, ox + 3, oy + 10, 4, 5, '#4a4f57');
-    P(c2, ox + 9, oy + 10, 4, 5, '#4a4f57');
+    shadow(c2, ox + 30, oy + 4, 2, 24);
+    P(c2, ox + 1, oy + 2, 29, 26, '#9aa3ad');
+    for (let i = 0; i < 29; i += 3) P(c2, ox + 1 + i, oy + 2, 1, 12, '#7d8690');
+    P(c2, ox + 1, oy + 14, 29, 2, '#f2b632');
+    P(c2, ox + 4, oy + 17, 8, 11, '#4a4f57');
+    P(c2, ox + 18, oy + 17, 8, 11, '#4a4f57');
+    for (let i = 0; i < 5; i++) { P(c2, ox + 4, oy + 18 + i * 2, 8, 1, '#5a606a'); P(c2, ox + 18, oy + 18 + i * 2, 8, 1, '#5a606a'); }
   }
 
   function drawHospital(c2, ox, oy) {
-    P(c2, ox + 1, oy + 1, 14, 14, '#eef0f2');
-    P(c2, ox + 1, oy + 1, 14, 3, '#c9d3dc');
-    P(c2, ox + 1, oy + 4, 14, 1, '#ffcc4d');
-    P(c2, ox + 7, oy + 6, 2, 6, '#e8443a');
-    P(c2, ox + 5, oy + 8, 6, 2, '#e8443a');
-    P(c2, ox + 2, oy + 13, 12, 2, '#9fb4c7');
+    shadow(c2, ox + 30, oy + 4, 2, 24);
+    P(c2, ox + 1, oy + 2, 29, 26, '#eef0f2');
+    P(c2, ox + 1, oy + 2, 29, 7, '#c9d3dc');
+    P(c2, ox + 1, oy + 9, 29, 2, '#f2b632');
+    P(c2, ox + 13, oy + 12, 4, 12, '#d64035');
+    P(c2, ox + 9, oy + 16, 12, 4, '#d64035');
+    for (let i = 0; i < 4; i++) P(c2, ox + 3 + i * 7, oy + 4, 4, 3, '#9fd8ff');
+    P(c2, ox + 3, oy + 25, 25, 3, '#9fb4c7');
   }
 
   function drawOffice(c2, ox, oy, zone, r) {
-    if (zone === 'cbd') { drawTower(c2, ox, oy, r, true); return; }
-    P(c2, ox + 1, oy + 1, 14, 14, zone === 'per' ? '#c9b18c' : '#e9d3b0');
-    P(c2, ox + 1, oy + 1, 14, 4, '#8a6d5a');
-    P(c2, ox + 1, oy + 5, 14, 1, '#ffcc4d');
-    for (let yy = oy + 7; yy < oy + 14; yy += 3) for (let xx = ox + 2; xx < ox + 14; xx += 3) P(c2, xx, yy, 2, 2, '#3a4a66');
+    if (zone === 'cbd') { drawTower(c2, ox, oy, r, { gold: true }); return; }
+    shadow(c2, ox + 30, oy + 4, 2, 24);
+    P(c2, ox + 1, oy + 2, 29, 26, zone === 'per' ? '#d3bc94' : '#efdcbc');
+    P(c2, ox + 1, oy + 2, 29, 8, '#8a6d5a');
+    P(c2, ox + 1, oy + 2, 29, 1, '#a88a74');
+    P(c2, ox + 1, oy + 10, 29, 2, '#f2b632');
+    for (let yy = oy + 14; yy < oy + 26; yy += 5) for (let xx = ox + 3; xx < ox + 28; xx += 5) { P(c2, xx, yy, 3, 3, '#3a4a66'); P(c2, xx, yy, 1, 1, '#9fd8ff'); }
+    P(c2, ox + 13, oy + 22, 5, 6, '#3a2e3f');
   }
 
-  function drawHome(c2, ox, oy) {
-    P(c2, ox + 1, oy + 1, 14, 14, '#7aa35b');
-    P(c2, ox + 3, oy + 2, 10, 5, '#ffd166');
-    P(c2, ox + 3, oy + 2, 10, 1, '#fff0b3');
-    P(c2, ox + 3, oy + 7, 10, 7, '#f6e7cf');
-    P(c2, ox + 7, oy + 10, 2, 4, '#8f3a22');
-    P(c2, ox + 4, oy + 9, 2, 2, '#3a2e3f');
-    P(c2, ox + 10, oy + 9, 2, 2, '#3a2e3f');
+  function drawHome(c2, ox, oy, r) {
+    P(c2, ox, oy, 32, 32, '#7fae54');
+    speckle(c2, ox, oy, 32, 32, ['#94c266', '#6a9a45'], 20, r);
+    shadow(c2, ox + 27, oy + 7, 2, 21);
+    P(c2, ox + 4, oy + 4, 23, 11, '#f2b632');
+    for (let k = 2; k < 11; k += 3) P(c2, ox + 4, oy + 4 + k, 23, 1, '#d1951f');
+    P(c2, ox + 4, oy + 4, 23, 1, '#ffe08a');
+    P(c2, ox + 4, oy + 15, 23, 12, '#fffaf1');
+    P(c2, ox + 7, oy + 18, 4, 4, '#3b3f58'); P(c2, ox + 20, oy + 18, 4, 4, '#3b3f58');
+    P(c2, ox + 13, oy + 20, 5, 7, '#b9541f'); P(c2, ox + 16, oy + 23, 1, 1, '#ffe08a');
+    P(c2, ox + 2, oy + 27, 28, 3, '#dcc79a');
+    P(c2, ox + 3, oy + 24, 2, 3, '#e8559a'); P(c2, ox + 27, oy + 24, 2, 3, '#f2b632');
+  }
+
+  const M_GLYPH = ['#...#', '##.##', '#.#.#', '#...#', '#...#'];
+  function drawStationSign(c2, s, net) {
+    const X = s.x * TILE, Y = s.y * TILE;
+    const cols = s.lines.map(id => net.lineById[id].color);
+    P(c2, X + 2, Y + 2, 12, 12, '#111');
+    P(c2, X + 3, Y + 3, 10, 10, cols[0]);
+    if (cols[1]) P(c2, X + 8, Y + 3, 5, 10, cols[1]);
+    if (cols[2]) P(c2, X + 3, Y + 9, 10, 4, cols[2]);
+    M_GLYPH.forEach((row, j) => { for (let i = 0; i < 5; i++) if (row[i] === '#') P(c2, X + 5 + i, Y + 5 + j, 1, 1, '#fff'); });
   }
 
   function renderMap(express) {
-    m.clearRect(0, 0, BUF_W, BUF_H);
-    drawRoads(m);
+    m.clearRect(0, 0, WORLD_W, WORLD_H);
+    const r0 = mulberry32(1234);
+    for (let y = 0; y < MAP_H; y++) for (let x = 0; x < MAP_W; x++) if (grid[y][x] === ROAD) drawRoadTile(m, x, y, r0);
     blocks.forEach(bl => {
       const ox = bl.bx * TILE, oy = bl.by * TILE;
       const r = mulberry32((bl.bx * 73856093) ^ (bl.by * 19349663) ^ 0x9e37);
       if (bl.type === 'park') { drawPark(m, ox, oy, r); return; }
       if (bl.type === 'hill') { drawHill(m, ox, oy, r); return; }
-      drawBlockBase(m, ox, oy, bl.zone);
-      if (bl.type === 'home') { drawHome(m, ox, oy); return; }
+      if (bl.type === 'home') { drawHome(m, ox, oy, r); return; }
+      blockGround(m, ox, oy, bl.zone, r);
       if (bl.type === 'hub') {
         const h = bl.hub;
-        if (h.kind === 'tower') drawTower(m, ox, oy, r, true);
+        if (h.kind === 'tower') drawTower(m, ox, oy, r, { gold: true, helipad: h.bx === 10 });
         else if (h.kind === 'office') drawOffice(m, ox, oy, h.zone, r);
         else if (h.kind === 'hospital') drawHospital(m, ox, oy);
         else if (h.kind === 'warehouse') drawWarehouse(m, ox, oy);
         else if (h.kind === 'workshop') drawWorkshop(m, ox, oy);
         else if (h.kind === 'construction') drawConstruction(m, ox, oy);
-        else if (h.kind === 'delivery') drawStall(m, ox, oy, r, '#5fb35a');
-        else drawStall(m, ox, oy, r, h.zone === 'per' ? '#f0609e' : '#e8443a');
+        else if (h.kind === 'delivery') drawDelivery(m, ox, oy);
+        else drawStall(m, ox, oy, r, h.zone === 'per' ? ['#e8559a', '#2aa8b8'] : ['#d64035', '#f2b632']);
         return;
       }
-      if (bl.zone === 'cbd') { if (r() < 0.8) drawTower(m, ox, oy, r, false); else drawPlaza(m, ox, oy, r); }
-      else if (bl.zone === 'int') drawHouseRow(m, ox, oy, r, null);
+      if (bl.zone === 'cbd') { if (r() < 0.8) drawTower(m, ox, oy, r, { helipad: r() < 0.2 }); else drawPlaza(m, ox, oy); }
+      else if (bl.zone === 'int') drawColonial(m, ox, oy, r);
       else drawSelfBuilt(m, ox, oy, r);
     });
-    // zone seams
-    P(m, 13 * TILE - 1, 0, 1, BUF_H, 'rgba(255,255,255,0.10)');
-    P(m, 25 * TILE - 1, 0, 1, BUF_H, 'rgba(255,255,255,0.10)');
-    // transit lines
     const net = buildTransit(express);
-    net.lines.forEach((l, li) => {
-      const off = [0, 1, -1, 2][li] || 0;
+    net.lines.forEach(l => {
       for (let i = 0; i < l.stops.length - 1; i++) {
         const [ax, ay] = l.stops[i], [bx, by] = l.stops[i + 1];
-        const x0 = Math.min(ax, bx) * TILE + 3 + off, y0 = Math.min(ay, by) * TILE + 3 + off;
-        const w = Math.abs(ax - bx) * TILE + 2, h = Math.abs(ay - by) * TILE + 2;
-        P(m, x0, y0, ax === bx ? 2 : w, ay === by ? 2 : h, l.color);
+        const x0 = Math.min(ax, bx) * TILE + 6, y0 = Math.min(ay, by) * TILE + 6;
+        const W = ax === bx ? 4 : Math.abs(ax - bx) * TILE + 4, H = ay === by ? 4 : Math.abs(ay - by) * TILE + 4;
+        P(m, x0 - 1, y0 - 1, W + 2, H + 2, 'rgba(0,0,0,0.45)');
+        P(m, x0, y0, W, H, l.color);
+        if (ay === by) for (let k = x0; k < x0 + W; k += 4) P(m, k, y0 + 1, 2, 1, 'rgba(255,255,255,0.45)');
+        else for (let k = y0; k < y0 + H; k += 4) P(m, x0 + 1, k, 1, 2, 'rgba(255,255,255,0.45)');
       }
     });
-    net.stations.forEach(s => {
-      const x = s.x * TILE, y = s.y * TILE;
-      P(m, x + 1, y + 1, 6, 6, '#000');
-      P(m, x + 2, y + 2, 4, 4, '#f6e7cf');
-      const cols = s.lines.map(id => net.lineById[id].color);
-      P(m, x + 3, y + 3, 2, 2, cols[0]);
-      if (cols[1]) P(m, x + 4, y + 3, 1, 2, cols[1]);
-    });
+    net.stations.forEach(s => drawStationSign(m, s, net));
     return net;
   }
 
-  /* Pixel bitmaps */
+  /* Icons for job bubbles */
   const ICONS = {
-    brief: { rows: ['..####..', '.#....#.', '########', '#yyyyyy#', '#yy##yy#', '#yyyyyy#', '#yyyyyy#', '########'], pal: { '#': '#3a2414', y: '#ffcc4d' } },
-    basket: { rows: ['.#....#.', '..#..#..', '########', '#gGgGgG#', '#GgGgGg#', '#gGgGgG#', '.######.', '........'], pal: { '#': '#5b3a1e', g: '#7bd389', G: '#3f8f4f' } },
-    heart: { rows: ['.##.##..', '#######.', '#######.', '.#####..', '..###...', '...#....'], pal: { '#': '#ff6b6b' } },
-    x: { rows: ['#....#', '.#..#.', '..##..', '..##..', '.#..#.', '#....#'], pal: { '#': '#e8443a' } }
+    brief: { rows: ['...####...', '..#....#..', '##########', '#yyyyyyyy#', '#yyy##yyy#', '#yyyyyyyy#', '#yyyyyyyy#', '##########'], pal: { '#': '#4a2e14', y: '#f2b632' } },
+    basket: { rows: ['..#....#..', '...#..#...', '##########', '#gGgGgGgG#', '#GgGgGgGg#', '#gGgGgGgG#', '.########.'], pal: { '#': '#5b3a1e', g: '#7bd389', G: '#3f9b4b' } },
+    heart: { rows: ['.##..##.', '########', '########', '.######.', '..####..', '...##...'], pal: { '#': '#e8434f' } },
+    x: { rows: ['##....##', '.##..##.', '..####..', '...##...', '..####..', '.##..##.', '##....##'], pal: { '#': '#d64035' } }
   };
-  function drawIcon(c2, icon, x, y, alpha) {
-    c2.globalAlpha = alpha == null ? 1 : alpha;
+  function drawIcon(c2, icon, x, y) {
     icon.rows.forEach((row, j) => {
-      for (let i = 0; i < row.length; i++) {
-        const c = row[i];
-        if (c !== '.') P(c2, x + i, y + j, 1, 1, icon.pal[c]);
-      }
+      for (let i = 0; i < row.length; i++) if (row[i] !== '.') P(c2, x + i, y + j, 1, 1, icon.pal[row[i]]);
     });
-    c2.globalAlpha = 1;
+  }
+  function drawBubble(c2, x, y, border, icon) {
+    P(c2, x, y + 1, 16, 12, border);
+    P(c2, x + 1, y, 14, 14, border);
+    P(c2, x + 1, y + 1, 14, 12, '#fffaf1');
+    P(c2, x + 6, y + 14, 4, 1, border);
+    P(c2, x + 7, y + 15, 2, 1, border);
+    drawIcon(c2, icon, x + 3, y + 3);
   }
 
-  const AVATAR_PAL = { h: '#2b1d14', s: '#c68642', e: '#1a1a1a', o: '#ff6b35', p: '#2d3a8c', k: '#141414' };
-  const AV_HEAD = {
-    down: ['..hhh..', '.hhhhh.', '.seses.', '..sss..'],
-    up: ['..hhh..', '.hhhhh.', '.hhhhh.', '..sss..'],
-    left: ['..hhh..', '.hhhhh.', '.esss..', '..sss..'],
-    right: ['..hhh..', '.hhhhh.', '..ssse.', '..sss..']
-  };
-  const AV_BODY = ['.ooooo.', 'sooooos', '.ooooo.', '.ppppp.'];
-  const AV_LEGS = [['.pp.pp.', '.kk.kk.'], ['pp...pp', 'kk...kk'], ['..ppp..', '..kkk..']];
-  function drawAvatar(c2, x, y, dir, frame) {
-    const rows = AV_HEAD[dir].concat(AV_BODY, AV_LEGS[frame]);
-    P(c2, x + 1, y + 10, 5, 1, 'rgba(0,0,0,0.35)');
-    rows.forEach((row, j) => {
-      for (let i = 0; i < row.length; i++) {
-        const c = row[i];
-        if (c !== '.') P(c2, x + i, y + j, 1, 1, AVATAR_PAL[c]);
-      }
-    });
+  /* People sprites (12 x 18) */
+  const PLAYER_PAL = { skin: '#c68642', skinD: '#9c6633', hair: '#2b1d14', shirt: '#e8743b', shirtD: '#b9541f', pants: '#2d3a8c', shoes: '#1a1a1a' };
+  function drawPerson(c2, x, y, dir, frame, pal = PLAYER_PAL) {
+    P(c2, x + 2, y + 16, 8, 2, 'rgba(0,0,0,0.28)');
+    const step = frame === 1 ? 1 : frame === 2 ? -1 : 0;
+    P(c2, x + 3, y + 12, 3, 4 - Math.max(0, step), pal.pants);
+    P(c2, x + 6, y + 12, 3, 4 - Math.max(0, -step), pal.pants);
+    P(c2, x + 3, y + 16 - Math.max(0, step), 3, 1, pal.shoes);
+    P(c2, x + 6, y + 16 - Math.max(0, -step), 3, 1, pal.shoes);
+    P(c2, x + 2, y + 7, 8, 6, pal.shirt);
+    P(c2, x + 2, y + 12, 8, 1, pal.shirtD);
+    if (dir === 'left' || dir === 'right') {
+      P(c2, x + (dir === 'left' ? 4 : 6), y + 8 + (step ? 1 : 0), 2, 4, pal.skin);
+    } else {
+      P(c2, x + 1, y + 8 + Math.max(0, step), 1, 4, pal.skin);
+      P(c2, x + 10, y + 8 + Math.max(0, -step), 1, 4, pal.skin);
+    }
+    P(c2, x + 2, y + 1, 8, 7, pal.skin);
+    P(c2, x + 2, y + 7, 8, 1, pal.skinD);
+    P(c2, x + 2, y, 8, 3, pal.hair);
+    if (dir === 'up') P(c2, x + 2, y + 3, 8, 3, pal.hair);
+    if (dir === 'left') { P(c2, x + 7, y + 3, 3, 3, pal.hair); P(c2, x + 3, y + 4, 1, 2, '#1a1a1a'); }
+    if (dir === 'right') { P(c2, x + 2, y + 3, 3, 3, pal.hair); P(c2, x + 8, y + 4, 1, 2, '#1a1a1a'); }
+    if (dir === 'down') { P(c2, x + 2, y + 3, 1, 2, pal.hair); P(c2, x + 9, y + 3, 1, 2, pal.hair); P(c2, x + 4, y + 4, 1, 2, '#1a1a1a'); P(c2, x + 7, y + 4, 1, 2, '#1a1a1a'); }
   }
 
   function polyPoint(pts, t) {
@@ -1086,7 +1233,7 @@
     sandboxN: 0,
     balance: START_BALANCE,
     home: null,
-    player: { x: 16, y: 12, rx: 16, ry: 12, dir: 'down', moving: false, prog: 0, from: null, to: null, path: [], pending: null, frame: 0, stepCount: 0 },
+    player: { x: 16, y: 12, rx: 16, ry: 12, dir: 'down', moving: false, prog: 0, from: null, to: null, path: [], pending: null, stepCount: 0 },
     clock: DAY_START,
     searchFares: 0,
     attempts: {},
@@ -1105,7 +1252,10 @@
     hover: null,
     time: 0,
     keys: new Set(),
-    lastFriction: null
+    queued: null,
+    overview: false,
+    tutorial: null,
+    cam: { x: WORLD_W / 2, y: WORLD_H / 2, zoom: 3 }
   };
 
   function log(event, data = {}) {
@@ -1129,24 +1279,25 @@
     const bal = $('#hud-balance');
     bal.textContent = money(G.balance);
     bal.classList.toggle('neg', G.balance < 0);
-    $('#hud-round').textContent = G.scen ? G.scen.label : 'TITLE';
-    $('#hud-clock').textContent = G.state === 'search' || G.state === 'ride' ? clock(G.clock) : G.state === 'month' ? 'WORKING' : '—';
+    $('#hud-round').textContent = G.scen ? G.scen.label : 'WorkReach';
+    $('#hud-clock').textContent = G.state === 'search' || G.state === 'ride' ? clock12(Math.min(G.clock, DAY_END)) : G.state === 'month' ? 'Working' : '—';
     const badge = $('#hud-badge');
     if (G.job) {
-      badge.textContent = G.job.formal ? 'FORMAL · IMSS' : 'INFORMAL';
-      badge.className = 'badge ' + (G.job.formal ? 'formal' : 'informal');
+      badge.textContent = G.job.formal ? 'Formal · IMSS' : 'Informal';
+      badge.className = 'chip ' + (G.job.formal ? 'formal' : 'informal');
     } else {
-      badge.textContent = 'SEEKING';
-      badge.className = 'badge none';
+      badge.textContent = 'Seeking work';
+      badge.className = 'chip none';
     }
-    let fr = null, label = 'Choose a home first';
+
+    let fr = null, sub = 'Choose a home first';
     if (G.home && NET) {
       if (G.job) {
         fr = G.job.commute;
-        label = Math.round(fr.time * 2) + ' min/day · ' + money(fr.fare * TRIPS) + '/mo';
+        sub = money(fr.fare * TRIPS) + '/month in fares';
       } else if (G.state === 'search' || G.state === 'ride') {
         fr = commute(HOMES[G.home].door, { x: G.player.x, y: G.player.y }, G.scen);
-        label = 'Working here: ' + Math.round(fr.time * 2) + ' min/day';
+        sub = 'if you worked right here';
       }
     }
     const bar = $('#hud-friction-bar');
@@ -1154,10 +1305,43 @@
       const v = clamp(fr.time * 2 / 240, 0, 1);
       bar.style.width = Math.round(v * 100) + '%';
       bar.style.background = v < 0.35 ? 'var(--green)' : v < 0.65 ? 'var(--gold)' : 'var(--red)';
+      $('#hud-friction').textContent = Math.round(fr.time * 2) + ' min/day';
     } else {
       bar.style.width = '0';
+      $('#hud-friction').textContent = '—';
     }
-    $('#hud-friction').textContent = label;
+    $('#hud-friction-sub').textContent = sub;
+
+    const box = $('#hud-infection');
+    const dz = G.scen && G.scen.disease;
+    box.hidden = !dz || !G.home;
+    if (dz && G.home) {
+      let risk = null, isub = 'household, this month';
+      if (G.job) risk = infectionRisk(G.scen, G.job.hub.kind, G.job.commute);
+      else if (G.state === 'search' || G.state === 'ride') {
+        const near = G.state === 'search' ? nearbyTarget() : null;
+        if (near && near.type === 'hub') { risk = infectionRisk(G.scen, near.hub.kind, commute(HOMES[G.home].door, near.hub.door, G.scen)); isub = 'if you work at ' + near.hub.name; }
+        else { risk = infectionRisk(G.scen, null, fr); isub = 'if you worked right here'; }
+      }
+      $('#hud-infect').textContent = risk ? Math.round(risk.household * 100) + '%' : '—';
+      $('#hud-infect-sub').textContent = isub;
+    }
+
+    let exp = '—', expSub = 'Walk up to a job';
+    if (G.job && G.month) {
+      exp = money(G.month.ledger.net);
+      expSub = G.job.name;
+    } else if (G.state === 'search' && G.home) {
+      const near = nearbyTarget();
+      if (near && near.type === 'hub') {
+        exp = money(estimate(near.hub).net);
+        expSub = near.hub.name;
+      }
+    }
+    const ex = $('#hud-expected');
+    ex.textContent = exp;
+    ex.classList.toggle('neg', exp.startsWith('−'));
+    $('#hud-expected-sub').textContent = expSub;
   }
 
   /* ==========================================================
@@ -1174,6 +1358,8 @@
   /* ==========================================================
    * Panels
    * ========================================================== */
+  const FOCUSABLE = '.card, .st-btn, .panel-actions .btn:not([disabled])';
+
   function showPanel({ title, body, buttons = [], closable = false, wide = false, onClose = null, focus = true }) {
     const ov = $('#overlay'), p = $('#panel');
     p.className = 'panel' + (wide ? ' wide' : '');
@@ -1189,12 +1375,15 @@
       el.addEventListener('click', () => { Snd.sfx('select'); bt.onClick(); });
       act.appendChild(el);
     });
+    if (!buttons.length) act.remove();
     ov.hidden = false;
     p.scrollTop = 0;
     G.panel = { closable, onClose };
+    G.keys.clear();
+    G.queued = null;
     if (focus) {
-      const f = p.querySelector('.card, .st-btn, .panel-actions .btn:not([disabled])');
-      if (f) setTimeout(() => f.focus({ preventScroll: true }), 30);
+      const fEl = p.querySelector(FOCUSABLE);
+      if (fEl) setTimeout(() => fEl.focus({ preventScroll: true }), 30);
     }
     return p;
   }
@@ -1206,19 +1395,32 @@
     G.panel = null;
     canvas.focus({ preventScroll: true });
     if (cb) cb();
+    if (G.state === 'search') refreshNearbyPrompt();
+  }
+
+  // Arrow keys move between the choices of any open panel.
+  function panelNav(code) {
+    const panel = $('#panel');
+    const items = [...panel.querySelectorAll(FOCUSABLE)].filter(el => el.offsetParent !== null);
+    if (!items.length) return;
+    let i = items.indexOf(document.activeElement);
+    const back = code === 'ArrowUp' || code === 'ArrowLeft';
+    if (i === -1) i = back ? items.length : -1;
+    const next = items[(i + (back ? -1 : 1) + items.length) % items.length];
+    next.focus();
+    next.scrollIntoView({ block: 'nearest' });
+    Snd.sfx('move');
   }
 
   /* ==========================================================
    * Round flow
    * ========================================================== */
-  function freshScenario(base) {
-    return JSON.parse(JSON.stringify(base));
-  }
+  const freshScenario = base => JSON.parse(JSON.stringify(base));
 
   function makeSandbox(n) {
     const s = freshScenario(SCENARIOS[0]);
     s.id = 'S' + n;
-    s.label = 'SANDBOX · M' + n;
+    s.label = 'Sandbox · Month ' + n;
     s.title = 'Sandbox · Month ' + n;
     const pool = SANDBOX_HEADLINES.slice();
     const heads = [];
@@ -1242,6 +1444,8 @@
     G.clock = DAY_START;
     G.month = null;
     G.ride = null;
+    G.tutorial = null;
+    setOverview(false);
     NET = renderMap(scen.express);
     G.state = 'intro';
     setPrompt(null);
@@ -1249,18 +1453,16 @@
     log('round_start', { detail: scen.prompt, headlines: scen.headlines || null });
     const rules = '<ul>' + scen.rules.map(r => '<li>' + esc(r) + '</li>').join('') + '</ul>';
     const first = scen.id === 'R1'
-      ? '<p class="note">Walk with arrows/WASD or click the map. Press SPACE or E next to a building or a station to interact. Every step uses search time, and the job hunt ends at 8 PM.</p>'
+      ? '<p class="note">Walk with the arrow keys or WASD, or click the map. Press SPACE or E next to a building or on a station sign to interact, and M to see the whole city. Every step uses search time, and the job hunt ends at 8 PM.</p>'
       : '';
     showPanel({
       title: esc(scen.title),
       body: '<div class="quote">' + esc(scen.prompt) + '</div>' + rules + first,
-      buttons: [{ label: 'CHOOSE WHERE TO LIVE ▶', onClick: housingPanel }]
+      buttons: [{ label: 'Choose where to live ▶', onClick: housingPanel }]
     });
   }
 
-  function rentFor(zone, scen = G.scen) {
-    return Math.round(ZONES[zone].rent * scen.rentMult[zone]);
-  }
+  const rentFor = (zone, scen = G.scen) => Math.round(ZONES[zone].rent * scen.rentMult[zone]);
 
   function housingPanel() {
     G.state = 'housing';
@@ -1270,7 +1472,8 @@
       const change = now !== base ? ' <span class="' + (now > base ? 'neg' : 'pos') + '">(' + (now > base ? '+' : '−') + Math.round(Math.abs(now / base - 1) * 100) + '%)</span>' : '';
       const extra = G.scen.homeExtra[z] ? '<span class="tag">+ ' + money(G.scen.homeExtra[z]) + ' water trucks</span>' : '';
       return '<button type="button" class="card" data-zone="' + z + '">' +
-        '<span class="ct" style="color:' + Z.label + '">' + esc(Z.name) + '</span>' +
+        '<span class="swatch" style="background:' + Z.color + '"></span>' +
+        '<span class="ct">' + esc(Z.name) + '</span>' +
         '<span class="cd">' + esc(Z.districts) + '</span>' +
         '<span class="rent">' + Z.tier + ' · ' + money(now) + '/mo' + change + '</span>' + extra +
         '<span class="cd">' + esc(Z.desc) + '</span>' +
@@ -1279,7 +1482,7 @@
     }).join('');
     const p = showPanel({
       title: 'Where will you live this month?',
-      body: '<div class="cards">' + cards + '</div><p class="note" style="margin-top:12px">Rent is paid no matter where you work. Commuting costs fares and time every day.</p>',
+      body: '<div class="cards">' + cards + '</div><p class="keys">Use <kbd>←</kbd> <kbd>→</kbd> to choose and <kbd>Enter</kbd> to confirm. Rent is paid no matter where you work; commuting costs fares and time every day.</p>',
       wide: true
     });
     p.querySelectorAll('.card').forEach(c => c.addEventListener('click', () => { Snd.sfx('coin'); chooseHome(c.dataset.zone); }));
@@ -1289,15 +1492,14 @@
     G.home = zone;
     const d = HOMES[zone].door;
     Object.assign(G.player, { x: d.x, y: d.y, rx: d.x, ry: d.y, moving: false, path: [], pending: null, dir: 'down' });
+    G.cam.x = d.x * TILE + 8;
+    G.cam.y = d.y * TILE;
     log('home_chosen', { zone, rent: rentFor(zone) });
     closePanel();
     G.state = 'search';
+    if (G.scen.id === 'R1') G.tutorial = { until: G.time + 14, steps: G.player.stepCount };
     updateHUD();
-    hintAtStart();
-  }
-
-  function hintAtStart() {
-    setPrompt('<b>JOB HUNT</b> Gold briefcases are formal jobs, green baskets are informal. Stations let you ride across town.');
+    setPrompt('<b>Job hunt</b> Gold briefcases are formal jobs, green baskets are informal. Press <kbd>M</kbd> for the city map.');
   }
 
   /* ==========================================================
@@ -1336,32 +1538,30 @@
 
   function nearbyTarget() {
     const p = G.player;
+    if (!NET) return null;
     const onStation = NET.stations.find(s => s.x === p.x && s.y === p.y);
     if (onStation) return { type: 'station', station: onStation };
-    for (const h of HUBS) {
-      if (p.x >= h.bx - 1 && p.x <= h.bx + 2 && p.y >= h.by - 1 && p.y <= h.by + 2) return { type: 'hub', hub: h };
-    }
-    for (const s of NET.stations) {
-      if (manhattan(s, p) <= 1) return { type: 'station', station: s };
-    }
+    for (const h of HUBS) if (nearBlock(p, h)) return { type: 'hub', hub: h };
+    for (const s of NET.stations) if (manhattan(s, p) <= 1) return { type: 'station', station: s };
     const home = HOMES[G.home];
-    if (home && p.x >= home.bx - 1 && p.x <= home.bx + 2 && p.y >= home.by - 1 && p.y <= home.by + 2) return { type: 'home' };
+    if (home && nearBlock(p, home)) return { type: 'home' };
     return null;
   }
 
   function refreshNearbyPrompt() {
     if (G.state !== 'search' || G.panel) return;
     const t = nearbyTarget();
+    updateHUD();
     if (!t) { setPrompt(null); return; }
     if (t.type === 'hub') {
       const h = t.hub;
-      setPrompt('<b>' + esc(h.name.toUpperCase()) + '</b> ' + (h.formal ? 'Formal · tier ' + h.tier : 'Informal') + ' · ' + money(wageFor(h)) + '/mo',
-        { label: 'E · VISIT', onClick: () => interactWith(t) });
+      setPrompt('<b>' + esc(h.name) + '</b> ' + (h.formal ? 'Formal · tier ' + h.tier : 'Informal') + ' · ' + money(wageFor(h)) + '/mo',
+        { label: 'E · Visit', onClick: () => interactWith(t) });
     } else if (t.type === 'station') {
-      setPrompt('<b>' + esc(t.station.name.toUpperCase()) + '</b> ' + t.station.lines.map(id => NET.lineById[id].name).join(' · '),
-        { label: 'E · RIDE', onClick: () => interactWith(t) });
+      setPrompt('<b>' + esc(t.station.name) + '</b> ' + t.station.lines.map(id => NET.lineById[id].name).join(' · '),
+        { label: 'E · Ride', onClick: () => interactWith(t) });
     } else {
-      setPrompt('<b>HOME</b> ' + esc(HOMES[G.home].label) + ' · rent ' + money(rentFor(G.home)) + '/mo');
+      setPrompt('<b>Home</b> ' + esc(HOMES[G.home].label) + ' · rent ' + money(rentFor(G.home)) + '/mo');
     }
   }
 
@@ -1373,8 +1573,8 @@
 
   function interact() {
     const t = nearbyTarget();
-    if (t) interactWith(t);
-    else { Snd.sfx('error'); setPrompt('Nothing here. Walk next to a building with an icon, or a station.'); }
+    if (t && t.type !== 'home') interactWith(t);
+    else { Snd.sfx('error'); setPrompt('Nothing to do here. Walk next to a building with a bubble, or onto a station sign.'); }
   }
 
   function walkTo(target, pending) {
@@ -1417,20 +1617,24 @@
     const body =
       '<p>' + esc(h.blurb) + '</p>' +
       '<dl class="kv">' +
-      '<dt>Type</dt><dd>' + (h.formal ? '<span style="color:var(--gold)">Formal contract · IMSS</span>' : '<span style="color:var(--pink)">Informal · no contract</span>') + '</dd>' +
+      '<dt>Type</dt><dd>' + (h.formal ? '<b style="color:#a77b10">Formal contract · IMSS</b>' : '<b style="color:#b0367f">Informal · no contract</b>') + '</dd>' +
       '<dt>Tier</dt><dd><span class="stars">' + stars(h.tier) + '</span> ' + (h.tier === 1 ? 'hired on the spot' : h.tier === 2 ? 'interview, moderate' : 'interview, fast and precise') + '</dd>' +
       '<dt>Wage</dt><dd>' + money(e.wage) + '/month' + (h.variable ? ' (varies ±' + Math.round(h.variable * 100) + '%)' : !h.formal ? ' (varies ±8%)' : '') + '</dd>' +
       '<dt>Commute</dt><dd>' + Math.round(e.c.time) + ' min each way · ' + money(e.c.fare) + '/trip<br><span class="note">' + esc(e.c.desc) + '</span></dd>' +
       '<dt>Est. month</dt><dd><b class="' + (e.net >= 0 ? 'pos' : 'neg') + '">' + money(e.net) + '</b> <span class="note">before shocks</span></dd>' +
+      (G.scen.disease ? (() => {
+        const risk = infectionRisk(G.scen, h.kind, e.c);
+        return '<dt>Infection risk</dt><dd><b class="neg">' + Math.round(risk.household * 100) + '%</b> for your household this month' +
+          (risk.crowdedMin ? ' <span class="note">(' + risk.crowdedMin + ' min/day on crowded transit)</span>' : '') +
+          '<br><span class="note">If someone gets sick: ' + money(careCost(G.scen, h.formal, e.wage)) + (h.formal ? ' with IMSS' : ' without IMSS (4× the care cost, plus unpaid sick days)') + '</span></dd>';
+      })() : '') +
       '</dl>' +
-      (tried === 'failed' ? '<p class="neg">You already interviewed here this month and did not pass.</p>' : '');
+      (tried === 'failed' ? '<p class="neg">You already interviewed here this month and did not pass.</p>' : '') +
+      (tried === 'passed' ? '<p class="note">You turned down this offer earlier today.</p>' : '');
     const buttons = [];
-    if (h.formal) {
-      buttons.push({ label: 'INTERVIEW (60 MIN)', cls: 'gold', disabled: !!tried, onClick: () => beginInterview(h) });
-    } else {
-      buttons.push({ label: 'TAKE THIS JOB (15 MIN)', cls: 'good', onClick: () => takeInformal(h) });
-    }
-    buttons.push({ label: 'LEAVE', cls: 'alt', onClick: closePanel });
+    if (h.formal) buttons.push({ label: 'Interview (60 min)', cls: 'gold', disabled: !!tried, onClick: () => interviewIntro(h) });
+    else buttons.push({ label: 'Take this job (15 min)', cls: 'good', onClick: () => takeInformal(h) });
+    buttons.push({ label: 'Leave', cls: 'alt', onClick: closePanel });
     log('hub_viewed', { employer: h.id, tier: h.tier, formal: h.formal, wage: e.wage, commute_min_day: Math.round(e.c.time * 2) });
     showPanel({ title: esc(h.name), body, buttons, closable: true });
   }
@@ -1450,14 +1654,14 @@
     const e = estimate(h);
     showPanel({
       title: 'Offer from ' + esc(h.name),
-      body: '<p>You passed. Contract validation took 30 minutes of paperwork.</p>' +
+      body: '<p>You passed! Contract paperwork took 30 more minutes.</p>' +
         '<dl class="kv"><dt>Wage</dt><dd>' + money(wage) + '/month</dd><dt>Benefits</dt><dd>IMSS health coverage, paid sick leave, daycare access</dd>' +
-        '<dt>Commute</dt><dd>' + Math.round(e.c.time * 2) + ' min/day</dd><dt>Est. month</dt><dd class="' + (e.net >= 0 ? 'pos' : 'neg') + '">' + money(e.net) + '</dd></dl>' +
+        '<dt>Commute</dt><dd>' + Math.round(e.c.time * 2) + ' min/day</dd><dt>Est. month</dt><dd class="' + (e.net >= 0 ? 'pos' : 'neg') + '"><b>' + money(e.net) + '</b></dd></dl>' +
         '<p class="note">If you keep looking, this offer expires.</p>',
       buttons: [
-        { label: 'ACCEPT OFFER', cls: 'good', onClick: () => acceptJob(h, wage, false) },
+        { label: 'Accept offer', cls: 'good', onClick: () => acceptJob(h, wage, false) },
         {
-          label: 'KEEP SEARCHING', cls: 'alt', onClick: () => {
+          label: 'Keep searching', cls: 'alt', onClick: () => {
             log('offer_declined', { employer: h.id, tier: h.tier, formal: true, wage });
             closePanel();
             if (G.clock >= DAY_END) endOfDay();
@@ -1483,7 +1687,7 @@
       title: '8 PM. The job hunt is over.',
       body: '<p>You ran out of time today. A neighbor offers you local informal work at <b>' + esc(best.name) + '</b>, paying a bit less than usual.</p>' +
         '<dl class="kv"><dt>Wage</dt><dd>' + money(wage) + '/month</dd><dt>Type</dt><dd>Informal · no contract</dd></dl>',
-      buttons: [{ label: 'TAKE THE WORK', onClick: () => acceptJob(best, wage, true) }]
+      buttons: [{ label: 'Take the work', onClick: () => acceptJob(best, wage, true) }]
     });
   }
 
@@ -1492,6 +1696,7 @@
     G.job = { hub: h, id: h.id, name: h.name, tier: h.tier, formal: h.formal, wage, fallback, commute: c };
     log('job_accepted', {
       employer: h.id, tier: h.tier, formal: h.formal, wage, fallback,
+      infection_risk: G.scen.disease ? +infectionRisk(G.scen, h.kind, c).household.toFixed(3) : null,
       commute_min_day: Math.round(c.time * 2), fare_per_trip: +c.fare.toFixed(2), route: c.desc
     });
     Snd.sfx('coin');
@@ -1500,58 +1705,97 @@
   }
 
   /* ==========================================================
-   * Interview mini-game
+   * Interview mini-game: intro → Start → 3-2-1 → watch → repeat
    * ========================================================== */
   const IV_CFG = {
-    2: { len: 5, show: 520, limit: 10000, pass: 0.8, name: 'Moderate' },
-    3: { len: 7, show: 330, limit: 6500, pass: 1, name: 'Fast & precise' }
+    2: { len: 5, show: 650, limit: 10000, pass: 0.8, name: 'Moderate' },
+    3: { len: 7, show: 480, limit: 7000, pass: 1, name: 'Fast & precise' }
   };
 
-  function beginInterview(h) {
-    G.attempts[h.id] = 'started';
-    G.clock += 60;
-    updateHUD();
+  function interviewIntro(h) {
     const cfg = IV_CFG[h.tier];
-    const dirs = ['up', 'right', 'down', 'left'];
-    const seq = Array.from({ length: cfg.len }, () => dirs[Math.floor(G.rng() * 4)]);
     const p = showPanel({
       title: 'Interview · ' + esc(h.name),
       body:
-        '<p>Skills test (' + cfg.name + '). Watch the sequence, then repeat it with the arrow keys, WASD or the buttons. ' +
-        (cfg.pass < 1 ? 'You can miss the last step and still pass.' : 'Every step must be right.') + '</p>' +
+        '<p><b>Skills test: ' + cfg.name + '.</b> After a 3-2-1 countdown the pad flashes a sequence of <b>' + cfg.len + '</b> arrows. Watch it, then repeat it with the arrow keys, WASD or by tapping the buttons. ' +
+        (cfg.pass < 1 ? 'You can miss the last step and still pass.' : 'Every step must be right.') + ' You have ' + Math.round(cfg.limit / 1000) + ' seconds to answer.</p>' +
         '<div class="iv">' +
-        '<div class="iv-status">GET READY…</div>' +
+        '<div class="iv-status">Ready when you are</div>' +
         '<div class="pad">' +
-        '<button type="button" data-dir="up" aria-label="Up" disabled>▲</button>' +
-        '<button type="button" data-dir="left" aria-label="Left" disabled>◀</button>' +
-        '<div class="core">' + h.tier + '★</div>' +
-        '<button type="button" data-dir="right" aria-label="Right" disabled>▶</button>' +
-        '<button type="button" data-dir="down" aria-label="Down" disabled>▼</button>' +
+        '<button type="button" data-dir="up" aria-label="Up" disabled>▲<span class="stepno"></span></button>' +
+        '<button type="button" data-dir="left" aria-label="Left" disabled>◀<span class="stepno"></span></button>' +
+        '<div class="core">' + stars(h.tier) + '</div>' +
+        '<button type="button" data-dir="right" aria-label="Right" disabled>▶<span class="stepno"></span></button>' +
+        '<button type="button" data-dir="down" aria-label="Down" disabled>▼<span class="stepno"></span></button>' +
         '</div>' +
-        '<div class="iv-progress">' + seq.map(() => '<span></span>').join('') + '</div>' +
+        '<div class="iv-progress">' + Array.from({ length: cfg.len }, () => '<span></span>').join('') + '</div>' +
         '<div class="timer"><div></div></div>' +
         '</div>',
-      focus: false
+      buttons: [
+        { label: 'Start interview', cls: 'gold', onClick: () => startInterview(h) },
+        { label: 'Not now', cls: 'alt', onClick: () => { G.iv = null; closePanel(); } }
+      ]
     });
-    const iv = { hub: h, cfg, seq, idx: 0, phase: 'show', start: 0, timers: [], el: p, done: false };
-    G.iv = iv;
+    G.iv = { hub: h, cfg, phase: 'ready', el: p, timers: [], done: false };
     p.querySelectorAll('.pad button').forEach(btn => btn.addEventListener('click', () => ivInput(btn.dataset.dir)));
+  }
+
+  async function startInterview(h) {
+    const iv = G.iv;
+    if (!iv || iv.phase !== 'ready') return;
+    iv.phase = 'countdown';
+    G.attempts[h.id] = 'started';
+    G.clock += 60;
+    updateHUD();
+    const p = iv.el;
+    p.querySelector('.panel-actions').style.visibility = 'hidden';
+    canvas.focus({ preventScroll: true });
     const status = p.querySelector('.iv-status');
-    let t = 700;
-    seq.forEach((d, i) => {
+    status.classList.add('count');
+    for (const n of ['3', '2', '1']) {
+      if (G.iv !== iv) return;
+      status.textContent = n;
+      Snd.sfx('count');
+      await sleep(750);
+    }
+    if (G.iv !== iv) return;
+    status.classList.remove('count');
+    status.textContent = 'Watch!';
+    Snd.sfx('go');
+    iv.phase = 'show';
+    const dirs = ['up', 'right', 'down', 'left'];
+    iv.seq = Array.from({ length: iv.cfg.len }, () => dirs[Math.floor(G.rng() * 4)]);
+    iv.idx = 0;
+    let t = 500;
+    const core = p.querySelector('.pad .core');
+    const dots = p.querySelectorAll('.iv-progress span');
+    // Each step lights for ~55% of its slot, then goes fully dark, so a repeated
+    // arrow reads as two numbered flashes rather than one long flicker.
+    iv.seq.forEach((d, i) => {
       iv.timers.push(setTimeout(() => {
-        status.textContent = 'WATCH ' + (i + 1) + '/' + seq.length;
-        flash(d, 'lit', cfg.show * 0.7);
+        status.textContent = 'Watch ' + (i + 1) + '/' + iv.seq.length;
+        core.textContent = String(i + 1);
+        core.classList.add('step');
+        const btn = p.querySelector('.pad button[data-dir="' + d + '"]');
+        btn.querySelector('.stepno').textContent = String(i + 1);
+        btn.classList.add('lit');
+        dots[i].classList.add('seen');
         Snd.padTone(d);
       }, t));
-      t += cfg.show;
+      iv.timers.push(setTimeout(() => {
+        p.querySelectorAll('.pad button.lit').forEach(b => b.classList.remove('lit'));
+        core.textContent = '';
+      }, t + iv.cfg.show * 0.55));
+      t += iv.cfg.show;
     });
     iv.timers.push(setTimeout(() => {
+      core.classList.remove('step');
+      core.textContent = stars(iv.hub.tier);
+      dots.forEach(dd => dd.classList.remove('seen'));
       iv.phase = 'input';
       iv.start = performance.now();
-      status.textContent = 'YOUR TURN!';
+      status.textContent = 'Your turn!';
       p.querySelectorAll('.pad button').forEach(btn => { btn.disabled = false; });
-      p.querySelector('.pad button[data-dir="up"]').focus({ preventScroll: true });
     }, t + 150));
   }
 
@@ -1601,7 +1845,7 @@
     const rec = { employer: h.id, tier: h.tier, formal: true, task_score: +score.toFixed(2), passed, reason, response_ms: ms, sequence_length: iv.seq.length };
     G.interviews.push(rec);
     log('interview', rec);
-    iv.el.querySelector('.iv-status').textContent = passed ? 'PASSED!' : reason === 'timeout' ? 'TIME UP' : 'WRONG MOVE';
+    iv.el.querySelector('.iv-status').textContent = passed ? 'Passed!' : reason === 'timeout' ? 'Time is up' : 'Wrong move';
     iv.el.querySelectorAll('.pad button').forEach(btn => { btn.disabled = true; });
     Snd.sfx(passed ? 'pass' : 'fail');
     setTimeout(() => {
@@ -1612,8 +1856,8 @@
         title: 'Not this time',
         body: '<p>Score: <b>' + Math.round(score * 100) + '%</b> (needed ' + Math.round(iv.cfg.pass * 100) + '%). ' +
           esc(h.name) + ' will not call back this month.</p>' +
-          '<p class="note">It is ' + clock(G.clock) + '. You can try another employer, or take informal or lower-tier work nearby.</p>',
-        buttons: [{ label: 'BACK TO THE STREET', onClick: () => { closePanel(); if (G.clock >= DAY_END) endOfDay(); } }]
+          '<p class="note">It is ' + clock12(Math.min(G.clock, DAY_END)) + '. You can try another employer, or take informal or lower-tier work nearby.</p>',
+        buttons: [{ label: 'Back to the street', onClick: () => { closePanel(); if (G.clock >= DAY_END) endOfDay(); } }]
       });
     }, 900);
   }
@@ -1624,18 +1868,20 @@
   function stationPanel(s) {
     Snd.sfx('open');
     const here = NET.AP[s.key];
-    const chips = s.lines.map(id => '<span class="chip" style="background:' + NET.lineById[id].color + '">' + esc(NET.lineById[id].name) + '</span>').join('');
+    const chips = s.lines.map(id => '<span class="chipline" style="background:' + NET.lineById[id].color + '">' + esc(NET.lineById[id].name) + '</span>').join('');
     const list = NET.stations
       .filter(t => t.key !== s.key && here[t.key])
-      .map(t => ({ t, r: here[t.key], f: here[t.key].fare * fareFactor(G.scen, s, t) }))
+      .map(t => ({ t, r: here[t.key], fr: here[t.key].fare * fareFactor(G.scen, s, t) }))
       .sort((a, c) => a.r.time - c.r.time)
-      .map(({ t, r, f }) =>
-        '<button type="button" class="st-btn" data-key="' + t.key + '"><span>' + esc(t.name) + ' <small style="color:' + ZONES[zoneOf(t.x)].label + '">' + ZONES[zoneOf(t.x)].short + '</small></span>' +
-        '<small>' + Math.round(r.time) + ' MIN · ' + money(f) + '</small></button>').join('');
+      .map(({ t, r, fr }) => {
+        const z = ZONES[zoneOf(t.x)];
+        return '<button type="button" class="st-btn" data-key="' + t.key + '"><span>' + esc(t.name) + ' <span class="zone-tag" style="background:' + z.color + '">' + z.short + '</span></span>' +
+          '<small>' + Math.round(r.time) + ' min · ' + money(fr) + '</small></button>';
+      }).join('');
     const p = showPanel({
       title: 'Station ' + esc(s.name),
-      body: '<div>' + chips + '</div><p class="note">Pick a destination. Riding is fast, but every trip costs a fare and waiting time.</p><div class="stations">' + list + '</div>',
-      buttons: [{ label: 'STAY HERE', cls: 'alt', onClick: closePanel }],
+      body: '<div>' + chips + '</div><p class="note">Pick a destination with the arrow keys or a click. Riding is fast, but every trip costs a fare and waiting time.</p><div class="stations">' + list + '</div>',
+      buttons: [{ label: 'Stay here', cls: 'alt', onClick: closePanel }],
       closable: true
     });
     p.querySelectorAll('.st-btn').forEach(btn => btn.addEventListener('click', () => ride(s, NET.stationMap.get(btn.dataset.key))));
@@ -1647,10 +1893,10 @@
     closePanel();
     Snd.sfx('train');
     G.state = 'ride';
-    G.ride = { from, to, r, fare, t: 0, dur: clamp(r.pts.length * 0.35, 1, 2.6), color: NET.lineById[r.lines[0]].color };
+    G.ride = { from, to, r, fare, t: 0, dur: clamp(r.pts.length * 0.45, 1.2, 3.2), color: NET.lineById[r.lines[0]].color };
     G.player.path = [];
     G.player.pending = null;
-    setPrompt('<b>RIDING</b> ' + esc(from.name) + ' → ' + esc(to.name));
+    setPrompt('<b>Riding</b> ' + esc(from.name) + ' → ' + esc(to.name));
   }
 
   function endRide() {
@@ -1674,6 +1920,19 @@
   function rollShocks(job) {
     const s = G.scen, r = G.rng, out = [];
     const w = job.wage, cm = job.commute.time;
+    if (s.disease) {
+      const risk = infectionRisk(s, job.hub.kind, job.commute);
+      const roll = r();
+      log('infection_roll', { detail: 'household risk ' + risk.household.toFixed(3), cost: null, covered: job.formal, passed: roll >= risk.household });
+      if (roll < risk.household) {
+        const who = r() < risk.you / (risk.household || 1) ? 'You caught' : 'One of your dependents caught';
+        out.push({
+          day: 4 + Math.floor(r() * 15),
+          title: who + ' coronavirus. ' + (job.formal ? 'IMSS covers most of the care and your sick days are paid' : 'With no IMSS, private care costs 4× more and the sick days go unpaid'),
+          cost: careCost(s, job.formal, w), covered: false, disease: true
+        });
+      }
+    }
     if (!job.formal) {
       if (s.forcedInformalShock) {
         out.push({ day: 11, title: 'Your child needs emergency care. With no IMSS, a private hospital and 3 lost workdays', cost: Math.round(7800 + w / 22 * 3), covered: false });
@@ -1707,9 +1966,11 @@
     };
     ledger.shockTotal = ledger.shocks.reduce((a, x) => a + x.cost, 0);
     ledger.net = ledger.gross - ledger.tax - ledger.rent - ledger.fares - ledger.timeCost - ledger.household - ledger.childcare - ledger.shockTotal;
-    G.month = { t: 0, dur: 6.5, hold: 0, ledger, shown: new Set(), pts: c.pts.length > 1 ? c.pts : [HOMES[G.home].door, job.hub.door] };
+    G.month = { t: 0, dur: 7, hold: 0, lastDay: 0, ledger, shown: new Set(), pts: c.pts.length > 1 ? c.pts : [HOMES[G.home].door, job.hub.door] };
     G.state = 'month';
-    setPrompt('<b>DAY 1</b> Working the month… (SPACE to skip)');
+    G.tutorial = null;
+    setOverview(false);
+    setPrompt('<b>Day 1</b> Working the month… (SPACE to skip)');
     updateHUD();
   }
 
@@ -1721,15 +1982,16 @@
     const ev = mo.ledger.shocks.find(x => x.day <= day && !mo.shown.has(x));
     if (ev) {
       mo.shown.add(ev);
-      mo.hold = 1.8;
+      mo.hold = 2;
+      mo.lastDay = 0;
       Snd.sfx(ev.covered ? 'covered' : 'shock');
       log('shock', { detail: ev.title, cost: ev.cost, covered: ev.covered, day: ev.day });
-      setPrompt('<b>DAY ' + ev.day + '</b> ' + esc(ev.title) + ': ' + (ev.covered ? '<span class="pos">covered</span>' : '<span class="neg">' + money(-ev.cost) + '</span>'));
+      setPrompt('<b>Day ' + ev.day + '</b> ' + esc(ev.title) + ': ' + (ev.covered ? '<b class="pos">covered</b>' : '<b class="neg">' + money(-ev.cost) + '</b>'));
       return;
     }
     if (day !== mo.lastDay) {
       mo.lastDay = day;
-      setPrompt('<b>DAY ' + day + '/22</b> Commuting ' + Math.round(G.job.commute.time * 2) + ' min a day… (SPACE to skip)');
+      setPrompt('<b>Day ' + day + '/22</b> Commuting ' + Math.round(G.job.commute.time * 2) + ' min a day… (SPACE to skip)');
     }
     if (mo.t >= mo.dur) finishMonth();
   }
@@ -1752,7 +2014,9 @@
       commute_min_day: Math.round(job.commute.time * 2), fare_per_trip: +job.commute.fare.toFixed(2), route: job.commute.desc,
       interviews: G.interviews.length, interviews_passed: G.interviews.filter(x => x.passed).length,
       formal_applications: G.interviews.length, search_fares: Math.round(G.searchFares),
-      search_minutes: Math.round(Math.min(G.clock, DAY_END) - DAY_START), balance_after: Math.round(G.balance)
+      search_minutes: Math.round(Math.min(G.clock, DAY_END) - DAY_START), balance_after: Math.round(G.balance),
+      infection_risk: G.scen.disease ? +infectionRisk(G.scen, job.hub.kind, job.commute).household.toFixed(3) : null,
+      infected: G.scen.disease ? L.shocks.some(x => x.disease) : null
     };
     G.results.push(result);
     log('round_end', { employer: job.id, tier: job.tier, formal: job.formal, wage: L.gross, net: L.net, commute_min_day: result.commute_min_day });
@@ -1763,7 +2027,7 @@
       const cls = v > 0 ? 'pos' : v < 0 ? 'neg' : 'zero';
       return '<tr><td>' + label + (note ? '<br><span class="note">' + note + '</span>' : '') + '</td><td class="amt ' + cls + '">' + (v === 0 ? '$0' : signed(v)) + '</td></tr>';
     };
-    let rows = row('Gross wage · ' + esc(job.name), L.gross, job.formal ? 'Formal contract' : 'Informal' + (job.fallback ? ' · end-of-day fallback' : ''));
+    let rows = row('<b>Gross wage</b> · ' + esc(job.name), L.gross, job.formal ? 'Formal contract' : 'Informal' + (job.fallback ? ' · end-of-day fallback' : ''));
     rows += job.formal ? row('ISR + IMSS contributions', -L.tax, 'Buys health coverage, sick pay and daycare') : row('Taxes', 0, 'None, but no protection either');
     rows += row('Housing rent · ' + ZONES[G.home].short, -L.rent);
     rows += row('Commute fares', -L.fares, TRIPS + ' trips × ' + money(job.commute.fare) + ' · ' + esc(job.commute.desc));
@@ -1778,10 +2042,10 @@
     const last = G.scen.id === 'R3';
     const buttons = [];
     if (isMain) {
-      buttons.push({ label: last ? 'SEE YOUR RESULTS ▶' : 'NEXT ROUND ▶', onClick: () => { closePanel(); nextRound(); } });
+      buttons.push({ label: last ? 'See your results ▶' : 'Next round ▶', onClick: () => { closePanel(); nextRound(); } });
     } else {
-      buttons.push({ label: 'NEXT MONTH ▶', onClick: () => { closePanel(); G.sandboxN++; startRound(makeSandbox(G.sandboxN)); } });
-      buttons.push({ label: 'RESULTS', cls: 'alt', onClick: () => { closePanel(); debrief(); } });
+      buttons.push({ label: 'Next month ▶', onClick: () => { closePanel(); G.sandboxN++; startRound(makeSandbox(G.sandboxN)); } });
+      buttons.push({ label: 'Results', cls: 'alt', onClick: () => { closePanel(); debrief(); } });
     }
     showPanel({
       title: esc(G.scen.title) + ' · Month ledger',
@@ -1810,6 +2074,7 @@
   function debrief() {
     G.state = 'debrief';
     G.job = null;
+    G.month = null;
     setPrompt(null);
     updateHUD();
     const main = ['R1', 'R2', 'R3'].map(id => G.results.find(r => r.round === id)).filter(Boolean);
@@ -1820,19 +2085,17 @@
 
     const tableRows = G.results.map(r =>
       '<tr><td>' + esc(r.round) + '</td><td>' + esc(ZONES[r.home_zone].short) + '</td><td>' + esc(r.employer_name) + '</td>' +
-      '<td>' + (r.formal ? '<span style="color:var(--gold)">Formal</span>' : '<span style="color:var(--pink)">Informal</span>') + '</td>' +
-      '<td>' + r.commute_min_day + ' min</td><td class="' + (r.net_savings >= 0 ? 'pos' : 'neg') + '">' + money(r.net_savings) + '</td></tr>').join('');
+      '<td>' + (r.formal ? '<b style="color:#a77b10">Formal</b>' : '<b style="color:#b0367f">Informal</b>') + '</td>' +
+      '<td>' + r.commute_min_day + ' min</td><td class="' + (r.net_savings >= 0 ? 'pos' : 'neg') + '"><b>' + money(r.net_savings) + '</b></td></tr>').join('');
 
     const base = byId.R1, care = byId.R2, transit = byId.R3;
     const fBase = base ? (base.formal ? 1 : 0) : 0;
     const fCare = care ? (care.formal ? 1 : 0) : 0;
     const pp = Math.round((fCare - fBase) * 100);
-    const appShare = r => (r ? r.formal_applications : 0);
     let elastTxt = 'n/a', elastSub = 'Needs rounds 1 and 3.';
     if (base && transit) {
       const e = arcElasticity(base.commute_min_day, transit.commute_min_day, base.fare_per_trip, transit.fare_per_trip);
       if (e === null) {
-        elastTxt = 'n/a';
         elastSub = 'Your fare per trip barely changed between R1 and R3 (' + money(base.fare_per_trip) + ' → ' + money(transit.fare_per_trip) + '), so there is no price change to measure against. Your commute went from ' + base.commute_min_day + ' to ' + transit.commute_min_day + ' min/day.';
       } else {
         elastTxt = e.toFixed(2);
@@ -1843,10 +2106,8 @@
     const premium = (() => {
       const valid = main.filter(r => r.commute_min_day > 0);
       if (!valid.length) return '—';
-      const perHour = valid.reduce((a, r) => a + r.gross_wage / (r.commute_min_day / 60), 0) / valid.length;
-      return money(perHour);
+      return money(valid.reduce((a, r) => a + r.gross_wage / (r.commute_min_day / 60), 0) / valid.length);
     })();
-
     const sandboxNote = sand.length
       ? '<p class="note">Sandbox: ' + sand.length + ' month' + (sand.length > 1 ? 's' : '') + ' played, formal in ' + pct(formalRate(sand)) + ' of them, average net ' + money(sand.reduce((a, r) => a + r.net_savings, 0) / sand.length) + '.</p>'
       : '';
@@ -1854,15 +2115,16 @@
     const body =
       '<p>Here is what your choices say about space, work and risk.</p>' +
       '<div class="stats">' +
-      '<div class="stat"><div class="k">FORMALIZATION<br>BASELINE → CAREGIVER</div><div class="v">' + pct(fBase) + ' → ' + pct(fCare) + '</div>' +
-      '<div class="s">' + (base && care ? (pp > 0 ? '+' : '') + pp + ' pp under the household treatment. Formal interviews: ' + appShare(base) + ' in R1, ' + appShare(care) + ' in R2.' : 'Play rounds 1 and 2 to compare.') + '</div></div>' +
-      '<div class="stat"><div class="k">COMMUTING ELASTICITY<br>TIME VS. FARE</div><div class="v">' + elastTxt + '</div><div class="s">' + elastSub + '</div></div>' +
-      '<div class="stat"><div class="k">COMMUTE TOLERANCE<br>WAGE PER DAILY COMMUTE HOUR</div><div class="v">' + premium + '</div><div class="s">Average monthly wage you accepted for each hour per day spent commuting. Higher means you needed more pay to travel.</div></div>' +
+      '<div class="stat"><div class="k">Formalization, baseline → epidemic</div><div class="v">' + pct(fBase) + ' → ' + pct(fCare) + '</div>' +
+      '<div class="s">' + (base && care ? (pp > 0 ? '+' : '') + pp + ' pp under the coronavirus treatment. Formal interviews: ' + base.formal_applications + ' in R1, ' + care.formal_applications + ' in R2.' : 'Play rounds 1 and 2 to compare.') + '</div></div>' +
+      (care && care.infection_risk != null ? '<div class="stat"><div class="k">Epidemic round</div><div class="v">' + Math.round(care.infection_risk * 100) + '% risk</div><div class="s">Household infection probability you accepted in R2' + (care.infected ? '. Someone got sick, and care cost you ' + money(care.shocks) + '.' : '. Nobody got sick this time.') + '</div></div>' : '') +
+      '<div class="stat"><div class="k">Commuting elasticity, time vs. fare</div><div class="v">' + elastTxt + '</div><div class="s">' + elastSub + '</div></div>' +
+      '<div class="stat"><div class="k">Commute tolerance</div><div class="v">' + premium + '</div><div class="s">Average monthly wage you accepted for each hour per day spent commuting. Higher means you needed more pay to travel.</div></div>' +
       '</div>' +
-      '<h3>YOUR MONTHS</h3>' +
-      '<div class="table-wrap"><table class="grid"><thead><tr><th>ROUND</th><th>HOME</th><th>JOB</th><th>TYPE</th><th>COMMUTE</th><th>NET</th></tr></thead><tbody>' + tableRows + '</tbody></table></div>' +
+      '<h3>Your months</h3>' +
+      '<div class="table-wrap"><table class="grid"><thead><tr><th>Round</th><th>Home</th><th>Job</th><th>Type</th><th>Commute</th><th>Net</th></tr></thead><tbody>' + tableRows + '</tbody></table></div>' +
       sandboxNote +
-      '<div class="paper"><h3 style="margin-top:0">WHAT THE RESEARCH SAYS</h3>' +
+      '<div class="paper-box"><h3 style="margin-top:0">What the research says</h3>' +
       '<p>In the WorkReach model (Langle-Chimal, Knoblauch &amp; González, <i>Nature Communications</i>, 2026), workers in four cities in the United States, Mexico and Brazil consistently travel farther to reach economically complex areas, while the pull of informality differs from region to region. Measuring access by how valuable opportunities are, not only how close they are, reveals gaps that distance-based metrics miss.</p>' +
       '<p class="note">This game is a simplified illustration, not the estimated model. <a href="https://www.nature.com/articles/s41467-026-78293-3" target="_blank" rel="noopener">Read the paper</a>.</p></div>' +
       '<p class="note" style="margin-top:12px">Your play data stays in this browser. Nothing is sent anywhere unless you download it and share it.</p>';
@@ -1873,17 +2135,17 @@
       body,
       wide: true,
       buttons: [
-        { label: 'DOWNLOAD DATA (.JSON)', cls: 'gold', onClick: () => download('json') },
-        { label: 'DOWNLOAD DATA (.CSV)', cls: 'gold', onClick: () => download('csv') },
-        { label: 'ENDLESS SANDBOX ▶', cls: 'good', onClick: () => { closePanel(); G.sandboxN++; startRound(makeSandbox(G.sandboxN)); } },
-        { label: 'PLAY AGAIN', cls: 'alt', onClick: restart }
+        { label: 'Download data (.json)', cls: 'gold', onClick: () => download('json') },
+        { label: 'Download data (.csv)', cls: 'gold', onClick: () => download('csv') },
+        { label: 'Endless sandbox ▶', cls: 'good', onClick: () => { closePanel(); G.sandboxN++; startRound(makeSandbox(G.sandboxN)); } },
+        { label: 'Play again', cls: 'alt', onClick: restart }
       ]
     });
   }
 
   const CSV_COLS = ['timestamp', 't_ms', 'session_id', 'round', 'event', 'home_zone', 'zone', 'employer', 'tier', 'formal', 'task_score', 'passed',
     'reason', 'response_ms', 'wage', 'net', 'rent', 'fallback', 'commute_min_day', 'fare_per_trip', 'route', 'from', 'to', 'minutes', 'fare', 'lines',
-    'cost', 'covered', 'day', 'clock', 'balance', 'detail'];
+    'cost', 'covered', 'day', 'clock', 'balance', 'infection_risk', 'detail'];
 
   function toCSV() {
     const q = v => {
@@ -1934,24 +2196,24 @@
   }
 
   function helpPanel() {
-    const wasState = G.state;
     showPanel({
       title: 'How to play',
       body:
-        '<p>Each round is one month in Mexico City. Choose where to live, explore the map to find work before 8 PM, then live with the consequences in your ledger.</p>' +
+        '<p>Each round is one month in Mexico City. Choose where to live, explore the city to find work before 8 PM, then live with the consequences in your ledger.</p>' +
         '<dl class="kv">' +
-        '<dt>Walk</dt><dd>Arrow keys / WASD, or click / tap the map</dd>' +
-        '<dt>Interact</dt><dd>SPACE or E next to a building or station</dd>' +
-        '<dt>Formal jobs</dt><dd>Gold briefcase. Interview mini-game, taxes, IMSS protection</dd>' +
-        '<dt>Informal jobs</dt><dd>Green basket. Instant hire, no taxes, exposed to shocks</dd>' +
-        '<dt>Transit</dt><dd>Stations are the small squares on colored lines</dd>' +
-        '<dt>Friction</dt><dd>The HUD meter shows the daily commute if you worked where you stand</dd>' +
-        '<dt>Toggles</dt><dd>M sound · C CRT effect · H help</dd>' +
+        '<dt>Walk</dt><dd><kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> or <kbd>WASD</kbd>, or click / tap where you want to go</dd>' +
+        '<dt>Interact</dt><dd><kbd>Space</kbd> or <kbd>E</kbd> next to a building or on a station sign</dd>' +
+        '<dt>City map</dt><dd><kbd>M</kbd> or the MAP button. Click a job on the map to walk there</dd>' +
+        '<dt>Formal jobs</dt><dd>Gold briefcase bubble. Interview mini-game, taxes, IMSS protection</dd>' +
+        '<dt>Informal jobs</dt><dd>Green basket bubble. Instant hire, no taxes, exposed to shocks</dd>' +
+        '<dt>Transit</dt><dd>Station signs (the M squares) on the colored lines</dd>' +
+        '<dt>Friction</dt><dd>The box on the right shows the daily commute if you worked where you stand</dd>' +
+        '<dt>Menus</dt><dd>Arrow keys move between options, <kbd>Enter</kbd> confirms, <kbd>Esc</kbd> closes</dd>' +
+        '<dt>Sound</dt><dd><kbd>N</kbd> or the SND button</dd>' +
         '</dl>' +
         '<p class="note">Net = wage − rent − commute fares − commute time − shocks (and taxes for formal jobs).</p>',
-      buttons: [{ label: 'BACK', onClick: closePanel }],
-      closable: true,
-      onClose: () => { if (wasState === 'search') refreshNearbyPrompt(); }
+      buttons: [{ label: 'Back', onClick: closePanel }],
+      closable: true
     });
   }
 
@@ -1971,24 +2233,35 @@
     nextRound();
   }
 
+  function setOverview(on) {
+    G.overview = on;
+    $('#btn-map').setAttribute('aria-pressed', String(on));
+  }
+
   window.addEventListener('keydown', e => {
-    if (e.code === 'KeyM' && !e.repeat) { toggleSound(); return; }
-    if (e.code === 'KeyC' && !e.repeat && !G.iv) { toggleCRT(); return; }
+    if (e.code === 'KeyN' && !e.repeat) { toggleSound(); return; }
     if (G.state === 'title') {
       if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); startGame(); }
       return;
     }
-    if (G.iv) {
+    if (G.iv && G.iv.phase !== 'ready') {
       const d = KEYMAP[e.code];
       if (d) { e.preventDefault(); if (!e.repeat) ivInput(d); }
       else if (e.code === 'Space' || e.code === 'Enter') e.preventDefault();
       return;
     }
     if (G.panel) {
-      if (e.code === 'Escape' && G.panel.closable) { e.preventDefault(); closePanel(); }
+      if (e.code === 'Escape' && G.panel.closable) { e.preventDefault(); closePanel(); return; }
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) { e.preventDefault(); panelNav(e.code); return; }
+      const panel = $('#panel');
+      if ((e.code === 'Enter' || e.code === 'Space') && !panel.contains(document.activeElement)) {
+        const first = panel.querySelector(FOCUSABLE);
+        if (first) { e.preventDefault(); first.focus({ preventScroll: true }); }
+      }
       return;
     }
     if ((e.code === 'KeyH' || e.key === '?') && !e.repeat) { helpPanel(); return; }
+    if ((e.code === 'KeyM' || e.code === 'Tab') && !e.repeat && ['search', 'ride'].includes(G.state)) { e.preventDefault(); setOverview(!G.overview); return; }
     if (G.state === 'month' && (e.code === 'Space' || e.code === 'Enter')) { e.preventDefault(); finishMonth(); return; }
     if (G.state !== 'search') return;
     if (KEYMAP[e.code]) {
@@ -2000,15 +2273,54 @@
     } else if ((e.code === 'Space' || e.code === 'KeyE' || e.code === 'Enter') && !e.repeat) {
       e.preventDefault();
       interact();
+    } else if (e.code === 'Escape' && G.overview) {
+      setOverview(false);
     }
   });
   window.addEventListener('keyup', e => { if (KEYMAP[e.code]) G.keys.delete(KEYMAP[e.code]); });
   window.addEventListener('blur', () => G.keys.clear());
 
+  /* Camera: zoomed in and following the player; the MAP view shows the whole city */
+  let cssW = 1, cssH = 1, dpr = 1;
+  let view = { left: 0, top: 0, zoom: 3 };
+
+  function baseZoom() {
+    const across = cssW < 600 ? 10 : cssW < 1000 ? 14 : 19;
+    const down = cssH < 600 ? 10 : 12;
+    return Math.max(Math.min(cssW / (across * TILE), cssH / (down * TILE)), cssW / WORLD_W, cssH / WORLD_H);
+  }
+  const overviewZoom = () => Math.min(cssW / WORLD_W, cssH / WORLD_H);
+
+  function updateCamera(dt) {
+    const showAll = G.overview || G.state === 'month' || G.state === 'intro' || G.state === 'housing' || G.state === 'debrief';
+    const targetZoom = showAll ? overviewZoom() : G.state === 'title' ? baseZoom() * 0.85 : baseZoom();
+    let tx, ty;
+    if (G.state === 'title') {
+      tx = WORLD_W / 2 + Math.sin(G.time * 0.08) * WORLD_W * 0.32;
+      ty = WORLD_H / 2 + Math.cos(G.time * 0.11) * WORLD_H * 0.18;
+    } else if (G.state === 'ride' && G.ride) {
+      const q = polyPoint(G.ride.r.pts, G.ride.t);
+      tx = q.x * TILE + 8; ty = q.y * TILE + 8;
+    } else {
+      tx = G.player.rx * TILE + 8; ty = G.player.ry * TILE + 6;
+    }
+    const k = Math.min(1, dt * (G.state === 'title' ? 2 : 7));
+    G.cam.zoom += (targetZoom - G.cam.zoom) * Math.min(1, dt * 8);
+    if (Math.abs(targetZoom - G.cam.zoom) < 0.002) G.cam.zoom = targetZoom;
+    G.cam.x += (tx - G.cam.x) * k;
+    G.cam.y += (ty - G.cam.y) * k;
+    const z = G.cam.zoom;
+    const vw = cssW / z, vh = cssH / z;
+    const left = vw >= WORLD_W ? (WORLD_W - vw) / 2 : clamp(G.cam.x - vw / 2, 0, WORLD_W - vw);
+    const top = vh >= WORLD_H ? (WORLD_H - vh) / 2 : clamp(G.cam.y - vh / 2, 0, WORLD_H - vh);
+    view = { left: Math.round(left * z) / z, top: Math.round(top * z) / z, zoom: z };
+  }
+
   function eventTile(e) {
     const r = canvas.getBoundingClientRect();
-    const x = Math.floor((e.clientX - r.left) / r.width * MAP_W);
-    const y = Math.floor((e.clientY - r.top) / r.height * MAP_H);
+    const wx = view.left + (e.clientX - r.left) / view.zoom;
+    const wy = view.top + (e.clientY - r.top) / view.zoom;
+    const x = Math.floor(wx / TILE), y = Math.floor(wy / TILE);
     return inMap(x, y) ? { x, y } : null;
   }
 
@@ -2018,32 +2330,35 @@
     let t = eventTile(e);
     if (!t) return;
     const p = G.player;
-    // Small tiles are hard to hit with a finger: snap to a nearby station or job site.
-    if ((e.pointerType === 'touch' || scale < 2) && !blockAt(t.x, t.y)?.hub && !NET.stations.some(s => s.x === t.x && s.y === t.y)) {
-      const near = NET.stations.find(s => manhattan(s, t) <= 1);
-      const hubNear = HUBS.find(h => t.x >= h.bx - 1 && t.x <= h.bx + 2 && t.y >= h.by - 1 && t.y <= h.by + 2);
+    // Fingers and the zoomed-out map are imprecise: snap to a nearby job site or station.
+    if ((e.pointerType === 'touch' || G.overview) && !blockAt(t.x, t.y)?.hub && !NET.stations.some(s => s.x === t.x && s.y === t.y)) {
+      const hubNear = HUBS.find(h => nearBlock(t, h));
+      const stNear = NET.stations.find(s => manhattan(s, t) <= 1);
       if (hubNear) t = { x: hubNear.bx, y: hubNear.by };
-      else if (near) t = { x: near.x, y: near.y };
+      else if (stNear) t = { x: stNear.x, y: stNear.y };
     }
+    const leaveMap = () => { if (G.overview) setOverview(false); };
     const st = NET.stations.find(s => s.x === t.x && s.y === t.y);
     if (st) {
-      if (manhattan(st, p) <= 1 && !p.moving) { interactWith({ type: 'station', station: st }); return; }
+      if (st.x === p.x && st.y === p.y && !p.moving) { interactWith({ type: 'station', station: st }); return; }
       walkTo({ x: st.x, y: st.y }, { type: 'station', station: st });
+      leaveMap();
       return;
     }
     const bl = blockAt(t.x, t.y);
     if (bl && bl.type === 'hub') {
       const h = bl.hub;
-      if (p.x >= h.bx - 1 && p.x <= h.bx + 2 && p.y >= h.by - 1 && p.y <= h.by + 2 && !p.moving) { interactWith({ type: 'hub', hub: h }); return; }
+      if (nearBlock(p, h) && !p.moving) { interactWith({ type: 'hub', hub: h }); return; }
       walkTo(h.door, { type: 'hub', hub: h });
+      leaveMap();
       return;
     }
-    if (bl && bl.type === 'home') { walkTo(HOMES[bl.zone].door, null); return; }
-    if (walkable(t.x, t.y)) walkTo(t, null);
+    if (bl && bl.type === 'home') { walkTo(HOMES[bl.zone].door, null); leaveMap(); return; }
+    if (walkable(t.x, t.y)) { walkTo(t, null); leaveMap(); }
     else Snd.sfx('error');
   });
 
-  canvas.addEventListener('pointermove', e => { G.hover = eventTile(e); });
+  canvas.addEventListener('pointermove', e => { G.hover = e.pointerType === 'mouse' ? eventTile(e) : null; });
   canvas.addEventListener('pointerleave', () => { G.hover = null; });
 
   $('#title').addEventListener('click', startGame);
@@ -2054,13 +2369,8 @@
     $('#btn-sound').setAttribute('aria-pressed', String(!Snd.muted));
     if (!Snd.muted) { Snd.init(); if (G.state !== 'title') Snd.startMusic(); }
   }
-  function toggleCRT() {
-    const on = !document.body.classList.contains('crt');
-    document.body.classList.toggle('crt', on);
-    $('#btn-crt').setAttribute('aria-pressed', String(on));
-  }
   $('#btn-sound').addEventListener('click', e => { e.stopPropagation(); toggleSound(); });
-  $('#btn-crt').addEventListener('click', e => { e.stopPropagation(); toggleCRT(); });
+  $('#btn-map').addEventListener('click', e => { e.stopPropagation(); if (['search', 'ride'].includes(G.state) && !G.panel) setOverview(!G.overview); });
   $('#btn-help').addEventListener('click', e => { e.stopPropagation(); if (G.state !== 'title' && !G.panel && !G.iv) helpPanel(); });
 
   /* ==========================================================
@@ -2068,15 +2378,11 @@
    * ========================================================== */
   function fit() {
     const st = $('#stage');
-    const w = st.clientWidth - 24, h = st.clientHeight - 24;
-    let s = Math.min(w / BUF_W, h / BUF_H);
-    if (s >= 2) s = Math.floor(s * 2) / 2;
-    scale = Math.max(0.5, s);
+    cssW = st.clientWidth;
+    cssH = st.clientHeight;
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.style.width = Math.round(BUF_W * scale) + 'px';
-    canvas.style.height = Math.round(BUF_H * scale) + 'px';
-    canvas.width = Math.round(BUF_W * scale * dpr);
-    canvas.height = Math.round(BUF_H * scale * dpr);
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
   }
   window.addEventListener('resize', fit);
 
@@ -2111,129 +2417,193 @@
       updateMonth(dt);
     }
     if (G.iv) ivTick();
+    if (G.tutorial && (G.time > G.tutorial.until || G.player.stepCount - G.tutorial.steps > 18 || G.state !== 'search')) G.tutorial = null;
+    updateCamera(dt);
   }
 
   function drawTrains() {
     NET.lines.forEach((l, li) => {
       const pts = l.stops.map(([x, y]) => ({ x, y }));
       const len = pts.reduce((a, q, i) => a + (i ? manhattan(pts[i - 1], q) : 0), 0);
-      const period = len * 0.35;
+      const period = len * 0.45;
       for (let k = 0; k < 2; k++) {
         let ph = ((G.time + k * period * 0.5 + li * 3) % (period * 2)) / period;
         if (ph > 1) ph = 2 - ph;
         const q = polyPoint(pts, ph);
-        const off = [0, 1, -1, 2][li] || 0;
-        P(b, Math.round(q.x * TILE + 2 + off), Math.round(q.y * TILE + 2 + off), 4, 4, '#000');
-        P(b, Math.round(q.x * TILE + 3 + off), Math.round(q.y * TILE + 3 + off), 2, 2, l.color === '#f0609e' ? '#ffd1e6' : '#f6e7cf');
+        const a = polyPoint(pts, Math.min(1, ph + 0.01));
+        const b2 = polyPoint(pts, Math.max(0, ph - 0.01));
+        const horiz = Math.abs(a.x - b2.x) >= Math.abs(a.y - b2.y);
+        const X = Math.round(q.x * TILE + 8), Y = Math.round(q.y * TILE + 8);
+        const w = horiz ? 14 : 8, h = horiz ? 8 : 14;
+        P(f, X - w / 2 - 1, Y - h / 2 - 1, w + 2, h + 2, '#111');
+        P(f, X - w / 2, Y - h / 2, w, h, l.color);
+        if (horiz) for (let i = 0; i < 3; i++) P(f, X - 5 + i * 4, Y - 2, 2, 2, '#e8f6ff');
+        else for (let i = 0; i < 3; i++) P(f, X - 2, Y - 5 + i * 4, 2, 2, '#e8f6ff');
       }
     });
   }
 
-  function drawRoute(pts, color) {
-    b.fillStyle = color;
+  function drawRoute(pts, color, w = 3) {
+    f.fillStyle = color;
     for (let i = 0; i < pts.length - 1; i++) {
       const a = pts[i], c = pts[i + 1];
-      const x0 = Math.min(a.x, c.x) * TILE + 3, y0 = Math.min(a.y, c.y) * TILE + 3;
-      const w = Math.abs(a.x - c.x) * TILE + 2, h = Math.abs(a.y - c.y) * TILE + 2;
-      b.fillRect(x0, y0, a.x === c.x ? 2 : w, a.y === c.y ? 2 : h);
+      const x0 = Math.min(a.x, c.x) * TILE + 8 - (w >> 1), y0 = Math.min(a.y, c.y) * TILE + 8 - (w >> 1);
+      const ww = Math.abs(a.x - c.x) * TILE + w, hh = Math.abs(a.y - c.y) * TILE + w;
+      f.fillRect(x0, y0, a.x === c.x ? w : ww, a.y === c.y ? w : hh);
     }
   }
 
   function render() {
-    b.clearRect(0, 0, BUF_W, BUF_H);
-    b.drawImage(mapCanvas, 0, 0);
+    f.clearRect(0, 0, WORLD_W, WORLD_H);
+    f.drawImage(mapCv, 0, 0);
     if (NET) drawTrains();
 
-    const bob = Math.round(Math.sin(G.time * 4) * 1.2);
-    HUBS.forEach(h => {
-      const x = h.bx * TILE + 4, y = h.by * TILE - 7 + bob;
-      const failed = G.attempts[h.id] === 'failed';
-      if (G.state === 'title') return;
-      P(b, x - 1, y - 1, 10, 10, failed ? '#555' : '#000');
-      drawIcon(b, failed ? ICONS.x : h.formal ? ICONS.brief : ICONS.basket, failed ? x + 1 : x, failed ? y + 1 : y);
-    });
-    if (G.home && G.state !== 'title') {
-      const hm = HOMES[G.home];
-      drawIcon(b, ICONS.heart, hm.bx * TILE + 4, hm.by * TILE - 5 + bob);
+    const bob = Math.round(Math.sin(G.time * 4) * 1.5);
+    if (G.state !== 'title') {
+      HUBS.forEach(h => {
+        const failed = G.attempts[h.id] === 'failed';
+        drawBubble(f, h.bx * TILE + 8, h.by * TILE - 12 + bob, failed ? '#777' : h.formal ? '#b5841a' : '#2b6f35', failed ? ICONS.x : h.formal ? ICONS.brief : ICONS.basket);
+      });
+      if (G.home) {
+        const hm = HOMES[G.home];
+        drawIcon(f, ICONS.heart, hm.bx * TILE + 12, hm.by * TILE - 6 + bob);
+      }
     }
 
     if (G.state === 'search' && !G.panel) {
       const near = nearbyTarget();
       if (near && near.type === 'hub') {
-        const a = 0.5 + 0.5 * Math.sin(G.time * 8);
-        b.strokeStyle = 'rgba(255,204,77,' + a.toFixed(2) + ')';
-        b.lineWidth = 1;
-        b.strokeRect(near.hub.bx * TILE - 0.5, near.hub.by * TILE - 0.5, 17, 17);
+        const a = 0.55 + 0.45 * Math.sin(G.time * 7);
+        f.strokeStyle = 'rgba(242,182,50,' + a.toFixed(2) + ')';
+        f.lineWidth = 2;
+        f.strokeRect(near.hub.bx * TILE - 1, near.hub.by * TILE - 1, 34, 34);
+      } else if (near && near.type === 'station') {
+        f.strokeStyle = 'rgba(255,255,255,0.9)';
+        f.lineWidth = 2;
+        f.strokeRect(near.station.x * TILE + 1, near.station.y * TILE + 1, 14, 14);
       }
-      G.player.path.forEach((q, i) => { if (i % 2 === 0) P(b, q.x * TILE + 3, q.y * TILE + 3, 2, 2, 'rgba(255,255,255,0.7)'); });
+      G.player.path.forEach((q, i) => { if (i % 2 === 0) P(f, q.x * TILE + 6, q.y * TILE + 6, 4, 4, 'rgba(255,255,255,0.75)'); });
+      if (G.hover) { f.strokeStyle = 'rgba(255,255,255,0.6)'; f.lineWidth = 1; f.strokeRect(G.hover.x * TILE + 0.5, G.hover.y * TILE + 0.5, 15, 15); }
     }
 
     if (G.state === 'month' && G.month) {
-      drawRoute(G.month.pts, 'rgba(255,107,53,0.9)');
+      drawRoute(G.month.pts, 'rgba(0,0,0,0.5)', 5);
+      drawRoute(G.month.pts, '#e8743b', 3);
       const mo = G.month;
       const dayT = (mo.t / mo.dur * 22) % 1;
       const leg = dayT < 0.5 ? dayT * 2 : 2 - dayT * 2;
       const q = polyPoint(mo.pts, leg);
-      drawAvatar(b, Math.round(q.x * TILE), Math.round(q.y * TILE - 3), 'down', Math.floor(G.time * 8) % 2 ? 1 : 2);
+      drawPerson(f, Math.round(q.x * TILE + 2), Math.round(q.y * TILE - 4), 'down', Math.floor(G.time * 8) % 2 ? 1 : 2);
     } else if (G.state === 'ride' && G.ride) {
-      drawRoute(G.ride.r.pts, 'rgba(255,255,255,0.55)');
+      drawRoute(G.ride.r.pts, 'rgba(255,255,255,0.6)', 3);
       const q = polyPoint(G.ride.r.pts, G.ride.t);
-      P(b, Math.round(q.x * TILE), Math.round(q.y * TILE + 1), 8, 6, '#000');
-      P(b, Math.round(q.x * TILE + 1), Math.round(q.y * TILE + 2), 6, 4, G.ride.color);
-      P(b, Math.round(q.x * TILE + 2), Math.round(q.y * TILE + 3), 4, 1, '#f6e7cf');
-    } else if (G.home && ['search', 'housing', 'fallback', 'ledger', 'intro'].includes(G.state)) {
+      const X = Math.round(q.x * TILE + 8), Y = Math.round(q.y * TILE + 8);
+      P(f, X - 9, Y - 6, 18, 12, '#111');
+      P(f, X - 8, Y - 5, 16, 10, G.ride.color);
+      P(f, X - 6, Y - 3, 12, 3, '#e8f6ff');
+    } else if (G.home && ['search', 'fallback', 'ledger'].includes(G.state)) {
       const p = G.player;
-      const frame = p.moving ? (Math.floor(p.prog * 2) % 2 ? 1 : 2) : 0;
-      drawAvatar(b, Math.round(p.rx * TILE), Math.round(p.ry * TILE - 3), p.dir, frame);
+      const frame = p.moving ? (p.prog < 0.5 ? 1 : 2) : 0;
+      drawPerson(f, Math.round(p.rx * TILE + 2), Math.round(p.ry * TILE - 4), p.dir, frame);
     }
 
-    if (G.hover && G.state === 'search' && !G.panel) {
-      b.strokeStyle = 'rgba(255,255,255,0.5)';
-      b.strokeRect(G.hover.x * TILE + 0.5, G.hover.y * TILE + 0.5, 7, 7);
-    }
-
+    // Blit the camera view
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.imageSmoothingEnabled = false;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(buf, 0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#24331f';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const z = view.zoom * dpr;
+    ctx.setTransform(z, 0, 0, z, -view.left * z, -view.top * z);
+    ctx.drawImage(frameCv, 0, 0);
 
-    // Labels drawn at screen resolution so text stays crisp.
-    const k = scale * dpr;
-    ctx.setTransform(k, 0, 0, k, 0, 0);
+    // World-space labels, sized in screen pixels so they stay readable
+    const px = n => n / view.zoom;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.lineJoin = 'round';
-    const label = (text, x, y, size, color) => {
-      ctx.font = size + 'px "Press Start 2P", monospace';
-      ctx.lineWidth = 2.2 / scale + 0.6;
-      ctx.strokeStyle = 'rgba(0,0,0,0.85)';
+    const label = (text, x, y, size, color, weight = 700) => {
+      ctx.font = weight + ' ' + px(size) + 'px "Pixelify Sans", sans-serif';
+      ctx.lineWidth = px(4);
+      ctx.strokeStyle = 'rgba(20,20,20,0.85)';
       ctx.strokeText(text, x, y);
       ctx.fillStyle = color;
       ctx.fillText(text, x, y);
     };
-    const showMinor = scale >= 1.8;
-    label('CBD', 6.5 * TILE, 21.5 * TILE, 5, ZONES.cbd.label);
-    label('INTERMEDIATE RING', 19 * TILE, 21.5 * TILE - (showMinor ? 0 : 0), 4.2, ZONES.int.label);
-    label('PERIPHERY', 32 * TILE, 0.7 * TILE + (showMinor ? 0 : 0), 4.2, ZONES.per.label);
-    if (showMinor) {
-      DISTRICT_LABELS.forEach(d => {
-        if (d.text === 'COYOACÁN' || d.text === 'NEZA') return;
-        label(d.text, d.x * TILE, d.y * TILE, 3, 'rgba(246,231,207,0.82)');
-      });
-      Object.entries(PARK_NAMES).forEach(([k2, name]) => {
-        const [bx, by] = k2.split(',').map(Number);
-        label(name.toUpperCase(), bx * TILE + 8, by * TILE + 8, 2.4, '#d8f5c8');
-      });
+    if (G.state !== 'title') {
+      const big = G.overview || G.state === 'month' || G.state === 'intro' || G.state === 'housing' || G.state === 'debrief';
+      DISTRICT_LABELS.forEach(d => label(d.text, d.x * TILE, d.y * TILE, big ? 13 : 16, '#fffaf1'));
+      if (!big) {
+        Object.entries(PARK_NAMES).forEach(([k2, name]) => {
+          const [bx, by] = k2.split(',').map(Number);
+          label(name, bx * TILE + 16, by * TILE + 16, 12, '#e2f5d0', 500);
+        });
+      } else {
+        label('CBD', 6.5 * TILE, 3 * TILE, 22, '#9cc1ff');
+        label('INTERMEDIATE RING', 19 * TILE, 3 * TILE, 18, '#ffc8a8');
+        label('PERIPHERY', 31.5 * TILE, 3 * TILE, 20, '#ffb3dc');
+        if (G.overview) HUBS.forEach(h => label(h.name, h.bx * TILE + 16, h.by * TILE + 36, 11, h.formal ? '#ffe08a' : '#bff0c4', 500));
+      }
+      if (G.hover && G.state === 'search' && !G.panel) {
+        const bl = blockAt(G.hover.x, G.hover.y);
+        const st = NET && NET.stations.find(s => s.x === G.hover.x && s.y === G.hover.y);
+        let txt = null;
+        if (bl && bl.type === 'hub') txt = bl.hub.name;
+        else if (bl && bl.type === 'home') txt = HOMES[bl.zone].label;
+        else if (st) txt = 'Station ' + st.name;
+        if (txt) label(txt, G.hover.x * TILE + 8, G.hover.y * TILE - 6, 15, '#ffe08a');
+      }
     }
-    if (G.hover && G.state === 'search' && !G.panel && showMinor) {
-      const bl = blockAt(G.hover.x, G.hover.y);
-      const st = NET && NET.stations.find(s => s.x === G.hover.x && s.y === G.hover.y);
-      let txt = null;
-      if (bl && bl.type === 'hub') txt = bl.hub.name;
-      else if (bl && bl.type === 'home') txt = HOMES[bl.zone].label;
-      else if (st) txt = st.name;
-      if (txt) label(txt, clamp(G.hover.x * TILE + 4, 40, BUF_W - 40), Math.max(6, G.hover.y * TILE - 6), 3.4, '#ffcc4d');
-    }
+
+    // Tutorial callouts in screen space, like annotated screenshots
+    if (G.tutorial && G.state === 'search' && !G.panel && !G.overview) drawCallouts();
+  }
+
+  const toScreen = (wx, wy) => ({ x: (wx - view.left) * view.zoom, y: (wy - view.top) * view.zoom });
+
+  function callout(text, sx, sy, dx, dy) {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const small = cssW < 600;
+    ctx.font = '700 ' + (small ? 12 : 15) + 'px "Pixelify Sans", sans-serif';
+    const w = ctx.measureText(text).width + (small ? 12 : 20), h = small ? 22 : 28;
+    const bx = clamp(sx + dx - w / 2, 8, cssW - w - 8), by = clamp(sy + dy - h / 2, 60, cssH - h - 8);
+    const cx = bx + w / 2, cy = by + h / 2;
+    const ang = Math.atan2(sy - cy, sx - cx);
+    ctx.strokeStyle = '#e8743b';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(sx - Math.cos(ang) * 8, sy - Math.sin(ang) * 8);
+    ctx.stroke();
+    ctx.fillStyle = '#e8743b';
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.lineTo(sx - Math.cos(ang - 0.5) * 13, sy - Math.sin(ang - 0.5) * 13);
+    ctx.lineTo(sx - Math.cos(ang + 0.5) * 13, sy - Math.sin(ang + 0.5) * 13);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillRect(bx - 2, by - 2, w + 4, h + 4);
+    ctx.fillStyle = '#fffaf1';
+    ctx.fillRect(bx, by, w, h);
+    ctx.fillStyle = '#1f1d1a';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, cx, cy + 1);
+  }
+
+  function drawCallouts() {
+    const p = G.player;
+    const inView = s => s.x > 30 && s.y > 70 && s.x < cssW - 30 && s.y < cssH - 30;
+    const byDist = arr => arr.slice().sort((a, b) => manhattan(a.door || a, p) - manhattan(b.door || b, p));
+    const formal = byDist(HUBS.filter(h => h.formal))[0];
+    const informal = byDist(HUBS.filter(h => !h.formal))[0];
+    const station = byDist(NET.stations)[0];
+    const me = toScreen(p.rx * TILE + 8, p.ry * TILE - 4);
+    callout('You', me.x, me.y, 80, -70);
+    [
+      { text: 'Formal job: interview + IMSS', w: toScreen(formal.bx * TILE + 16, formal.by * TILE - 12), dx: -40, dy: -70 },
+      { text: 'Informal job: hired on the spot', w: toScreen(informal.bx * TILE + 16, informal.by * TILE - 12), dx: 40, dy: -70 },
+      { text: 'Station: ride across town', w: toScreen(station.x * TILE + 8, station.y * TILE + 14), dx: 0, dy: 70 }
+    ].forEach(it => { if (inView(it.w)) callout(it.text, it.w.x, it.w.y, it.dx, it.dy); });
   }
 
   let last = performance.now();
@@ -2250,9 +2620,9 @@
    * ========================================================== */
   NET = renderMap(false);
   fit();
+  G.cam.zoom = baseZoom() * 0.85;
   updateHUD();
   requestAnimationFrame(loop);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render());
   $('#title').focus({ preventScroll: true });
 })();
 </script>
