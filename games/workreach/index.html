@@ -1,0 +1,2260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="description" content="WorkReach: The Game. A serious game on space, work, and opportunity in Mexico City.">
+<title>WorkReach: The Game</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1a1423;
+    --bg2: #241a30;
+    --panel: #2b1f36;
+    --panel-edge: #f6e7cf;
+    --ink: #f6e7cf;
+    --muted: #b9a58f;
+    --terra: #d0643a;
+    --terra-dark: #8f3a22;
+    --gold: #ffcc4d;
+    --green: #5fb35a;
+    --green-dark: #2f6b36;
+    --pink: #f0609e;
+    --cyan: #36c5d6;
+    --red: #e8443a;
+    --blue: #5b8cff;
+    --pixel: "Press Start 2P", ui-monospace, monospace;
+    --term: "VT323", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); }
+  body {
+    font-family: var(--term);
+    font-size: 22px;
+    line-height: 1.15;
+    overflow: hidden;
+    -webkit-font-smoothing: none;
+    touch-action: manipulation;
+  }
+  button { font: inherit; color: inherit; }
+
+  #app { position: fixed; inset: 0; display: flex; flex-direction: column; }
+
+  /* HUD */
+  #hud {
+    display: flex; flex-wrap: wrap; align-items: stretch; gap: 6px;
+    padding: 8px 10px; background: var(--bg2);
+    border-bottom: 4px solid #000; box-shadow: 0 4px 0 var(--terra-dark);
+    position: relative; z-index: 3;
+  }
+  .hud-cell {
+    display: flex; flex-direction: column; justify-content: center; gap: 4px;
+    padding: 4px 10px; background: #150f1c; border: 2px solid #3d2d4a; min-width: 110px;
+  }
+  .hud-cell.wide { min-width: 190px; flex: 1 1 190px; }
+  .lbl { font-family: var(--pixel); font-size: 8px; color: var(--muted); letter-spacing: 1px; }
+  .val { font-family: var(--pixel); font-size: 12px; color: var(--ink); white-space: nowrap; }
+  .val.small { font-size: 9px; }
+  .val.neg { color: var(--red); }
+  .meter { height: 8px; background: #000; border: 2px solid #3d2d4a; position: relative; }
+  #hud-friction-bar { height: 100%; width: 0; background: var(--green); transition: width .2s steps(6), background .2s; }
+  .badge { font-family: var(--pixel); font-size: 9px; padding: 4px 6px; border: 2px solid currentColor; align-self: flex-start; }
+  .badge.none { color: var(--muted); }
+  .badge.formal { color: var(--gold); }
+  .badge.informal { color: var(--pink); }
+  .hud-tools { display: flex; gap: 6px; margin-left: auto; align-items: center; }
+  .tool {
+    font-family: var(--pixel); font-size: 9px; padding: 8px; min-width: 40px; cursor: pointer;
+    background: #150f1c; border: 2px solid #3d2d4a; color: var(--ink);
+  }
+  .tool[aria-pressed="false"] { color: var(--muted); }
+  .tool:hover, .tool:focus-visible { border-color: var(--gold); outline: none; }
+
+  /* Stage */
+  #stage {
+    flex: 1; min-height: 0; position: relative; display: flex; align-items: center; justify-content: center;
+    background:
+      radial-gradient(circle at 50% 40%, #2a1e36 0%, var(--bg) 70%);
+  }
+  #screen { display: block; image-rendering: pixelated; image-rendering: crisp-edges; cursor: pointer; border: 4px solid #000; box-shadow: 0 0 0 4px #3d2d4a, 0 12px 0 4px #000; }
+  #prompt {
+    position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%);
+    max-width: min(760px, calc(100% - 20px)); width: max-content;
+    background: rgba(21, 15, 28, 0.94); border: 3px solid var(--ink); box-shadow: 4px 4px 0 #000;
+    padding: 8px 12px; display: none; align-items: center; gap: 12px; z-index: 2;
+  }
+  #prompt.show { display: flex; }
+  #prompt .ptxt { font-size: 22px; }
+  #prompt .ptxt b { font-family: var(--pixel); font-size: 10px; color: var(--gold); font-weight: normal; }
+  #prompt .pbtn {
+    font-family: var(--pixel); font-size: 10px; padding: 8px 10px; background: var(--terra); border: 3px solid #000;
+    box-shadow: 3px 3px 0 #000; cursor: pointer; white-space: nowrap;
+  }
+
+  /* Panels */
+  #overlay {
+    position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center;
+    background: rgba(10, 6, 14, 0.62); padding: 12px;
+  }
+  #overlay[hidden] { display: none; }
+  .panel {
+    width: min(640px, 100%); max-height: calc(100vh - 24px); overflow: auto;
+    background: var(--panel); border: 4px solid var(--panel-edge); box-shadow: 0 0 0 4px #000, 8px 8px 0 4px #000;
+    padding: 18px 20px 16px; position: relative;
+  }
+  .panel.wide { width: min(900px, 100%); }
+  .panel h2 { font-family: var(--pixel); font-size: 14px; line-height: 1.5; margin: 0 0 12px; color: var(--gold); text-shadow: 2px 2px 0 #000; }
+  .panel h3 { font-family: var(--pixel); font-size: 10px; line-height: 1.5; margin: 16px 0 8px; color: var(--cyan); }
+  .panel p { margin: 0 0 10px; }
+  .panel .quote { border-left: 6px solid var(--terra); background: #1d1526; padding: 10px 12px; margin: 0 0 12px; font-size: 24px; }
+  .panel .note { color: var(--muted); font-size: 19px; }
+  .panel-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .btn {
+    font-family: var(--pixel); font-size: 10px; line-height: 1.4; padding: 10px 14px; cursor: pointer;
+    background: var(--terra); color: var(--ink); border: 3px solid #000; box-shadow: 4px 4px 0 #000;
+  }
+  .btn:hover { filter: brightness(1.12); }
+  .btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000; }
+  .btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  .btn.alt { background: #45355a; }
+  .btn.good { background: var(--green-dark); }
+  .btn.gold { background: #a87b12; }
+  .btn[disabled] { opacity: .45; cursor: not-allowed; }
+
+  .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .card {
+    text-align: left; background: #1d1526; border: 3px solid #4a3a5c; padding: 12px; cursor: pointer;
+    display: flex; flex-direction: column; gap: 6px; box-shadow: 4px 4px 0 #000;
+  }
+  .card:hover, .card:focus-visible { border-color: var(--gold); outline: none; }
+  .card .ct { font-family: var(--pixel); font-size: 10px; line-height: 1.5; }
+  .card .cd { color: var(--muted); font-size: 19px; }
+  .card .rent { font-family: var(--pixel); font-size: 11px; color: var(--gold); }
+  .card .tag { font-family: var(--pixel); font-size: 8px; color: var(--cyan); }
+
+  table.ledger { width: 100%; border-collapse: collapse; font-size: 21px; }
+  table.ledger td { padding: 4px 6px; border-bottom: 1px dashed #4a3a5c; vertical-align: top; }
+  table.ledger td.amt { text-align: right; font-family: var(--pixel); font-size: 10px; white-space: nowrap; padding-top: 7px; }
+  table.ledger tr.total td { border-top: 3px solid var(--ink); border-bottom: none; font-size: 24px; }
+  table.ledger tr.total td.amt { font-size: 12px; }
+  .pos { color: var(--green); }
+  .neg { color: var(--red); }
+  .zero { color: var(--muted); }
+
+  table.grid { width: 100%; border-collapse: collapse; font-size: 19px; }
+  table.grid th { font-family: var(--pixel); font-size: 8px; color: var(--muted); text-align: left; padding: 6px; border-bottom: 3px solid #4a3a5c; }
+  table.grid td { padding: 6px; border-bottom: 1px dashed #4a3a5c; }
+  .table-wrap { overflow-x: auto; }
+
+  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 6px 0 4px; }
+  .stat { background: #1d1526; border: 3px solid #4a3a5c; padding: 10px; }
+  .stat .k { font-family: var(--pixel); font-size: 8px; color: var(--muted); line-height: 1.5; }
+  .stat .v { font-family: var(--pixel); font-size: 14px; margin: 8px 0 6px; color: var(--gold); }
+  .stat .s { font-size: 18px; color: var(--muted); }
+  .paper { border: 3px dashed var(--cyan); padding: 10px 12px; margin-top: 14px; }
+  .paper a { color: var(--cyan); }
+
+  .stations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; max-height: 46vh; overflow: auto; padding-right: 4px; }
+  .st-btn {
+    display: flex; justify-content: space-between; gap: 8px; align-items: center; text-align: left;
+    background: #1d1526; border: 2px solid #4a3a5c; padding: 6px 8px; cursor: pointer; font-size: 20px;
+  }
+  .st-btn:hover, .st-btn:focus-visible { border-color: var(--gold); outline: none; }
+  .st-btn small { font-family: var(--pixel); font-size: 8px; color: var(--muted); white-space: nowrap; }
+  .chip { display: inline-block; font-family: var(--pixel); font-size: 8px; padding: 3px 5px; margin: 0 4px 4px 0; border: 2px solid #000; color: #000; }
+
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 6px 0 10px; font-size: 21px; }
+  .kv dt { color: var(--muted); }
+  .kv dd { margin: 0; }
+  .stars { color: var(--gold); font-family: var(--pixel); font-size: 10px; }
+
+  /* Interview mini-game */
+  .iv { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 4px 0; }
+  .iv-status { font-family: var(--pixel); font-size: 12px; color: var(--gold); min-height: 18px; text-align: center; }
+  .pad { display: grid; grid-template-columns: repeat(3, 72px); grid-template-rows: repeat(3, 72px); gap: 6px; }
+  .pad button {
+    font-family: var(--pixel); font-size: 22px; border: 4px solid #000; box-shadow: 4px 4px 0 #000; cursor: pointer;
+    background: #45355a; color: var(--ink); transition: background .05s;
+  }
+  .pad button[data-dir="up"] { grid-column: 2; grid-row: 1; }
+  .pad button[data-dir="left"] { grid-column: 1; grid-row: 2; }
+  .pad button[data-dir="right"] { grid-column: 3; grid-row: 2; }
+  .pad button[data-dir="down"] { grid-column: 2; grid-row: 3; }
+  .pad .core { grid-column: 2; grid-row: 2; background: #150f1c; border: 4px solid #000; display: flex; align-items: center; justify-content: center; font-family: var(--pixel); font-size: 10px; color: var(--muted); }
+  .pad button.lit { background: var(--gold); color: #000; }
+  .pad button.ok { background: var(--green); color: #000; }
+  .pad button.bad { background: var(--red); }
+  .pad button:disabled { cursor: default; }
+  .iv-progress { display: flex; gap: 6px; }
+  .iv-progress span { width: 14px; height: 14px; border: 2px solid var(--ink); background: transparent; }
+  .iv-progress span.done { background: var(--green); }
+  .iv-progress span.miss { background: var(--red); }
+  .timer { width: min(320px, 100%); height: 10px; border: 2px solid var(--ink); background: #000; }
+  .timer > div { height: 100%; width: 100%; background: var(--cyan); }
+
+  /* Title */
+  #title {
+    position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; text-align: center;
+    background:
+      linear-gradient(180deg, rgba(26, 20, 35, 0.55) 0%, rgba(26, 20, 35, 0.86) 60%, rgba(26, 20, 35, 0.97) 100%);
+    cursor: pointer; padding: 20px;
+  }
+  #title[hidden] { display: none; }
+  .title-inner { max-width: 900px; }
+  .kicker { font-family: var(--pixel); font-size: 9px; color: var(--cyan); letter-spacing: 3px; margin-bottom: 26px; }
+  #title h1 { margin: 0; font-family: var(--pixel); font-weight: normal; line-height: 1.1; }
+  #title .t1 {
+    display: block; font-size: clamp(30px, 8vw, 84px); color: var(--gold);
+    text-shadow: 4px 4px 0 var(--terra), 8px 8px 0 var(--terra-dark), 12px 12px 0 #000;
+    animation: rise 1.1s steps(10) both, glow 2.4s ease-in-out 1.1s infinite;
+  }
+  #title .t2 {
+    display: inline-block; margin-top: 22px; font-size: clamp(14px, 3vw, 28px); color: var(--ink);
+    background: var(--terra); padding: 10px 16px; border: 4px solid #000; box-shadow: 6px 6px 0 #000;
+    animation: rise 1.1s steps(10) .25s both;
+  }
+  #title .sub { font-size: clamp(22px, 3vw, 32px); margin: 28px auto 0; max-width: 680px; color: var(--ink); animation: fade 1s steps(6) .7s both; }
+  #title .press { font-family: var(--pixel); font-size: clamp(10px, 1.6vw, 14px); margin-top: 38px; color: var(--ink); animation: blink 1.1s steps(2, start) infinite; }
+  #title .foot { margin-top: 26px; color: var(--muted); font-size: 20px; }
+  @keyframes rise { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes blink { to { visibility: hidden; } }
+  @keyframes glow {
+    0%, 100% { filter: drop-shadow(0 0 0 rgba(255, 204, 77, 0)); }
+    50% { filter: drop-shadow(0 0 14px rgba(255, 204, 77, 0.55)); }
+  }
+
+  /* CRT */
+  #crt { position: fixed; inset: 0; pointer-events: none; z-index: 30; display: none; }
+  body.crt #crt {
+    display: block;
+    background:
+      repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px 3px),
+      radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, 0.5) 100%);
+    mix-blend-mode: multiply;
+  }
+  body.crt #screen { filter: saturate(1.15) contrast(1.05); }
+  body.crt .panel h2, body.crt .val, body.crt #title .press { text-shadow: 0 0 6px rgba(255, 204, 77, 0.45), 2px 2px 0 #000; }
+
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  @media (max-width: 720px) {
+    body { font-size: 20px; }
+    #hud { gap: 4px; padding: 6px; }
+    .hud-cell { min-width: 0; flex: 1 1 30%; padding: 4px 6px; }
+    .hud-cell.wide { flex: 1 1 60%; }
+    .val { font-size: 10px; }
+    .hud-tools { margin-left: 0; }
+    .cards, .stats { grid-template-columns: minmax(0, 1fr); }
+    .stations { grid-template-columns: minmax(0, 1fr); }
+    .pad { grid-template-columns: repeat(3, 64px); grid-template-rows: repeat(3, 64px); }
+    #prompt { bottom: 6px; }
+    #prompt .ptxt { font-size: 19px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #title .t1, #title .t2, #title .sub { animation: none; }
+    #title .press { animation: none; }
+  }
+</style>
+</head>
+<body class="crt">
+<div id="app">
+  <header id="hud" aria-label="Game status">
+    <div class="hud-cell"><span class="lbl">NET BALANCE</span><span id="hud-balance" class="val">$0</span></div>
+    <div class="hud-cell"><span class="lbl">SCENARIO</span><span id="hud-round" class="val small">TITLE</span></div>
+    <div class="hud-cell"><span class="lbl">SEARCH CLOCK</span><span id="hud-clock" class="val">08:00</span></div>
+    <div class="hud-cell wide"><span class="lbl">COMMUTE FRICTION</span><div class="meter"><div id="hud-friction-bar"></div></div><span id="hud-friction" class="val small">Choose a home first</span></div>
+    <div class="hud-cell"><span class="lbl">BENEFITS</span><span id="hud-badge" class="badge none">SEEKING</span></div>
+    <div class="hud-tools">
+      <button class="tool" id="btn-sound" aria-pressed="true" title="Sound (M)">SND</button>
+      <button class="tool" id="btn-crt" aria-pressed="true" title="CRT effect (C)">CRT</button>
+      <button class="tool" id="btn-help" title="How to play (H)">?</button>
+    </div>
+  </header>
+  <main id="stage">
+    <canvas id="screen" tabindex="0" aria-label="Map of Mexico City with job sites and transit lines. Use arrow keys or WASD to walk, Space or E to interact, or click to walk."></canvas>
+    <div id="prompt" role="status" aria-live="polite"><span class="ptxt"></span></div>
+  </main>
+</div>
+
+<div id="overlay" hidden><div id="panel" class="panel" role="dialog" aria-modal="true"></div></div>
+
+<div id="title" role="button" tabindex="0" aria-label="Start game">
+  <div class="title-inner">
+    <div class="kicker">A WORKREACH PROJECT</div>
+    <h1><span class="t1">WORKREACH</span><span class="t2">THE GAME</span></h1>
+    <p class="sub">A Serious Game on Space, Work, and Opportunity in Mexico City</p>
+    <p class="press">PRESS SPACE OR CLICK TO START</p>
+    <p class="foot">Arrows / WASD to walk &middot; SPACE / E to interact &middot; click or tap to walk</p>
+  </div>
+</div>
+<div id="crt"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ==========================================================
+   * Constants and helpers
+   * ========================================================== */
+  const MAP_W = 40, MAP_H = 22, TILE = 8;
+  const BUF_W = MAP_W * TILE, BUF_H = MAP_H * TILE;
+  const DAY_START = 8 * 60, DAY_END = 20 * 60;
+  const STEP_MIN = 5;            // search minutes per tile walked
+  const STEP_TIME = 0.12;        // seconds per walking step (animation)
+  const TRIPS = 44;              // 22 workdays x 2 trips
+  const VOT = 1.0;               // $/min used to pick the best route
+  const FATIGUE = 0.6;           // $/min of commuting charged as time cost
+  const START_BALANCE = 3000;
+  const VERSION = '1.0.0';
+
+  const $ = sel => document.querySelector(sel);
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const money = n => {
+    const r = Math.round(n);
+    return (r < 0 ? '−$' : '$') + Math.abs(r).toLocaleString('en-US');
+  };
+  const signed = n => (n > 0 ? '+' : '') + money(n);
+  const clock = m => {
+    const h = Math.floor(m / 60), mm = Math.round(m % 60);
+    return String(h).padStart(2, '0') + ':' + String(mm).padStart(2, '0');
+  };
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const manhattan = (a, b) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+
+  function mulberry32(seed) {
+    let a = seed >>> 0;
+    return function () {
+      a = (a + 0x6D2B79F5) >>> 0;
+      let t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  const pick = (r, arr) => arr[Math.floor(r() * arr.length)];
+
+  /* ==========================================================
+   * World data
+   * ========================================================== */
+  const ZONES = {
+    cbd: {
+      id: 'cbd', name: 'Central Business District', short: 'CBD', districts: 'Polanco · Reforma · Santa Fe',
+      rent: 11500, tier: '$$$', label: '#8fb8ff',
+      desc: 'Glass towers and most of the formal, high-pay jobs. Rent is brutal.',
+      jobs: 'Formal jobs: many · Informal: few'
+    },
+    int: {
+      id: 'int', name: 'Intermediate Ring', short: 'Ring', districts: 'Cuauhtémoc · Benito Juárez · Coyoacán',
+      rent: 6800, tier: '$$', label: '#ffc08a',
+      desc: 'Mixed-use neighborhoods with a bit of everything, medium rent, decent transit.',
+      jobs: 'Formal jobs: some · Informal: some'
+    },
+    per: {
+      id: 'per', name: 'Periphery (East & South)', short: 'Periphery', districts: 'Iztapalapa · Neza · Tláhuac',
+      rent: 3200, tier: '$', label: '#ff9fb4',
+      desc: 'Affordable self-built homes. Lots of informal work, few formal jobs, long trips to the center.',
+      jobs: 'Formal jobs: few · Informal: many'
+    }
+  };
+  const zoneOf = x => (x <= 12 ? 'cbd' : x <= 24 ? 'int' : 'per');
+
+  const HOMES = {
+    cbd: { bx: 4, by: 4, label: 'Studio in Polanco' },
+    int: { bx: 16, by: 10, label: 'Apartment in Narvarte' },
+    per: { bx: 37, by: 10, label: 'House in Iztapalapa' }
+  };
+
+  const HUBS = [
+    { id: 'santafe-tech', name: 'Santa Fe Tech Campus', bx: 4, by: 10, tier: 3, formal: true, wage: 24500, kind: 'tower', blurb: 'Software QA and data roles. A fast, technical interview.' },
+    { id: 'torre-reforma', name: 'Torre Reforma Consulting', bx: 10, by: 7, tier: 3, formal: true, wage: 21000, kind: 'tower', blurb: 'Junior analyst. Suits, spreadsheets and a 40th-floor view.' },
+    { id: 'banco-polanco', name: 'Banco Polanco HQ', bx: 7, by: 1, tier: 3, formal: true, wage: 19500, kind: 'tower', blurb: 'Back-office banking. Strict, precise screening.' },
+    { id: 'hotel-polanco', name: 'Hotel Polanco Staff', bx: 10, by: 4, tier: 2, formal: true, wage: 10800, kind: 'office', blurb: 'Reception and housekeeping with a formal contract.' },
+    { id: 'reforma-stand', name: 'Reforma Food Stand', bx: 7, by: 10, tier: 1, formal: false, wage: 8400, kind: 'stand', blurb: 'Selling tortas to office workers. Cash only, no contract.' },
+    { id: 'callcenter', name: 'Call Center Insurgentes', bx: 13, by: 4, tier: 2, formal: true, wage: 11000, kind: 'office', blurb: 'Customer service shifts. Formal contract, IMSS from day one.' },
+    { id: 'hospital', name: 'Hospital General · Admissions', bx: 19, by: 7, tier: 2, formal: true, wage: 11800, kind: 'hospital', blurb: 'Admissions desk. Formal, stable, demanding.' },
+    { id: 'delivery', name: 'Delivery Rider (App)', bx: 22, by: 4, tier: 1, formal: false, wage: 9200, kind: 'delivery', variable: 0.22, blurb: 'Bike deliveries through an app. No contract, and pay swings week to week.' },
+    { id: 'supermarket', name: 'Supermarket Chain', bx: 22, by: 13, tier: 2, formal: true, wage: 10200, kind: 'office', blurb: 'Cashier and stocking. Formal contract and IMSS.' },
+    { id: 'mercado-coyoacan', name: 'Mercado de Coyoacán Stall', bx: 16, by: 16, tier: 1, formal: false, wage: 8000, kind: 'stand', blurb: 'Helping at a family stall. Flexible, informal, unprotected.' },
+    { id: 'abasto', name: 'Central de Abasto Loader', bx: 28, by: 10, tier: 1, formal: false, wage: 8600, kind: 'stand', blurb: 'Loading produce from 4 a.m. Informal, physical work.' },
+    { id: 'taller', name: 'Taller Mecánico', bx: 34, by: 4, tier: 1, formal: false, wage: 7900, kind: 'workshop', blurb: 'Neighborhood car repair shop. Informal and close to home.' },
+    { id: 'tianguis', name: 'Tianguis Vendor', bx: 34, by: 13, tier: 1, formal: false, wage: 7600, kind: 'stand', blurb: 'Street market stall. Informal and weather-dependent.' },
+    { id: 'warehouse', name: 'Logistics Warehouse', bx: 31, by: 16, tier: 2, formal: true, wage: 10400, kind: 'warehouse', blurb: 'Picking and packing. One of the few formal employers out east.' },
+    { id: 'obra', name: 'Construction Crew', bx: 37, by: 16, tier: 1, formal: false, wage: 8300, kind: 'construction', blurb: 'Building second floors on self-built homes. Informal.' }
+  ];
+  HUBS.forEach(h => { h.zone = zoneOf(h.bx); h.door = { x: h.bx, y: h.by + 2 }; });
+  Object.values(HOMES).forEach(h => { h.door = { x: h.bx, y: h.by + 2 }; });
+
+  const PARKS = [[4, 7], [7, 7], [19, 16], [25, 1]];
+  const PARK_NAMES = { '7,7': 'Chapultepec', '19,16': 'Viveros' };
+  const HILLS = [[31, 13]];
+  for (let by = 1; by <= 19; by += 3) HILLS.push([1, by]);
+  for (let bx = 4; bx <= 10; bx += 3) HILLS.push([bx, 19]);
+
+  const DISTRICT_LABELS = [
+    { text: 'SANTA FE', x: 5, y: 13.6 }, { text: 'POLANCO', x: 4.6, y: 0.7 }, { text: 'REFORMA', x: 11, y: 10.3 },
+    { text: 'CUAUHTÉMOC', x: 18.5, y: 0.7 }, { text: 'BENITO JUÁREZ', x: 19, y: 15.4 }, { text: 'COYOACÁN', x: 17, y: 21.5 },
+    { text: 'NEZA', x: 36.5, y: 0.7 }, { text: 'IZTAPALAPA', x: 33, y: 9.5 }, { text: 'TLÁHUAC', x: 35, y: 21.5 }
+  ];
+
+  const FARE = { metro: 5, metrobus: 6, express: 5 };
+  const WAIT = { metro: 5, metrobus: 6, express: 3 };
+  const TRANSFER_MIN = 4;
+  const LINES = [
+    {
+      id: 'M1', name: 'Metro Line 1', system: 'metro', color: '#f0609e', speed: 1.9,
+      stops: [[3, 9, 'Observatorio'], [6, 9, 'Tacubaya'], [9, 9, 'Chapultepec'], [12, 9, 'Sevilla'], [15, 9, 'Insurgentes'],
+        [18, 9, 'Salto del Agua'], [21, 9, 'Pino Suárez'], [24, 9, 'Merced'], [27, 9, 'San Lázaro'], [30, 9, 'Moctezuma'],
+        [33, 9, 'Zaragoza'], [36, 9, 'Pantitlán']]
+    },
+    {
+      id: 'MB1', name: 'Metrobús Insurgentes', system: 'metrobus', color: '#e8443a', speed: 2.4,
+      stops: [[15, 3, 'Buenavista'], [15, 6, 'Reforma'], [15, 9, 'Insurgentes'], [15, 12, 'Polyforum'], [15, 15, 'Félix Cuevas'], [15, 18, 'Ciudad Universitaria']]
+    },
+    {
+      id: 'M8', name: 'Metro Line 8', system: 'metro', color: '#5fb35a', speed: 1.9,
+      stops: [[18, 3, 'Garibaldi'], [18, 6, 'Bellas Artes'], [18, 9, 'Salto del Agua'], [18, 12, 'Chabacano'], [21, 12, 'La Viga'],
+        [24, 12, 'Iztacalco'], [27, 12, 'Apatlaco'], [30, 12, 'Atlalilco'], [30, 15, 'Constitución']]
+    },
+    {
+      id: 'EXP', name: 'Línea Oriente Express', system: 'express', color: '#36c5d6', speed: 1.1, express: true,
+      stops: [[36, 18, 'Tláhuac'], [30, 18, 'Periférico Oriente'], [24, 18, 'Culhuacán'], [18, 18, 'Coyoacán'], [15, 18, 'Ciudad Universitaria'],
+        [12, 18, 'Mixcoac'], [12, 15, 'Barranca del Muerto'], [12, 12, 'San Pedro de los Pinos'], [12, 9, 'Sevilla']]
+    }
+  ];
+
+  const SCENARIOS = [
+    {
+      id: 'R1', label: 'R1 · BASELINE', title: 'Round 1 · Baseline',
+      prompt: 'You are an individual job seeker in CDMX. Maximize your savings for the month.',
+      rules: ['Pick where to live, then explore the city and land a job before 8 PM.', 'Formal jobs need an interview. Informal jobs hire on the spot.'],
+      rentMult: { cbd: 1, int: 1, per: 1 }, fareMult: 1, perFareMult: 1, express: false,
+      caregiver: false, household: 0, childcareInformal: 0, fatigueMult: 1, forcedInformalShock: false, informalShockP: 0.4,
+      wageMult: { formal: 1, informal: 1, tier3: 1 }, homeExtra: {}
+    },
+    {
+      id: 'R2', label: 'R2 · CAREGIVER', title: 'Round 2 · Head of Household',
+      prompt: 'You are now the primary caregiver and head of household with two dependents. Your family urgently requires IMSS (social security and health coverage), which only formal employment provides.',
+      rules: ['Dependents add household costs, and every hour commuting is an hour away from them (time costs double).', 'Without IMSS, a family health emergency must be paid out of pocket.'],
+      rentMult: { cbd: 1, int: 1, per: 1 }, fareMult: 1, perFareMult: 1, express: false,
+      caregiver: true, household: 3500, childcareInformal: 1400, fatigueMult: 2, forcedInformalShock: true, informalShockP: 0,
+      wageMult: { formal: 1, informal: 1, tier3: 1 }, homeExtra: {}
+    },
+    {
+      id: 'R3', label: 'R3 · NEW TRANSIT', title: 'Round 3 · Transit & Rent Shock',
+      prompt: 'The city has launched an expanded rapid transit line cutting commute costs from the periphery by 50%, but inflation has raised CBD rent by 20%.',
+      rules: ['The cyan Línea Oriente Express now runs from Tláhuac to Sevilla.', 'Trips that start or end in the periphery cost half.'],
+      rentMult: { cbd: 1.2, int: 1, per: 1 }, fareMult: 1, perFareMult: 0.5, express: true,
+      caregiver: false, household: 0, childcareInformal: 0, fatigueMult: 1, forcedInformalShock: false, informalShockP: 0.4,
+      wageMult: { formal: 1, informal: 1, tier3: 1 }, homeExtra: {}
+    }
+  ];
+
+  const SANDBOX_HEADLINES = [
+    { text: 'Short-term rentals spread through Cuauhtémoc: Ring rents up 25%.', apply: s => { s.rentMult.int *= 1.25; } },
+    { text: 'Office vacancies pile up downtown: CBD rents fall 15%.', apply: s => { s.rentMult.cbd *= 0.85; } },
+    { text: 'Metro and Metrobús fares rise 40%.', apply: s => { s.fareMult *= 1.4; } },
+    { text: 'The Línea Oriente Express is running again.', apply: s => { s.express = true; s.perFareMult = 0.5; } },
+    { text: 'Water shortage out east: periphery homes buy water trucks ($900).', apply: s => { s.homeExtra.per = (s.homeExtra.per || 0) + 900; } },
+    { text: 'Santa Fe hiring spree: tier-3 salaries up 15%.', apply: s => { s.wageMult.tier3 *= 1.15; } },
+    { text: 'Economic slowdown: informal earnings drop 15%.', apply: s => { s.wageMult.informal *= 0.85; } },
+    { text: 'Minimum wage hike: formal salaries up 8%.', apply: s => { s.wageMult.formal *= 1.08; } },
+    { text: 'Rainy season: informal workers face more shocks.', apply: s => { s.informalShockP = Math.min(0.9, s.informalShockP + 0.3); } },
+    { text: 'You take in a relative who needs care.', apply: s => { s.caregiver = true; s.household += 2200; s.childcareInformal = 1400; s.fatigueMult = 2; } }
+  ];
+
+  const INFORMAL_SHOCKS = [
+    { title: 'Flu: 4 unpaid days plus a private clinic', cost: w => w / 22 * 4 + 650 },
+    { title: 'Rainy week: half your customers vanished', cost: () => 1200 },
+    { title: 'Inspectors confiscated your goods', cost: () => 1500, kinds: ['stand'] },
+    { title: 'Phone stolen on the long commute', cost: () => 2200, minCommute: 50 },
+    { title: 'Back injury: a week without pay', cost: w => w / 22 * 5, kinds: ['stand', 'construction', 'workshop', 'delivery'] }
+  ];
+
+  const taxRate = w => (w <= 11000 ? 0.07 : w <= 20000 ? 0.11 : 0.15);
+
+  /* ==========================================================
+   * Map grid
+   * ========================================================== */
+  const ROAD = 0, BLOCK = 1, PARK = 2, HILL = 3;
+  const grid = [];
+  const blocks = new Map();
+  for (let y = 0; y < MAP_H; y++) {
+    grid.push([]);
+    for (let x = 0; x < MAP_W; x++) grid[y].push(x % 3 === 0 || y % 3 === 0 ? ROAD : BLOCK);
+  }
+  for (let by = 1; by < MAP_H; by += 3) {
+    for (let bx = 1; bx < MAP_W; bx += 3) blocks.set(bx + ',' + by, { bx, by, type: 'bld', zone: zoneOf(bx) });
+  }
+  const setBlock = (bx, by, props) => {
+    const b = blocks.get(bx + ',' + by);
+    Object.assign(b, props);
+    const t = props.type === 'park' ? PARK : props.type === 'hill' ? HILL : BLOCK;
+    for (let y = by; y < by + 2; y++) for (let x = bx; x < bx + 2; x++) grid[y][x] = t;
+  };
+  PARKS.forEach(([bx, by]) => setBlock(bx, by, { type: 'park' }));
+  HILLS.forEach(([bx, by]) => setBlock(bx, by, { type: 'hill' }));
+  HUBS.forEach(h => setBlock(h.bx, h.by, { type: 'hub', hub: h }));
+  Object.entries(HOMES).forEach(([z, h]) => setBlock(h.bx, h.by, { type: 'home', zone: z }));
+
+  const inMap = (x, y) => x >= 0 && y >= 0 && x < MAP_W && y < MAP_H;
+  const walkable = (x, y) => inMap(x, y) && (grid[y][x] === ROAD || grid[y][x] === PARK);
+  const blockAt = (x, y) => {
+    if (!inMap(x, y) || grid[y][x] === ROAD) return null;
+    const bx = x - ((x - 1) % 3), by = y - ((y - 1) % 3);
+    return blocks.get(bx + ',' + by) || null;
+  };
+
+  function bfs(from, to) {
+    if (!walkable(to.x, to.y)) return null;
+    const key = (x, y) => y * MAP_W + x;
+    const prev = new Int32Array(MAP_W * MAP_H).fill(-2);
+    const q = [from];
+    prev[key(from.x, from.y)] = -1;
+    while (q.length) {
+      const c = q.shift();
+      if (c.x === to.x && c.y === to.y) break;
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const nx = c.x + dx, ny = c.y + dy;
+        if (walkable(nx, ny) && prev[key(nx, ny)] === -2) {
+          prev[key(nx, ny)] = key(c.x, c.y);
+          q.push({ x: nx, y: ny });
+        }
+      }
+    }
+    if (prev[key(to.x, to.y)] === -2) return null;
+    const path = [];
+    let k = key(to.x, to.y);
+    while (k !== key(from.x, from.y)) {
+      path.unshift({ x: k % MAP_W, y: Math.floor(k / MAP_W) });
+      k = prev[k];
+    }
+    return path;
+  }
+
+  /* ==========================================================
+   * Transit network
+   * ========================================================== */
+  let NET = null;
+
+  function buildTransit(express) {
+    const lines = LINES.filter(l => !l.express || express);
+    const lineById = Object.fromEntries(lines.map(l => [l.id, l]));
+    const stations = new Map();
+    lines.forEach(l => l.stops.forEach(([x, y, name]) => {
+      const k = x + ',' + y;
+      if (!stations.has(k)) stations.set(k, { key: k, x, y, name, lines: [] });
+      const s = stations.get(k);
+      if (!s.lines.includes(l.id)) s.lines.push(l.id);
+    }));
+    const adj = new Map();
+    const addE = (a, b, time, fare) => {
+      if (!adj.has(a)) adj.set(a, []);
+      adj.get(a).push({ to: b, time, fare });
+    };
+    lines.forEach(l => {
+      for (let i = 0; i < l.stops.length - 1; i++) {
+        const [ax, ay] = l.stops[i], [bx, by] = l.stops[i + 1];
+        const t = (Math.abs(ax - bx) + Math.abs(ay - by)) * l.speed;
+        const A = ax + ',' + ay + '|' + l.id, B = bx + ',' + by + '|' + l.id;
+        addE(A, B, t, 0);
+        addE(B, A, t, 0);
+      }
+    });
+    stations.forEach(s => {
+      s.lines.forEach(a => s.lines.forEach(b => {
+        if (a === b) return;
+        const sa = lineById[a].system, sb = lineById[b].system;
+        addE(s.key + '|' + a, s.key + '|' + b, TRANSFER_MIN, sa === sb ? 0 : FARE[sb]);
+      }));
+    });
+
+    const AP = {};
+    stations.forEach(src => {
+      const dist = new Map(), prev = new Map(), done = new Set();
+      src.lines.forEach(lid => {
+        const sys = lineById[lid].system;
+        const n = src.key + '|' + lid;
+        dist.set(n, { g: WAIT[sys] * VOT + FARE[sys], time: WAIT[sys], fare: FARE[sys] });
+        prev.set(n, null);
+      });
+      for (;;) {
+        let best = null, bg = Infinity;
+        dist.forEach((v, k) => { if (!done.has(k) && v.g < bg) { bg = v.g; best = k; } });
+        if (best === null) break;
+        done.add(best);
+        const cur = dist.get(best);
+        (adj.get(best) || []).forEach(e => {
+          const g = cur.g + e.time * VOT + e.fare;
+          if (!dist.has(e.to) || g < dist.get(e.to).g) {
+            dist.set(e.to, { g, time: cur.time + e.time, fare: cur.fare + e.fare });
+            prev.set(e.to, best);
+          }
+        });
+      }
+      AP[src.key] = {};
+      stations.forEach(dst => {
+        if (dst.key === src.key) return;
+        let bestNode = null;
+        dst.lines.forEach(lid => {
+          const n = dst.key + '|' + lid;
+          if (dist.has(n) && (!bestNode || dist.get(n).g < dist.get(bestNode).g)) bestNode = n;
+        });
+        if (!bestNode) return;
+        const nodes = [];
+        for (let n = bestNode; n; n = prev.get(n)) nodes.unshift(n);
+        const pts = [];
+        const used = [];
+        nodes.forEach(n => {
+          const [k, lid] = n.split('|');
+          const [x, y] = k.split(',').map(Number);
+          const last = pts[pts.length - 1];
+          if (!last || last.x !== x || last.y !== y) pts.push({ x, y });
+          if (!used.includes(lid)) used.push(lid);
+        });
+        const d = dist.get(bestNode);
+        AP[src.key][dst.key] = { time: d.time, fare: d.fare, pts, lines: used };
+      });
+    });
+    return { lines, lineById, stations: [...stations.values()], stationMap: stations, AP };
+  }
+
+  function streetLeg(a, b) {
+    const d = manhattan(a, b);
+    if (d <= 3) return { time: d * 6, fare: 0, mode: 'walk', d };
+    return { time: 8 + d * 3, fare: 7 + 0.4 * Math.max(0, d - 5), mode: 'colectivo', d };
+  }
+
+  function streetPts(a, b) {
+    if (a.y === b.y || a.x === b.x) return [a, b];
+    const c = b.x % 3 === 0 ? b.x : a.x % 3 === 0 ? a.x : b.x - 1;
+    const pts = [a];
+    if (c !== a.x) pts.push({ x: c, y: a.y });
+    pts.push({ x: c, y: b.y });
+    if (c !== b.x) pts.push(b);
+    return pts;
+  }
+
+  function fareFactor(scen, a, b) {
+    let f = scen.fareMult || 1;
+    if (zoneOf(a.x) === 'per' || zoneOf(b.x) === 'per') f *= scen.perFareMult || 1;
+    return f;
+  }
+
+  function commute(a, b, scen) {
+    const ff = fareFactor(scen, a, b);
+    const direct = streetLeg(a, b);
+    let best = {
+      time: direct.time, fare: direct.fare * ff, mode: direct.mode,
+      pts: streetPts(a, b), lines: [], desc: direct.mode === 'walk' ? 'Walk' : 'Colectivo'
+    };
+    best.g = best.time * VOT + best.fare;
+    if (direct.d === 0) return { ...best, time: 0, fare: 0, g: 0, desc: 'Same spot' };
+    NET.stations.forEach(s1 => {
+      const l1 = streetLeg(a, s1);
+      if (l1.d > 9) return;
+      NET.stations.forEach(s2 => {
+        if (s1 === s2) return;
+        const l2 = streetLeg(s2, b);
+        if (l2.d > 9) return;
+        const r = NET.AP[s1.key][s2.key];
+        if (!r) return;
+        const time = l1.time + r.time + l2.time;
+        const fare = (l1.fare + r.fare + l2.fare) * ff;
+        const g = time * VOT + fare;
+        if (g < best.g) {
+          const pts = streetPts(a, { x: s1.x, y: s1.y }).concat(r.pts.slice(1), streetPts({ x: s2.x, y: s2.y }, b).slice(1));
+          const parts = [];
+          if (l1.d > 0) parts.push(l1.mode === 'walk' ? 'walk' : 'colectivo');
+          r.lines.forEach(id => parts.push(NET.lineById[id].name));
+          if (l2.d > 0) parts.push(l2.mode === 'walk' ? 'walk' : 'colectivo');
+          best = { time, fare, g, mode: 'transit', pts, lines: r.lines, desc: parts.join(' → ') };
+        }
+      });
+    });
+    return best;
+  }
+
+  /* ==========================================================
+   * Audio (Web Audio API, no assets)
+   * ========================================================== */
+  const Snd = {
+    ctx: null, master: null, music: null, fx: null, muted: false,
+    timer: null, step: 0, nextT: 0, playing: false, mood: 'title',
+    init() {
+      if (this.ctx) { if (this.ctx.state === 'suspended') this.ctx.resume(); return; }
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      this.ctx = new AC();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = this.muted ? 0 : 0.8;
+      this.master.connect(this.ctx.destination);
+      this.music = this.ctx.createGain();
+      this.music.gain.value = 0.22;
+      this.music.connect(this.master);
+      this.fx = this.ctx.createGain();
+      this.fx.gain.value = 0.5;
+      this.fx.connect(this.master);
+      const len = this.ctx.sampleRate * 0.4;
+      this.noiseBuf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
+      const data = this.noiseBuf.getChannelData(0);
+      for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+    },
+    setMuted(m) {
+      this.muted = m;
+      if (this.master) this.master.gain.setTargetAtTime(m ? 0 : 0.8, this.ctx.currentTime, 0.02);
+    },
+    tone(freq, start, dur, { type = 'square', vol = 0.15, slide = null, dest = null } = {}) {
+      if (!this.ctx) return;
+      const o = this.ctx.createOscillator(), g = this.ctx.createGain();
+      o.type = type;
+      o.frequency.setValueAtTime(freq, start);
+      if (slide) o.frequency.exponentialRampToValueAtTime(slide, start + dur);
+      g.gain.setValueAtTime(0.0001, start);
+      g.gain.linearRampToValueAtTime(vol, start + 0.006);
+      g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+      o.connect(g);
+      g.connect(dest || this.fx);
+      o.start(start);
+      o.stop(start + dur + 0.03);
+    },
+    noise(start, dur, vol, dest) {
+      if (!this.ctx) return;
+      const s = this.ctx.createBufferSource(), g = this.ctx.createGain(), f = this.ctx.createBiquadFilter();
+      s.buffer = this.noiseBuf;
+      f.type = 'highpass';
+      f.frequency.value = 6000;
+      g.gain.setValueAtTime(vol, start);
+      g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+      s.connect(f); f.connect(g); g.connect(dest || this.fx);
+      s.start(start);
+      s.stop(start + dur + 0.02);
+    },
+    sfx(name) {
+      if (!this.ctx || this.muted) return;
+      const t = this.ctx.currentTime;
+      const n = m => 440 * Math.pow(2, (m - 69) / 12);
+      switch (name) {
+        case 'step': this.tone(n(40), t, 0.03, { type: 'triangle', vol: 0.05 }); break;
+        case 'select': this.tone(n(76), t, 0.05, { vol: 0.08 }); this.tone(n(83), t + 0.05, 0.07, { vol: 0.08 }); break;
+        case 'open': this.tone(n(67), t, 0.06, { vol: 0.08 }); this.tone(n(72), t + 0.06, 0.08, { vol: 0.08 }); break;
+        case 'coin': this.tone(n(83), t, 0.07, { vol: 0.1 }); this.tone(n(88), t + 0.07, 0.2, { vol: 0.1 }); break;
+        case 'error': this.tone(n(50), t, 0.25, { type: 'sawtooth', vol: 0.1, slide: n(38) }); break;
+        case 'pass': [72, 76, 79, 84].forEach((m, i) => this.tone(n(m), t + i * 0.09, 0.14, { vol: 0.1 })); break;
+        case 'fail': [67, 63, 60, 55].forEach((m, i) => this.tone(n(m), t + i * 0.12, 0.16, { type: 'triangle', vol: 0.14 })); break;
+        case 'train': [76, 72, 79].forEach((m, i) => this.tone(n(m), t + i * 0.16, 0.22, { type: 'sine', vol: 0.12 })); break;
+        case 'shock': for (let i = 0; i < 4; i++) this.tone(i % 2 ? n(70) : n(77), t + i * 0.13, 0.12, { vol: 0.09 }); break;
+        case 'covered': this.tone(n(72), t, 0.1, { type: 'sine', vol: 0.12 }); this.tone(n(79), t + 0.1, 0.25, { type: 'sine', vol: 0.12 }); break;
+        default: break;
+      }
+    },
+    padTone(dir) {
+      if (!this.ctx || this.muted) return;
+      const f = { up: 659.25, right: 523.25, down: 392.0, left: 440.0 }[dir];
+      this.tone(f, this.ctx.currentTime, 0.18, { vol: 0.12 });
+    },
+    startMusic() {
+      if (!this.ctx || this.playing) return;
+      this.playing = true;
+      this.step = 0;
+      this.nextT = this.ctx.currentTime + 0.1;
+      this.timer = setInterval(() => this.schedule(), 25);
+    },
+    setMood(m) {
+      this.mood = m;
+      if (this.music) this.music.gain.setTargetAtTime(m === 'title' ? 0.24 : 0.11, this.ctx.currentTime, 0.4);
+    },
+    schedule() {
+      const spb = 60 / 104 / 4;
+      const chords = [[57, 60, 64], [53, 57, 60], [55, 60, 64], [55, 59, 62]];
+      const bass = [45, 41, 48, 43];
+      const arp = [0, 1, 2, 1, 0, 2, 1, 2, 0, 1, 2, 1, 2, 1, 0, 1];
+      const n = m => 440 * Math.pow(2, (m - 69) / 12);
+      while (this.nextT < this.ctx.currentTime + 0.12) {
+        const bar = Math.floor(this.step / 16) % 4, s = this.step % 16;
+        const ch = chords[bar];
+        if (s % 4 === 0) this.tone(n(bass[bar]), this.nextT, spb * 3.6, { type: 'triangle', vol: 0.32, dest: this.music });
+        if (this.mood === 'title' || s % 2 === 0) {
+          this.tone(n(ch[arp[s]] + 12), this.nextT, spb * 0.9, { type: 'square', vol: 0.07, dest: this.music });
+        }
+        if (this.mood === 'title' && s % 4 === 2) this.noise(this.nextT, 0.04, 0.05, this.music);
+        if (this.mood === 'title' && (this.step % 64) === 56) this.tone(n(ch[2] + 24), this.nextT, spb * 6, { type: 'square', vol: 0.05, dest: this.music });
+        this.nextT += spb;
+        this.step++;
+      }
+    }
+  };
+
+  /* ==========================================================
+   * Rendering: canvases
+   * ========================================================== */
+  const canvas = $('#screen');
+  const ctx = canvas.getContext('2d');
+  const buf = document.createElement('canvas');
+  buf.width = BUF_W; buf.height = BUF_H;
+  const b = buf.getContext('2d');
+  const mapCanvas = document.createElement('canvas');
+  mapCanvas.width = BUF_W; mapCanvas.height = BUF_H;
+  const m = mapCanvas.getContext('2d');
+  let scale = 3, dpr = 1;
+
+  const P = (c2, x, y, w, h, col) => { c2.fillStyle = col; c2.fillRect(x, y, w, h); };
+
+  const PAL = {
+    road: { cbd: '#3b3f52', int: '#4a4152', per: '#6b5844' },
+    side: { cbd: '#8b8fa3', int: '#b49d86', per: '#9a8164' },
+    mark: { cbd: '#c9c9d6', int: '#d6c3a8', per: '#b59c7a' }
+  };
+
+  function drawRoads(c2) {
+    for (let y = 0; y < MAP_H; y++) {
+      for (let x = 0; x < MAP_W; x++) {
+        if (grid[y][x] !== ROAD) continue;
+        const z = zoneOf(x);
+        P(c2, x * TILE, y * TILE, TILE, TILE, PAL.road[z]);
+        const hRoad = y % 3 === 0, vRoad = x % 3 === 0;
+        if (hRoad && !vRoad && (x % 2 === 0)) P(c2, x * TILE + 2, y * TILE + 4, 3, 1, PAL.mark[z]);
+        if (vRoad && !hRoad && (y % 2 === 0)) P(c2, x * TILE + 4, y * TILE + 2, 1, 3, PAL.mark[z]);
+        if (z === 'per' && ((x * 7 + y * 13) % 5 === 0)) P(c2, x * TILE + 1, y * TILE + 6, 1, 1, '#7d684f');
+      }
+    }
+  }
+
+  function drawBlockBase(c2, ox, oy, zone) {
+    P(c2, ox, oy, 16, 16, PAL.side[zone]);
+  }
+
+  function drawTower(c2, ox, oy, r, gold) {
+    const h = 3 + Math.floor(r() * 4);
+    P(c2, ox + 1, oy + 1, 14, 14, '#262b3d');
+    P(c2, ox + 2, oy + 1, 12, h, '#6c7fa6');
+    P(c2, ox + 2, oy + 1, 12, 1, '#a3b5d9');
+    P(c2, ox + 2, oy + 1 + h, 12, 13 - h, '#2c4670');
+    for (let yy = oy + 2 + h; yy < oy + 14; yy += 2) {
+      for (let xx = ox + 3; xx < ox + 13; xx += 2) P(c2, xx, yy, 1, 1, r() < 0.22 ? '#ffd36b' : '#8fd3ff');
+    }
+    P(c2, ox + 13, oy + 1 + h, 1, 13 - h, '#1c2c4a');
+    if (gold) P(c2, ox + 2, oy + 1 + h - 1, 12, 1, '#ffcc4d');
+    if (r() < 0.5) P(c2, ox + 4 + Math.floor(r() * 7), oy, 1, 2, '#e8443a');
+  }
+
+  function drawPlaza(c2, ox, oy, r) {
+    P(c2, ox + 1, oy + 1, 14, 14, '#cfc6b2');
+    P(c2, ox + 6, oy + 6, 4, 4, '#5b8cff');
+    P(c2, ox + 7, oy + 7, 2, 2, '#bfe3ff');
+    [[2, 2], [11, 2], [2, 11], [11, 11]].forEach(([dx, dy]) => drawTree(c2, ox + dx, oy + dy, r));
+  }
+
+  function drawTree(c2, x, y) {
+    P(c2, x, y + 1, 3, 2, '#2d6b38');
+    P(c2, x + 1, y, 1, 3, '#2d6b38');
+    P(c2, x, y, 1, 1, '#5fb35a');
+    P(c2, x + 1, y + 3, 1, 1, '#5b3a1e');
+  }
+
+  function drawHouseRow(c2, ox, oy, r, roofTint) {
+    for (const i of [0, 7]) {
+      if (r() < 0.18 && !roofTint) {
+        P(c2, ox + 1 + i, oy + 1, 7, 14, '#7aa35b');
+        drawTree(c2, ox + 3 + i, oy + 4, r);
+        drawTree(c2, ox + 2 + i, oy + 10, r);
+        continue;
+      }
+      const wall = roofTint ? '#f6e7cf' : pick(r, ['#f1d3a5', '#e8b78b', '#f4e3c1', '#d9a7c7', '#a9d1c4']);
+      const roof = roofTint || pick(r, ['#c4553a', '#a8432e', '#b8643f']);
+      P(c2, ox + 1 + i, oy + 1, 7, 6, roof);
+      P(c2, ox + 1 + i, oy + 1, 7, 1, '#e98a63');
+      P(c2, ox + 1 + i, oy + 7, 7, 8, wall);
+      P(c2, ox + 2 + i, oy + 9, 2, 2, '#3a2e3f');
+      P(c2, ox + 5 + i, oy + 9, 2, 2, '#3a2e3f');
+      P(c2, ox + 3 + i, oy + 12, 2, 3, '#6b3e26');
+      P(c2, ox + 7 + i, oy + 7, 1, 8, 'rgba(0,0,0,0.18)');
+    }
+  }
+
+  function drawSelfBuilt(c2, ox, oy, r) {
+    for (const [i, j] of [[0, 0], [7, 0], [0, 7], [7, 7]]) {
+      const wall = pick(r, ['#9da3a6', '#b86b3c', '#e46a8e', '#3fb5a3', '#f2c14e', '#9da3a6', '#b86b3c']);
+      P(c2, ox + 1 + i, oy + 1 + j, 7, 7, wall);
+      P(c2, ox + 1 + i, oy + 1 + j, 7, 3, '#8c8c8c');
+      P(c2, ox + 1 + i, oy + 1 + j, 7, 1, '#a9a9a9');
+      if (r() < 0.75) { P(c2, ox + 2 + i, oy + 1 + j, 2, 2, '#1b1b1b'); P(c2, ox + 2 + i, oy + 1 + j, 1, 1, '#444'); }
+      if (r() < 0.6) { P(c2, ox + 6 + i, oy + j, 1, 2, '#5b4636'); P(c2, ox + 4 + i, oy + j + 1, 1, 1, '#5b4636'); }
+      P(c2, ox + 3 + i, oy + 5 + j, 2, 2, '#2b2b2b');
+      if (wall === '#9da3a6') for (let k = 0; k < 3; k++) P(c2, ox + 1 + i + k * 2, oy + 4 + j, 1, 1, '#7d8385');
+    }
+  }
+
+  function drawPark(c2, ox, oy, r) {
+    P(c2, ox, oy, 16, 16, '#3e8948');
+    for (let k = 0; k < 10; k++) P(c2, ox + Math.floor(r() * 16), oy + Math.floor(r() * 16), 1, 1, '#5fb35a');
+    P(c2, ox, oy + 7, 16, 2, '#c9b48a');
+    for (let k = 0; k < 4; k++) drawTree(c2, ox + 1 + Math.floor(r() * 12), oy + (k % 2 ? 10 : 1) + Math.floor(r() * 3), r);
+  }
+
+  function drawHill(c2, ox, oy, r) {
+    P(c2, ox, oy, 16, 16, '#4a5a2e');
+    P(c2, ox + 2, oy + 3, 12, 11, '#5c6b3a');
+    P(c2, ox + 5, oy + 1, 6, 5, '#6d7d45');
+    P(c2, ox + 7, oy, 2, 2, '#8a9a5b');
+    for (let k = 0; k < 12; k++) P(c2, ox + Math.floor(r() * 16), oy + Math.floor(r() * 16), 1, 1, k % 2 ? '#2f3d1d' : '#7b8c4c');
+  }
+
+  function drawStall(c2, ox, oy, r, awning) {
+    P(c2, ox + 1, oy + 1, 14, 14, '#d9c39a');
+    for (let i = 0; i < 14; i++) P(c2, ox + 1 + i, oy + 3, 1, 4, i % 2 ? '#fff3e0' : awning);
+    P(c2, ox + 1, oy + 7, 14, 1, '#00000055');
+    P(c2, ox + 2, oy + 9, 12, 3, '#8b5a2b');
+    for (let i = 0; i < 6; i++) P(c2, ox + 3 + i * 2, oy + 9, 1, 1, pick(r, ['#e8443a', '#ffcc4d', '#5fb35a', '#ff8c42']));
+    P(c2, ox + 2, oy + 12, 1, 3, '#5b3a1e');
+    P(c2, ox + 13, oy + 12, 1, 3, '#5b3a1e');
+  }
+
+  function drawWorkshop(c2, ox, oy) {
+    P(c2, ox + 1, oy + 1, 14, 14, '#7b7f86');
+    P(c2, ox + 1, oy + 1, 14, 3, '#5d6168');
+    P(c2, ox + 3, oy + 7, 10, 8, '#2a2a2e');
+    for (let i = 0; i < 4; i++) P(c2, ox + 3, oy + 8 + i * 2, 10, 1, '#3d3d44');
+    P(c2, ox + 1, oy + 12, 2, 2, '#111');
+    P(c2, ox + 13, oy + 11, 2, 2, '#111');
+    P(c2, ox + 4, oy + 4, 8, 2, '#ffcc4d');
+  }
+
+  function drawConstruction(c2, ox, oy) {
+    P(c2, ox + 1, oy + 1, 14, 14, '#a08a6c');
+    P(c2, ox + 2, oy + 7, 12, 8, '#9da3a6');
+    for (let i = 0; i < 6; i++) P(c2, ox + 2 + i * 2, oy + 9 + (i % 2), 1, 1, '#7d8385');
+    for (let i = 0; i < 4; i++) P(c2, ox + 3 + i * 3, oy + 2, 1, 6, '#5b4636');
+    P(c2, ox + 2, oy + 4, 12, 1, '#c97b2c');
+    P(c2, ox + 11, oy + 1, 3, 3, '#e8443a');
+  }
+
+  function drawWarehouse(c2, ox, oy) {
+    P(c2, ox + 1, oy + 1, 14, 14, '#9aa3ad');
+    for (let i = 0; i < 7; i++) P(c2, ox + 1 + i * 2, oy + 1, 1, 7, '#7d8690');
+    P(c2, ox + 1, oy + 8, 14, 1, '#ffcc4d');
+    P(c2, ox + 3, oy + 10, 4, 5, '#4a4f57');
+    P(c2, ox + 9, oy + 10, 4, 5, '#4a4f57');
+  }
+
+  function drawHospital(c2, ox, oy) {
+    P(c2, ox + 1, oy + 1, 14, 14, '#eef0f2');
+    P(c2, ox + 1, oy + 1, 14, 3, '#c9d3dc');
+    P(c2, ox + 1, oy + 4, 14, 1, '#ffcc4d');
+    P(c2, ox + 7, oy + 6, 2, 6, '#e8443a');
+    P(c2, ox + 5, oy + 8, 6, 2, '#e8443a');
+    P(c2, ox + 2, oy + 13, 12, 2, '#9fb4c7');
+  }
+
+  function drawOffice(c2, ox, oy, zone, r) {
+    if (zone === 'cbd') { drawTower(c2, ox, oy, r, true); return; }
+    P(c2, ox + 1, oy + 1, 14, 14, zone === 'per' ? '#c9b18c' : '#e9d3b0');
+    P(c2, ox + 1, oy + 1, 14, 4, '#8a6d5a');
+    P(c2, ox + 1, oy + 5, 14, 1, '#ffcc4d');
+    for (let yy = oy + 7; yy < oy + 14; yy += 3) for (let xx = ox + 2; xx < ox + 14; xx += 3) P(c2, xx, yy, 2, 2, '#3a4a66');
+  }
+
+  function drawHome(c2, ox, oy) {
+    P(c2, ox + 1, oy + 1, 14, 14, '#7aa35b');
+    P(c2, ox + 3, oy + 2, 10, 5, '#ffd166');
+    P(c2, ox + 3, oy + 2, 10, 1, '#fff0b3');
+    P(c2, ox + 3, oy + 7, 10, 7, '#f6e7cf');
+    P(c2, ox + 7, oy + 10, 2, 4, '#8f3a22');
+    P(c2, ox + 4, oy + 9, 2, 2, '#3a2e3f');
+    P(c2, ox + 10, oy + 9, 2, 2, '#3a2e3f');
+  }
+
+  function renderMap(express) {
+    m.clearRect(0, 0, BUF_W, BUF_H);
+    drawRoads(m);
+    blocks.forEach(bl => {
+      const ox = bl.bx * TILE, oy = bl.by * TILE;
+      const r = mulberry32((bl.bx * 73856093) ^ (bl.by * 19349663) ^ 0x9e37);
+      if (bl.type === 'park') { drawPark(m, ox, oy, r); return; }
+      if (bl.type === 'hill') { drawHill(m, ox, oy, r); return; }
+      drawBlockBase(m, ox, oy, bl.zone);
+      if (bl.type === 'home') { drawHome(m, ox, oy); return; }
+      if (bl.type === 'hub') {
+        const h = bl.hub;
+        if (h.kind === 'tower') drawTower(m, ox, oy, r, true);
+        else if (h.kind === 'office') drawOffice(m, ox, oy, h.zone, r);
+        else if (h.kind === 'hospital') drawHospital(m, ox, oy);
+        else if (h.kind === 'warehouse') drawWarehouse(m, ox, oy);
+        else if (h.kind === 'workshop') drawWorkshop(m, ox, oy);
+        else if (h.kind === 'construction') drawConstruction(m, ox, oy);
+        else if (h.kind === 'delivery') drawStall(m, ox, oy, r, '#5fb35a');
+        else drawStall(m, ox, oy, r, h.zone === 'per' ? '#f0609e' : '#e8443a');
+        return;
+      }
+      if (bl.zone === 'cbd') { if (r() < 0.8) drawTower(m, ox, oy, r, false); else drawPlaza(m, ox, oy, r); }
+      else if (bl.zone === 'int') drawHouseRow(m, ox, oy, r, null);
+      else drawSelfBuilt(m, ox, oy, r);
+    });
+    // zone seams
+    P(m, 13 * TILE - 1, 0, 1, BUF_H, 'rgba(255,255,255,0.10)');
+    P(m, 25 * TILE - 1, 0, 1, BUF_H, 'rgba(255,255,255,0.10)');
+    // transit lines
+    const net = buildTransit(express);
+    net.lines.forEach((l, li) => {
+      const off = [0, 1, -1, 2][li] || 0;
+      for (let i = 0; i < l.stops.length - 1; i++) {
+        const [ax, ay] = l.stops[i], [bx, by] = l.stops[i + 1];
+        const x0 = Math.min(ax, bx) * TILE + 3 + off, y0 = Math.min(ay, by) * TILE + 3 + off;
+        const w = Math.abs(ax - bx) * TILE + 2, h = Math.abs(ay - by) * TILE + 2;
+        P(m, x0, y0, ax === bx ? 2 : w, ay === by ? 2 : h, l.color);
+      }
+    });
+    net.stations.forEach(s => {
+      const x = s.x * TILE, y = s.y * TILE;
+      P(m, x + 1, y + 1, 6, 6, '#000');
+      P(m, x + 2, y + 2, 4, 4, '#f6e7cf');
+      const cols = s.lines.map(id => net.lineById[id].color);
+      P(m, x + 3, y + 3, 2, 2, cols[0]);
+      if (cols[1]) P(m, x + 4, y + 3, 1, 2, cols[1]);
+    });
+    return net;
+  }
+
+  /* Pixel bitmaps */
+  const ICONS = {
+    brief: { rows: ['..####..', '.#....#.', '########', '#yyyyyy#', '#yy##yy#', '#yyyyyy#', '#yyyyyy#', '########'], pal: { '#': '#3a2414', y: '#ffcc4d' } },
+    basket: { rows: ['.#....#.', '..#..#..', '########', '#gGgGgG#', '#GgGgGg#', '#gGgGgG#', '.######.', '........'], pal: { '#': '#5b3a1e', g: '#7bd389', G: '#3f8f4f' } },
+    heart: { rows: ['.##.##..', '#######.', '#######.', '.#####..', '..###...', '...#....'], pal: { '#': '#ff6b6b' } },
+    x: { rows: ['#....#', '.#..#.', '..##..', '..##..', '.#..#.', '#....#'], pal: { '#': '#e8443a' } }
+  };
+  function drawIcon(c2, icon, x, y, alpha) {
+    c2.globalAlpha = alpha == null ? 1 : alpha;
+    icon.rows.forEach((row, j) => {
+      for (let i = 0; i < row.length; i++) {
+        const c = row[i];
+        if (c !== '.') P(c2, x + i, y + j, 1, 1, icon.pal[c]);
+      }
+    });
+    c2.globalAlpha = 1;
+  }
+
+  const AVATAR_PAL = { h: '#2b1d14', s: '#c68642', e: '#1a1a1a', o: '#ff6b35', p: '#2d3a8c', k: '#141414' };
+  const AV_HEAD = {
+    down: ['..hhh..', '.hhhhh.', '.seses.', '..sss..'],
+    up: ['..hhh..', '.hhhhh.', '.hhhhh.', '..sss..'],
+    left: ['..hhh..', '.hhhhh.', '.esss..', '..sss..'],
+    right: ['..hhh..', '.hhhhh.', '..ssse.', '..sss..']
+  };
+  const AV_BODY = ['.ooooo.', 'sooooos', '.ooooo.', '.ppppp.'];
+  const AV_LEGS = [['.pp.pp.', '.kk.kk.'], ['pp...pp', 'kk...kk'], ['..ppp..', '..kkk..']];
+  function drawAvatar(c2, x, y, dir, frame) {
+    const rows = AV_HEAD[dir].concat(AV_BODY, AV_LEGS[frame]);
+    P(c2, x + 1, y + 10, 5, 1, 'rgba(0,0,0,0.35)');
+    rows.forEach((row, j) => {
+      for (let i = 0; i < row.length; i++) {
+        const c = row[i];
+        if (c !== '.') P(c2, x + i, y + j, 1, 1, AVATAR_PAL[c]);
+      }
+    });
+  }
+
+  function polyPoint(pts, t) {
+    const segs = [];
+    let total = 0;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const l = manhattan(pts[i], pts[i + 1]);
+      segs.push(l);
+      total += l;
+    }
+    if (total === 0) return { x: pts[0].x, y: pts[0].y };
+    let d = clamp(t, 0, 1) * total;
+    for (let i = 0; i < segs.length; i++) {
+      if (d <= segs[i] || i === segs.length - 1) {
+        const k = segs[i] ? d / segs[i] : 0;
+        return { x: pts[i].x + (pts[i + 1].x - pts[i].x) * k, y: pts[i].y + (pts[i + 1].y - pts[i].y) * k };
+      }
+      d -= segs[i];
+    }
+    return pts[pts.length - 1];
+  }
+
+  /* ==========================================================
+   * Game state
+   * ========================================================== */
+  const G = {
+    state: 'title',
+    scen: null,
+    roundIndex: -1,
+    sandboxN: 0,
+    balance: START_BALANCE,
+    home: null,
+    player: { x: 16, y: 12, rx: 16, ry: 12, dir: 'down', moving: false, prog: 0, from: null, to: null, path: [], pending: null, frame: 0, stepCount: 0 },
+    clock: DAY_START,
+    searchFares: 0,
+    attempts: {},
+    interviews: [],
+    job: null,
+    results: [],
+    events: [],
+    t0: performance.now(),
+    startedAt: new Date().toISOString(),
+    sessionId: (crypto.randomUUID ? crypto.randomUUID() : 'wr-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8)),
+    rng: mulberry32((Date.now() ^ 0x5eed) >>> 0),
+    panel: null,
+    iv: null,
+    ride: null,
+    month: null,
+    hover: null,
+    time: 0,
+    keys: new Set(),
+    lastFriction: null
+  };
+
+  function log(event, data = {}) {
+    G.events.push({
+      timestamp: new Date().toISOString(),
+      t_ms: Math.round(performance.now() - G.t0),
+      session_id: G.sessionId,
+      round: G.scen ? G.scen.id : null,
+      event,
+      home_zone: G.home,
+      clock: G.state === 'search' ? clock(G.clock) : null,
+      balance: Math.round(G.balance),
+      ...data
+    });
+  }
+
+  /* ==========================================================
+   * HUD
+   * ========================================================== */
+  function updateHUD() {
+    const bal = $('#hud-balance');
+    bal.textContent = money(G.balance);
+    bal.classList.toggle('neg', G.balance < 0);
+    $('#hud-round').textContent = G.scen ? G.scen.label : 'TITLE';
+    $('#hud-clock').textContent = G.state === 'search' || G.state === 'ride' ? clock(G.clock) : G.state === 'month' ? 'WORKING' : '—';
+    const badge = $('#hud-badge');
+    if (G.job) {
+      badge.textContent = G.job.formal ? 'FORMAL · IMSS' : 'INFORMAL';
+      badge.className = 'badge ' + (G.job.formal ? 'formal' : 'informal');
+    } else {
+      badge.textContent = 'SEEKING';
+      badge.className = 'badge none';
+    }
+    let fr = null, label = 'Choose a home first';
+    if (G.home && NET) {
+      if (G.job) {
+        fr = G.job.commute;
+        label = Math.round(fr.time * 2) + ' min/day · ' + money(fr.fare * TRIPS) + '/mo';
+      } else if (G.state === 'search' || G.state === 'ride') {
+        fr = commute(HOMES[G.home].door, { x: G.player.x, y: G.player.y }, G.scen);
+        label = 'Working here: ' + Math.round(fr.time * 2) + ' min/day';
+      }
+    }
+    const bar = $('#hud-friction-bar');
+    if (fr) {
+      const v = clamp(fr.time * 2 / 240, 0, 1);
+      bar.style.width = Math.round(v * 100) + '%';
+      bar.style.background = v < 0.35 ? 'var(--green)' : v < 0.65 ? 'var(--gold)' : 'var(--red)';
+    } else {
+      bar.style.width = '0';
+    }
+    $('#hud-friction').textContent = label;
+  }
+
+  /* ==========================================================
+   * Prompt bar
+   * ========================================================== */
+  function setPrompt(html, btn) {
+    const el = $('#prompt');
+    if (!html) { el.classList.remove('show'); el.innerHTML = '<span class="ptxt"></span>'; return; }
+    el.innerHTML = '<span class="ptxt">' + html + '</span>' + (btn ? '<button class="pbtn" type="button">' + btn.label + '</button>' : '');
+    el.classList.add('show');
+    if (btn) el.querySelector('.pbtn').addEventListener('click', e => { e.stopPropagation(); btn.onClick(); });
+  }
+
+  /* ==========================================================
+   * Panels
+   * ========================================================== */
+  function showPanel({ title, body, buttons = [], closable = false, wide = false, onClose = null, focus = true }) {
+    const ov = $('#overlay'), p = $('#panel');
+    p.className = 'panel' + (wide ? ' wide' : '');
+    p.setAttribute('aria-label', title.replace(/<[^>]+>/g, ''));
+    p.innerHTML = '<h2>' + title + '</h2><div class="panel-body">' + body + '</div><div class="panel-actions"></div>';
+    const act = p.querySelector('.panel-actions');
+    buttons.forEach(bt => {
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'btn ' + (bt.cls || '');
+      el.innerHTML = bt.label;
+      if (bt.disabled) el.disabled = true;
+      el.addEventListener('click', () => { Snd.sfx('select'); bt.onClick(); });
+      act.appendChild(el);
+    });
+    ov.hidden = false;
+    p.scrollTop = 0;
+    G.panel = { closable, onClose };
+    if (focus) {
+      const f = p.querySelector('.card, .st-btn, .panel-actions .btn:not([disabled])');
+      if (f) setTimeout(() => f.focus({ preventScroll: true }), 30);
+    }
+    return p;
+  }
+
+  function closePanel() {
+    const cb = G.panel && G.panel.onClose;
+    $('#overlay').hidden = true;
+    $('#panel').innerHTML = '';
+    G.panel = null;
+    canvas.focus({ preventScroll: true });
+    if (cb) cb();
+  }
+
+  /* ==========================================================
+   * Round flow
+   * ========================================================== */
+  function freshScenario(base) {
+    return JSON.parse(JSON.stringify(base));
+  }
+
+  function makeSandbox(n) {
+    const s = freshScenario(SCENARIOS[0]);
+    s.id = 'S' + n;
+    s.label = 'SANDBOX · M' + n;
+    s.title = 'Sandbox · Month ' + n;
+    const pool = SANDBOX_HEADLINES.slice();
+    const heads = [];
+    const k = 2 + (G.rng() < 0.35 ? 1 : 0);
+    for (let i = 0; i < k && pool.length; i++) heads.push(pool.splice(Math.floor(G.rng() * pool.length), 1)[0]);
+    heads.forEach(h => h.apply(s));
+    s.headlines = heads.map(h => h.text);
+    s.prompt = 'A new month in CDMX. This month\'s news:';
+    s.rules = s.headlines;
+    if (s.caregiver) s.forcedInformalShock = G.rng() < 0.5;
+    return s;
+  }
+
+  function startRound(scen) {
+    G.scen = scen;
+    G.job = null;
+    G.home = null;
+    G.attempts = {};
+    G.interviews = [];
+    G.searchFares = 0;
+    G.clock = DAY_START;
+    G.month = null;
+    G.ride = null;
+    NET = renderMap(scen.express);
+    G.state = 'intro';
+    setPrompt(null);
+    updateHUD();
+    log('round_start', { detail: scen.prompt, headlines: scen.headlines || null });
+    const rules = '<ul>' + scen.rules.map(r => '<li>' + esc(r) + '</li>').join('') + '</ul>';
+    const first = scen.id === 'R1'
+      ? '<p class="note">Walk with arrows/WASD or click the map. Press SPACE or E next to a building or a station to interact. Every step uses search time, and the job hunt ends at 8 PM.</p>'
+      : '';
+    showPanel({
+      title: esc(scen.title),
+      body: '<div class="quote">' + esc(scen.prompt) + '</div>' + rules + first,
+      buttons: [{ label: 'CHOOSE WHERE TO LIVE ▶', onClick: housingPanel }]
+    });
+  }
+
+  function rentFor(zone, scen = G.scen) {
+    return Math.round(ZONES[zone].rent * scen.rentMult[zone]);
+  }
+
+  function housingPanel() {
+    G.state = 'housing';
+    const cards = ['per', 'int', 'cbd'].map(z => {
+      const Z = ZONES[z];
+      const base = Z.rent, now = rentFor(z);
+      const change = now !== base ? ' <span class="' + (now > base ? 'neg' : 'pos') + '">(' + (now > base ? '+' : '−') + Math.round(Math.abs(now / base - 1) * 100) + '%)</span>' : '';
+      const extra = G.scen.homeExtra[z] ? '<span class="tag">+ ' + money(G.scen.homeExtra[z]) + ' water trucks</span>' : '';
+      return '<button type="button" class="card" data-zone="' + z + '">' +
+        '<span class="ct" style="color:' + Z.label + '">' + esc(Z.name) + '</span>' +
+        '<span class="cd">' + esc(Z.districts) + '</span>' +
+        '<span class="rent">' + Z.tier + ' · ' + money(now) + '/mo' + change + '</span>' + extra +
+        '<span class="cd">' + esc(Z.desc) + '</span>' +
+        '<span class="tag">' + esc(Z.jobs) + '</span>' +
+        '</button>';
+    }).join('');
+    const p = showPanel({
+      title: 'Where will you live this month?',
+      body: '<div class="cards">' + cards + '</div><p class="note" style="margin-top:12px">Rent is paid no matter where you work. Commuting costs fares and time every day.</p>',
+      wide: true
+    });
+    p.querySelectorAll('.card').forEach(c => c.addEventListener('click', () => { Snd.sfx('coin'); chooseHome(c.dataset.zone); }));
+  }
+
+  function chooseHome(zone) {
+    G.home = zone;
+    const d = HOMES[zone].door;
+    Object.assign(G.player, { x: d.x, y: d.y, rx: d.x, ry: d.y, moving: false, path: [], pending: null, dir: 'down' });
+    log('home_chosen', { zone, rent: rentFor(zone) });
+    closePanel();
+    G.state = 'search';
+    updateHUD();
+    hintAtStart();
+  }
+
+  function hintAtStart() {
+    setPrompt('<b>JOB HUNT</b> Gold briefcases are formal jobs, green baskets are informal. Stations let you ride across town.');
+  }
+
+  /* ==========================================================
+   * Search: movement and interaction
+   * ========================================================== */
+  const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+
+  function tryStep(dir) {
+    const p = G.player;
+    const [dx, dy] = DIRS[dir];
+    p.dir = dir;
+    const nx = p.x + dx, ny = p.y + dy;
+    if (!walkable(nx, ny)) return false;
+    p.from = { x: p.x, y: p.y };
+    p.to = { x: nx, y: ny };
+    p.moving = true;
+    p.prog = 0;
+    return true;
+  }
+
+  function onArrive() {
+    const p = G.player;
+    p.x = p.to.x; p.y = p.to.y;
+    p.rx = p.x; p.ry = p.y;
+    p.moving = false;
+    p.stepCount++;
+    if (p.stepCount % 2 === 0) Snd.sfx('step');
+    G.clock += STEP_MIN;
+    updateHUD();
+    if (G.clock >= DAY_END) { p.path = []; p.pending = null; endOfDay(); return; }
+    if (!p.path.length) {
+      if (p.pending) { const target = p.pending; p.pending = null; interactWith(target); }
+      else refreshNearbyPrompt();
+    }
+  }
+
+  function nearbyTarget() {
+    const p = G.player;
+    const onStation = NET.stations.find(s => s.x === p.x && s.y === p.y);
+    if (onStation) return { type: 'station', station: onStation };
+    for (const h of HUBS) {
+      if (p.x >= h.bx - 1 && p.x <= h.bx + 2 && p.y >= h.by - 1 && p.y <= h.by + 2) return { type: 'hub', hub: h };
+    }
+    for (const s of NET.stations) {
+      if (manhattan(s, p) <= 1) return { type: 'station', station: s };
+    }
+    const home = HOMES[G.home];
+    if (home && p.x >= home.bx - 1 && p.x <= home.bx + 2 && p.y >= home.by - 1 && p.y <= home.by + 2) return { type: 'home' };
+    return null;
+  }
+
+  function refreshNearbyPrompt() {
+    if (G.state !== 'search' || G.panel) return;
+    const t = nearbyTarget();
+    if (!t) { setPrompt(null); return; }
+    if (t.type === 'hub') {
+      const h = t.hub;
+      setPrompt('<b>' + esc(h.name.toUpperCase()) + '</b> ' + (h.formal ? 'Formal · tier ' + h.tier : 'Informal') + ' · ' + money(wageFor(h)) + '/mo',
+        { label: 'E · VISIT', onClick: () => interactWith(t) });
+    } else if (t.type === 'station') {
+      setPrompt('<b>' + esc(t.station.name.toUpperCase()) + '</b> ' + t.station.lines.map(id => NET.lineById[id].name).join(' · '),
+        { label: 'E · RIDE', onClick: () => interactWith(t) });
+    } else {
+      setPrompt('<b>HOME</b> ' + esc(HOMES[G.home].label) + ' · rent ' + money(rentFor(G.home)) + '/mo');
+    }
+  }
+
+  function interactWith(t) {
+    if (G.state !== 'search' || G.panel) return;
+    if (t.type === 'hub') hubPanel(t.hub);
+    else if (t.type === 'station') stationPanel(t.station);
+  }
+
+  function interact() {
+    const t = nearbyTarget();
+    if (t) interactWith(t);
+    else { Snd.sfx('error'); setPrompt('Nothing here. Walk next to a building with an icon, or a station.'); }
+  }
+
+  function walkTo(target, pending) {
+    const p = G.player;
+    const from = p.moving ? p.to : { x: p.x, y: p.y };
+    const path = bfs(from, target);
+    if (!path) { Snd.sfx('error'); return; }
+    p.path = path;
+    p.pending = pending || null;
+    if (!path.length && !p.moving && pending) { p.pending = null; interactWith(pending); }
+  }
+
+  /* ==========================================================
+   * Hubs, offers and jobs
+   * ========================================================== */
+  function wageFor(h, scen = G.scen) {
+    let w = h.wage * (h.formal ? scen.wageMult.formal : scen.wageMult.informal);
+    if (h.tier === 3) w *= scen.wageMult.tier3;
+    return Math.round(w / 10) * 10;
+  }
+
+  function estimate(h) {
+    const wage = wageFor(h);
+    const c = commute(HOMES[G.home].door, h.door, G.scen);
+    const tax = h.formal ? Math.round(wage * taxRate(wage)) : 0;
+    const rent = rentFor(G.home);
+    const fares = Math.round(c.fare * TRIPS);
+    const timeCost = Math.round(c.time * TRIPS * FATIGUE * G.scen.fatigueMult);
+    const household = G.scen.household + (G.scen.homeExtra[G.home] || 0);
+    const childcare = h.formal ? 0 : G.scen.childcareInformal;
+    return { wage, c, tax, rent, fares, timeCost, household, childcare, net: wage - tax - rent - fares - timeCost - household - childcare };
+  }
+
+  const stars = n => '★'.repeat(n) + '☆'.repeat(3 - n);
+
+  function hubPanel(h) {
+    Snd.sfx('open');
+    const e = estimate(h);
+    const tried = G.attempts[h.id];
+    const body =
+      '<p>' + esc(h.blurb) + '</p>' +
+      '<dl class="kv">' +
+      '<dt>Type</dt><dd>' + (h.formal ? '<span style="color:var(--gold)">Formal contract · IMSS</span>' : '<span style="color:var(--pink)">Informal · no contract</span>') + '</dd>' +
+      '<dt>Tier</dt><dd><span class="stars">' + stars(h.tier) + '</span> ' + (h.tier === 1 ? 'hired on the spot' : h.tier === 2 ? 'interview, moderate' : 'interview, fast and precise') + '</dd>' +
+      '<dt>Wage</dt><dd>' + money(e.wage) + '/month' + (h.variable ? ' (varies ±' + Math.round(h.variable * 100) + '%)' : !h.formal ? ' (varies ±8%)' : '') + '</dd>' +
+      '<dt>Commute</dt><dd>' + Math.round(e.c.time) + ' min each way · ' + money(e.c.fare) + '/trip<br><span class="note">' + esc(e.c.desc) + '</span></dd>' +
+      '<dt>Est. month</dt><dd><b class="' + (e.net >= 0 ? 'pos' : 'neg') + '">' + money(e.net) + '</b> <span class="note">before shocks</span></dd>' +
+      '</dl>' +
+      (tried === 'failed' ? '<p class="neg">You already interviewed here this month and did not pass.</p>' : '');
+    const buttons = [];
+    if (h.formal) {
+      buttons.push({ label: 'INTERVIEW (60 MIN)', cls: 'gold', disabled: !!tried, onClick: () => beginInterview(h) });
+    } else {
+      buttons.push({ label: 'TAKE THIS JOB (15 MIN)', cls: 'good', onClick: () => takeInformal(h) });
+    }
+    buttons.push({ label: 'LEAVE', cls: 'alt', onClick: closePanel });
+    log('hub_viewed', { employer: h.id, tier: h.tier, formal: h.formal, wage: e.wage, commute_min_day: Math.round(e.c.time * 2) });
+    showPanel({ title: esc(h.name), body, buttons, closable: true });
+  }
+
+  function takeInformal(h) {
+    G.clock += 15;
+    const wage = Math.round(wageFor(h) * (1 + (G.rng() * 2 - 1) * (h.variable || 0.08)) / 10) * 10;
+    log('job_offer', { employer: h.id, tier: h.tier, formal: false, wage, passed: true });
+    acceptJob(h, wage, false);
+  }
+
+  function offerPanel(h, score) {
+    const wage = wageFor(h);
+    G.clock += 30;
+    updateHUD();
+    log('job_offer', { employer: h.id, tier: h.tier, formal: true, wage, task_score: score, passed: true });
+    const e = estimate(h);
+    showPanel({
+      title: 'Offer from ' + esc(h.name),
+      body: '<p>You passed. Contract validation took 30 minutes of paperwork.</p>' +
+        '<dl class="kv"><dt>Wage</dt><dd>' + money(wage) + '/month</dd><dt>Benefits</dt><dd>IMSS health coverage, paid sick leave, daycare access</dd>' +
+        '<dt>Commute</dt><dd>' + Math.round(e.c.time * 2) + ' min/day</dd><dt>Est. month</dt><dd class="' + (e.net >= 0 ? 'pos' : 'neg') + '">' + money(e.net) + '</dd></dl>' +
+        '<p class="note">If you keep looking, this offer expires.</p>',
+      buttons: [
+        { label: 'ACCEPT OFFER', cls: 'good', onClick: () => acceptJob(h, wage, false) },
+        {
+          label: 'KEEP SEARCHING', cls: 'alt', onClick: () => {
+            log('offer_declined', { employer: h.id, tier: h.tier, formal: true, wage });
+            closePanel();
+            if (G.clock >= DAY_END) endOfDay();
+          }
+        }
+      ]
+    });
+  }
+
+  function endOfDay() {
+    if (G.state !== 'search') return;
+    G.state = 'fallback';
+    const home = HOMES[G.home].door;
+    let best = null, bt = Infinity;
+    HUBS.filter(h => !h.formal).forEach(h => {
+      const c = commute(home, h.door, G.scen);
+      if (c.time < bt) { bt = c.time; best = h; }
+    });
+    const wage = Math.round(wageFor(best) * 0.9 / 10) * 10;
+    log('search_timeout', { employer: best.id, wage });
+    Snd.sfx('fail');
+    showPanel({
+      title: '8 PM. The job hunt is over.',
+      body: '<p>You ran out of time today. A neighbor offers you local informal work at <b>' + esc(best.name) + '</b>, paying a bit less than usual.</p>' +
+        '<dl class="kv"><dt>Wage</dt><dd>' + money(wage) + '/month</dd><dt>Type</dt><dd>Informal · no contract</dd></dl>',
+      buttons: [{ label: 'TAKE THE WORK', onClick: () => acceptJob(best, wage, true) }]
+    });
+  }
+
+  function acceptJob(h, wage, fallback) {
+    const c = commute(HOMES[G.home].door, h.door, G.scen);
+    G.job = { hub: h, id: h.id, name: h.name, tier: h.tier, formal: h.formal, wage, fallback, commute: c };
+    log('job_accepted', {
+      employer: h.id, tier: h.tier, formal: h.formal, wage, fallback,
+      commute_min_day: Math.round(c.time * 2), fare_per_trip: +c.fare.toFixed(2), route: c.desc
+    });
+    Snd.sfx('coin');
+    closePanel();
+    startMonth();
+  }
+
+  /* ==========================================================
+   * Interview mini-game
+   * ========================================================== */
+  const IV_CFG = {
+    2: { len: 5, show: 520, limit: 10000, pass: 0.8, name: 'Moderate' },
+    3: { len: 7, show: 330, limit: 6500, pass: 1, name: 'Fast & precise' }
+  };
+
+  function beginInterview(h) {
+    G.attempts[h.id] = 'started';
+    G.clock += 60;
+    updateHUD();
+    const cfg = IV_CFG[h.tier];
+    const dirs = ['up', 'right', 'down', 'left'];
+    const seq = Array.from({ length: cfg.len }, () => dirs[Math.floor(G.rng() * 4)]);
+    const p = showPanel({
+      title: 'Interview · ' + esc(h.name),
+      body:
+        '<p>Skills test (' + cfg.name + '). Watch the sequence, then repeat it with the arrow keys, WASD or the buttons. ' +
+        (cfg.pass < 1 ? 'You can miss the last step and still pass.' : 'Every step must be right.') + '</p>' +
+        '<div class="iv">' +
+        '<div class="iv-status">GET READY…</div>' +
+        '<div class="pad">' +
+        '<button type="button" data-dir="up" aria-label="Up" disabled>▲</button>' +
+        '<button type="button" data-dir="left" aria-label="Left" disabled>◀</button>' +
+        '<div class="core">' + h.tier + '★</div>' +
+        '<button type="button" data-dir="right" aria-label="Right" disabled>▶</button>' +
+        '<button type="button" data-dir="down" aria-label="Down" disabled>▼</button>' +
+        '</div>' +
+        '<div class="iv-progress">' + seq.map(() => '<span></span>').join('') + '</div>' +
+        '<div class="timer"><div></div></div>' +
+        '</div>',
+      focus: false
+    });
+    const iv = { hub: h, cfg, seq, idx: 0, phase: 'show', start: 0, timers: [], el: p, done: false };
+    G.iv = iv;
+    p.querySelectorAll('.pad button').forEach(btn => btn.addEventListener('click', () => ivInput(btn.dataset.dir)));
+    const status = p.querySelector('.iv-status');
+    let t = 700;
+    seq.forEach((d, i) => {
+      iv.timers.push(setTimeout(() => {
+        status.textContent = 'WATCH ' + (i + 1) + '/' + seq.length;
+        flash(d, 'lit', cfg.show * 0.7);
+        Snd.padTone(d);
+      }, t));
+      t += cfg.show;
+    });
+    iv.timers.push(setTimeout(() => {
+      iv.phase = 'input';
+      iv.start = performance.now();
+      status.textContent = 'YOUR TURN!';
+      p.querySelectorAll('.pad button').forEach(btn => { btn.disabled = false; });
+      p.querySelector('.pad button[data-dir="up"]').focus({ preventScroll: true });
+    }, t + 150));
+  }
+
+  function flash(dir, cls, ms) {
+    if (!G.iv) return;
+    const btn = G.iv.el.querySelector('.pad button[data-dir="' + dir + '"]');
+    if (!btn) return;
+    btn.classList.add(cls);
+    setTimeout(() => btn.classList.remove(cls), ms);
+  }
+
+  function ivInput(dir) {
+    const iv = G.iv;
+    if (!iv || iv.phase !== 'input' || iv.done) return;
+    const dots = iv.el.querySelectorAll('.iv-progress span');
+    Snd.padTone(dir);
+    if (dir === iv.seq[iv.idx]) {
+      flash(dir, 'ok', 160);
+      dots[iv.idx].classList.add('done');
+      iv.idx++;
+      if (iv.idx === iv.seq.length) finishInterview(1, 'complete');
+    } else {
+      flash(dir, 'bad', 300);
+      dots[iv.idx].classList.add('miss');
+      finishInterview(iv.idx / iv.seq.length, 'wrong');
+    }
+  }
+
+  function ivTick() {
+    const iv = G.iv;
+    if (!iv || iv.phase !== 'input' || iv.done) return;
+    const left = 1 - (performance.now() - iv.start) / iv.cfg.limit;
+    const bar = iv.el.querySelector('.timer > div');
+    if (bar) bar.style.width = Math.max(0, left * 100) + '%';
+    if (left <= 0) finishInterview(iv.idx / iv.seq.length, 'timeout');
+  }
+
+  function finishInterview(score, reason) {
+    const iv = G.iv;
+    iv.done = true;
+    iv.phase = 'done';
+    iv.timers.forEach(clearTimeout);
+    const passed = score >= iv.cfg.pass;
+    const h = iv.hub;
+    G.attempts[h.id] = passed ? 'passed' : 'failed';
+    const ms = Math.round(performance.now() - iv.start);
+    const rec = { employer: h.id, tier: h.tier, formal: true, task_score: +score.toFixed(2), passed, reason, response_ms: ms, sequence_length: iv.seq.length };
+    G.interviews.push(rec);
+    log('interview', rec);
+    iv.el.querySelector('.iv-status').textContent = passed ? 'PASSED!' : reason === 'timeout' ? 'TIME UP' : 'WRONG MOVE';
+    iv.el.querySelectorAll('.pad button').forEach(btn => { btn.disabled = true; });
+    Snd.sfx(passed ? 'pass' : 'fail');
+    setTimeout(() => {
+      G.iv = null;
+      if (passed) { offerPanel(h, score); return; }
+      updateHUD();
+      showPanel({
+        title: 'Not this time',
+        body: '<p>Score: <b>' + Math.round(score * 100) + '%</b> (needed ' + Math.round(iv.cfg.pass * 100) + '%). ' +
+          esc(h.name) + ' will not call back this month.</p>' +
+          '<p class="note">It is ' + clock(G.clock) + '. You can try another employer, or take informal or lower-tier work nearby.</p>',
+        buttons: [{ label: 'BACK TO THE STREET', onClick: () => { closePanel(); if (G.clock >= DAY_END) endOfDay(); } }]
+      });
+    }, 900);
+  }
+
+  /* ==========================================================
+   * Transit rides during the search
+   * ========================================================== */
+  function stationPanel(s) {
+    Snd.sfx('open');
+    const here = NET.AP[s.key];
+    const chips = s.lines.map(id => '<span class="chip" style="background:' + NET.lineById[id].color + '">' + esc(NET.lineById[id].name) + '</span>').join('');
+    const list = NET.stations
+      .filter(t => t.key !== s.key && here[t.key])
+      .map(t => ({ t, r: here[t.key], f: here[t.key].fare * fareFactor(G.scen, s, t) }))
+      .sort((a, c) => a.r.time - c.r.time)
+      .map(({ t, r, f }) =>
+        '<button type="button" class="st-btn" data-key="' + t.key + '"><span>' + esc(t.name) + ' <small style="color:' + ZONES[zoneOf(t.x)].label + '">' + ZONES[zoneOf(t.x)].short + '</small></span>' +
+        '<small>' + Math.round(r.time) + ' MIN · ' + money(f) + '</small></button>').join('');
+    const p = showPanel({
+      title: 'Station ' + esc(s.name),
+      body: '<div>' + chips + '</div><p class="note">Pick a destination. Riding is fast, but every trip costs a fare and waiting time.</p><div class="stations">' + list + '</div>',
+      buttons: [{ label: 'STAY HERE', cls: 'alt', onClick: closePanel }],
+      closable: true
+    });
+    p.querySelectorAll('.st-btn').forEach(btn => btn.addEventListener('click', () => ride(s, NET.stationMap.get(btn.dataset.key))));
+  }
+
+  function ride(from, to) {
+    const r = NET.AP[from.key][to.key];
+    const fare = r.fare * fareFactor(G.scen, from, to);
+    closePanel();
+    Snd.sfx('train');
+    G.state = 'ride';
+    G.ride = { from, to, r, fare, t: 0, dur: clamp(r.pts.length * 0.35, 1, 2.6), color: NET.lineById[r.lines[0]].color };
+    G.player.path = [];
+    G.player.pending = null;
+    setPrompt('<b>RIDING</b> ' + esc(from.name) + ' → ' + esc(to.name));
+  }
+
+  function endRide() {
+    const rd = G.ride;
+    G.player.x = rd.to.x; G.player.y = rd.to.y;
+    G.player.rx = rd.to.x; G.player.ry = rd.to.y;
+    G.clock += rd.r.time;
+    G.balance -= rd.fare;
+    G.searchFares += rd.fare;
+    log('transit_ride', { from: rd.from.name, to: rd.to.name, minutes: Math.round(rd.r.time), fare: +rd.fare.toFixed(2), lines: rd.r.lines.join('+') });
+    G.ride = null;
+    G.state = 'search';
+    updateHUD();
+    if (G.clock >= DAY_END) { endOfDay(); return; }
+    refreshNearbyPrompt();
+  }
+
+  /* ==========================================================
+   * Month simulation and ledger
+   * ========================================================== */
+  function rollShocks(job) {
+    const s = G.scen, r = G.rng, out = [];
+    const w = job.wage, cm = job.commute.time;
+    if (!job.formal) {
+      if (s.forcedInformalShock) {
+        out.push({ day: 11, title: 'Your child needs emergency care. With no IMSS, a private hospital and 3 lost workdays', cost: Math.round(7800 + w / 22 * 3), covered: false });
+      } else if (r() < s.informalShockP) {
+        const opts = INFORMAL_SHOCKS.filter(x => (!x.kinds || x.kinds.includes(job.hub.kind)) && (!x.minCommute || cm >= x.minCommute));
+        const sh = pick(r, opts);
+        out.push({ day: 5 + Math.floor(r() * 13), title: sh.title, cost: Math.round(sh.cost(w)), covered: false });
+      }
+    } else if (s.forcedInformalShock) {
+      out.push({ day: 11, title: 'Your child needs emergency care. IMSS covers the hospital, and you get paid leave', cost: 0, covered: true });
+    } else if (r() < 0.15) {
+      out.push({ day: 5 + Math.floor(r() * 13), title: 'Stomach bug. IMSS clinic visit and paid sick days', cost: 0, covered: true });
+    }
+    return out;
+  }
+
+  function startMonth() {
+    const job = G.job;
+    const s = G.scen;
+    const c = job.commute;
+    const tax = job.formal ? Math.round(job.wage * taxRate(job.wage)) : 0;
+    const ledger = {
+      gross: job.wage,
+      tax,
+      rent: rentFor(G.home),
+      fares: Math.round(c.fare * TRIPS),
+      timeCost: Math.round(c.time * TRIPS * FATIGUE * s.fatigueMult),
+      household: s.household + (s.homeExtra[G.home] || 0),
+      childcare: job.formal ? 0 : s.childcareInformal,
+      shocks: rollShocks(job)
+    };
+    ledger.shockTotal = ledger.shocks.reduce((a, x) => a + x.cost, 0);
+    ledger.net = ledger.gross - ledger.tax - ledger.rent - ledger.fares - ledger.timeCost - ledger.household - ledger.childcare - ledger.shockTotal;
+    G.month = { t: 0, dur: 6.5, hold: 0, ledger, shown: new Set(), pts: c.pts.length > 1 ? c.pts : [HOMES[G.home].door, job.hub.door] };
+    G.state = 'month';
+    setPrompt('<b>DAY 1</b> Working the month… (SPACE to skip)');
+    updateHUD();
+  }
+
+  function updateMonth(dt) {
+    const mo = G.month;
+    if (mo.hold > 0) { mo.hold -= dt; return; }
+    mo.t += dt;
+    const day = clamp(Math.floor(mo.t / mo.dur * 22) + 1, 1, 22);
+    const ev = mo.ledger.shocks.find(x => x.day <= day && !mo.shown.has(x));
+    if (ev) {
+      mo.shown.add(ev);
+      mo.hold = 1.8;
+      Snd.sfx(ev.covered ? 'covered' : 'shock');
+      log('shock', { detail: ev.title, cost: ev.cost, covered: ev.covered, day: ev.day });
+      setPrompt('<b>DAY ' + ev.day + '</b> ' + esc(ev.title) + ': ' + (ev.covered ? '<span class="pos">covered</span>' : '<span class="neg">' + money(-ev.cost) + '</span>'));
+      return;
+    }
+    if (day !== mo.lastDay) {
+      mo.lastDay = day;
+      setPrompt('<b>DAY ' + day + '/22</b> Commuting ' + Math.round(G.job.commute.time * 2) + ' min a day… (SPACE to skip)');
+    }
+    if (mo.t >= mo.dur) finishMonth();
+  }
+
+  function finishMonth() {
+    if (G.state !== 'month') return;
+    const mo = G.month;
+    mo.ledger.shocks.forEach(ev => {
+      if (!mo.shown.has(ev)) { mo.shown.add(ev); log('shock', { detail: ev.title, cost: ev.cost, covered: ev.covered, day: ev.day }); }
+    });
+    G.state = 'ledger';
+    setPrompt(null);
+    const L = mo.ledger, job = G.job;
+    G.balance += L.net;
+    const result = {
+      round: G.scen.id, scenario: G.scen.title, home_zone: G.home, rent: L.rent,
+      employer: job.id, employer_name: job.name, tier: job.tier, formal: job.formal, fallback: job.fallback,
+      gross_wage: L.gross, tax: L.tax, commute_fares: L.fares, commute_time_cost: L.timeCost,
+      household: L.household, childcare: L.childcare, shocks: L.shockTotal, net_savings: L.net,
+      commute_min_day: Math.round(job.commute.time * 2), fare_per_trip: +job.commute.fare.toFixed(2), route: job.commute.desc,
+      interviews: G.interviews.length, interviews_passed: G.interviews.filter(x => x.passed).length,
+      formal_applications: G.interviews.length, search_fares: Math.round(G.searchFares),
+      search_minutes: Math.round(Math.min(G.clock, DAY_END) - DAY_START), balance_after: Math.round(G.balance)
+    };
+    G.results.push(result);
+    log('round_end', { employer: job.id, tier: job.tier, formal: job.formal, wage: L.gross, net: L.net, commute_min_day: result.commute_min_day });
+    updateHUD();
+    Snd.sfx(L.net >= 0 ? 'coin' : 'error');
+
+    const row = (label, v, note) => {
+      const cls = v > 0 ? 'pos' : v < 0 ? 'neg' : 'zero';
+      return '<tr><td>' + label + (note ? '<br><span class="note">' + note + '</span>' : '') + '</td><td class="amt ' + cls + '">' + (v === 0 ? '$0' : signed(v)) + '</td></tr>';
+    };
+    let rows = row('Gross wage · ' + esc(job.name), L.gross, job.formal ? 'Formal contract' : 'Informal' + (job.fallback ? ' · end-of-day fallback' : ''));
+    rows += job.formal ? row('ISR + IMSS contributions', -L.tax, 'Buys health coverage, sick pay and daycare') : row('Taxes', 0, 'None, but no protection either');
+    rows += row('Housing rent · ' + ZONES[G.home].short, -L.rent);
+    rows += row('Commute fares', -L.fares, TRIPS + ' trips × ' + money(job.commute.fare) + ' · ' + esc(job.commute.desc));
+    rows += row('Commute time cost', -L.timeCost, Math.round(job.commute.time * TRIPS / 60) + ' hours on the road this month' + (G.scen.fatigueMult > 1 ? ' (time away from dependents counts double)' : ''));
+    if (L.household) rows += row('Dependents & household', -L.household);
+    if (L.childcare) rows += row('Childcare (no IMSS daycare)', -L.childcare);
+    L.shocks.forEach(ev => { rows += row((ev.covered ? 'Covered: ' : 'Shock: ') + esc(ev.title), -ev.cost); });
+    if (!L.shocks.length) rows += row('Health & economic shocks', 0, 'A quiet month');
+    rows += '<tr class="total"><td>Final net savings</td><td class="amt ' + (L.net >= 0 ? 'pos' : 'neg') + '">' + signed(L.net) + '</td></tr>';
+
+    const isMain = /^R\d$/.test(G.scen.id);
+    const last = G.scen.id === 'R3';
+    const buttons = [];
+    if (isMain) {
+      buttons.push({ label: last ? 'SEE YOUR RESULTS ▶' : 'NEXT ROUND ▶', onClick: () => { closePanel(); nextRound(); } });
+    } else {
+      buttons.push({ label: 'NEXT MONTH ▶', onClick: () => { closePanel(); G.sandboxN++; startRound(makeSandbox(G.sandboxN)); } });
+      buttons.push({ label: 'RESULTS', cls: 'alt', onClick: () => { closePanel(); debrief(); } });
+    }
+    showPanel({
+      title: esc(G.scen.title) + ' · Month ledger',
+      body: '<div class="table-wrap"><table class="ledger">' + rows + '</table></div>' +
+        '<p class="note" style="margin-top:10px">Job-search fares already paid: ' + money(G.searchFares) + '. Balance now: <b class="' + (G.balance >= 0 ? 'pos' : 'neg') + '">' + money(G.balance) + '</b></p>',
+      buttons
+    });
+  }
+
+  function nextRound() {
+    G.roundIndex++;
+    if (G.roundIndex < SCENARIOS.length) startRound(freshScenario(SCENARIOS[G.roundIndex]));
+    else debrief();
+  }
+
+  /* ==========================================================
+   * Debrief and data export
+   * ========================================================== */
+  function arcElasticity(q1, q2, p1, p2) {
+    const dp = (p2 - p1) / ((p1 + p2) / 2 || 1);
+    const dq = (q2 - q1) / ((q1 + q2) / 2 || 1);
+    if (Math.abs(p2 - p1) < 0.5 || !isFinite(dp) || dp === 0) return null;
+    return dq / dp;
+  }
+
+  function debrief() {
+    G.state = 'debrief';
+    G.job = null;
+    setPrompt(null);
+    updateHUD();
+    const main = ['R1', 'R2', 'R3'].map(id => G.results.find(r => r.round === id)).filter(Boolean);
+    const sand = G.results.filter(r => r.round.startsWith('S'));
+    const byId = Object.fromEntries(main.map(r => [r.round, r]));
+    const pct = v => Math.round(v * 100) + '%';
+    const formalRate = rs => (rs.length ? rs.filter(r => r.formal).length / rs.length : 0);
+
+    const tableRows = G.results.map(r =>
+      '<tr><td>' + esc(r.round) + '</td><td>' + esc(ZONES[r.home_zone].short) + '</td><td>' + esc(r.employer_name) + '</td>' +
+      '<td>' + (r.formal ? '<span style="color:var(--gold)">Formal</span>' : '<span style="color:var(--pink)">Informal</span>') + '</td>' +
+      '<td>' + r.commute_min_day + ' min</td><td class="' + (r.net_savings >= 0 ? 'pos' : 'neg') + '">' + money(r.net_savings) + '</td></tr>').join('');
+
+    const base = byId.R1, care = byId.R2, transit = byId.R3;
+    const fBase = base ? (base.formal ? 1 : 0) : 0;
+    const fCare = care ? (care.formal ? 1 : 0) : 0;
+    const pp = Math.round((fCare - fBase) * 100);
+    const appShare = r => (r ? r.formal_applications : 0);
+    let elastTxt = 'n/a', elastSub = 'Needs rounds 1 and 3.';
+    if (base && transit) {
+      const e = arcElasticity(base.commute_min_day, transit.commute_min_day, base.fare_per_trip, transit.fare_per_trip);
+      if (e === null) {
+        elastTxt = 'n/a';
+        elastSub = 'Your fare per trip barely changed between R1 and R3 (' + money(base.fare_per_trip) + ' → ' + money(transit.fare_per_trip) + '), so there is no price change to measure against. Your commute went from ' + base.commute_min_day + ' to ' + transit.commute_min_day + ' min/day.';
+      } else {
+        elastTxt = e.toFixed(2);
+        elastSub = 'Arc elasticity of daily commute time to fare per trip, R1 → R3 (' + base.commute_min_day + ' → ' + transit.commute_min_day + ' min/day; ' + money(base.fare_per_trip) + ' → ' + money(transit.fare_per_trip) + '/trip). ' +
+          (e < -0.3 ? 'Cheaper trips made you travel farther.' : e > 0.3 ? 'You commuted less even as fares moved the other way.' : 'Your commute barely responded to price.');
+      }
+    }
+    const premium = (() => {
+      const valid = main.filter(r => r.commute_min_day > 0);
+      if (!valid.length) return '—';
+      const perHour = valid.reduce((a, r) => a + r.gross_wage / (r.commute_min_day / 60), 0) / valid.length;
+      return money(perHour);
+    })();
+
+    const sandboxNote = sand.length
+      ? '<p class="note">Sandbox: ' + sand.length + ' month' + (sand.length > 1 ? 's' : '') + ' played, formal in ' + pct(formalRate(sand)) + ' of them, average net ' + money(sand.reduce((a, r) => a + r.net_savings, 0) / sand.length) + '.</p>'
+      : '';
+
+    const body =
+      '<p>Here is what your choices say about space, work and risk.</p>' +
+      '<div class="stats">' +
+      '<div class="stat"><div class="k">FORMALIZATION<br>BASELINE → CAREGIVER</div><div class="v">' + pct(fBase) + ' → ' + pct(fCare) + '</div>' +
+      '<div class="s">' + (base && care ? (pp > 0 ? '+' : '') + pp + ' pp under the household treatment. Formal interviews: ' + appShare(base) + ' in R1, ' + appShare(care) + ' in R2.' : 'Play rounds 1 and 2 to compare.') + '</div></div>' +
+      '<div class="stat"><div class="k">COMMUTING ELASTICITY<br>TIME VS. FARE</div><div class="v">' + elastTxt + '</div><div class="s">' + elastSub + '</div></div>' +
+      '<div class="stat"><div class="k">COMMUTE TOLERANCE<br>WAGE PER DAILY COMMUTE HOUR</div><div class="v">' + premium + '</div><div class="s">Average monthly wage you accepted for each hour per day spent commuting. Higher means you needed more pay to travel.</div></div>' +
+      '</div>' +
+      '<h3>YOUR MONTHS</h3>' +
+      '<div class="table-wrap"><table class="grid"><thead><tr><th>ROUND</th><th>HOME</th><th>JOB</th><th>TYPE</th><th>COMMUTE</th><th>NET</th></tr></thead><tbody>' + tableRows + '</tbody></table></div>' +
+      sandboxNote +
+      '<div class="paper"><h3 style="margin-top:0">WHAT THE RESEARCH SAYS</h3>' +
+      '<p>In the WorkReach model (Langle-Chimal, Knoblauch &amp; González, <i>Nature Communications</i>, 2026), workers in four cities in the United States, Mexico and Brazil consistently travel farther to reach economically complex areas, while the pull of informality differs from region to region. Measuring access by how valuable opportunities are, not only how close they are, reveals gaps that distance-based metrics miss.</p>' +
+      '<p class="note">This game is a simplified illustration, not the estimated model. <a href="https://www.nature.com/articles/s41467-026-78293-3" target="_blank" rel="noopener">Read the paper</a>.</p></div>' +
+      '<p class="note" style="margin-top:12px">Your play data stays in this browser. Nothing is sent anywhere unless you download it and share it.</p>';
+
+    log('debrief_viewed', { formal_baseline: fBase, formal_caregiver: fCare });
+    showPanel({
+      title: 'Empirical results debrief',
+      body,
+      wide: true,
+      buttons: [
+        { label: 'DOWNLOAD DATA (.JSON)', cls: 'gold', onClick: () => download('json') },
+        { label: 'DOWNLOAD DATA (.CSV)', cls: 'gold', onClick: () => download('csv') },
+        { label: 'ENDLESS SANDBOX ▶', cls: 'good', onClick: () => { closePanel(); G.sandboxN++; startRound(makeSandbox(G.sandboxN)); } },
+        { label: 'PLAY AGAIN', cls: 'alt', onClick: restart }
+      ]
+    });
+  }
+
+  const CSV_COLS = ['timestamp', 't_ms', 'session_id', 'round', 'event', 'home_zone', 'zone', 'employer', 'tier', 'formal', 'task_score', 'passed',
+    'reason', 'response_ms', 'wage', 'net', 'rent', 'fallback', 'commute_min_day', 'fare_per_trip', 'route', 'from', 'to', 'minutes', 'fare', 'lines',
+    'cost', 'covered', 'day', 'clock', 'balance', 'detail'];
+
+  function toCSV() {
+    const q = v => {
+      if (v === null || v === undefined) return '';
+      const s = Array.isArray(v) ? v.join(' | ') : String(v);
+      return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    };
+    return [CSV_COLS.join(',')].concat(G.events.map(e => CSV_COLS.map(c => q(e[c])).join(','))).join('\n');
+  }
+
+  function download(kind) {
+    log('data_exported', { detail: kind });
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+    let blob, name;
+    if (kind === 'json') {
+      const payload = {
+        game: 'WorkReach: The Game', version: VERSION, session_id: G.sessionId, started_at: G.startedAt, exported_at: new Date().toISOString(),
+        parameters: { trips_per_month: TRIPS, fatigue_cost_per_min: FATIGUE, search_window: [clock(DAY_START), clock(DAY_END)], rents: Object.fromEntries(Object.values(ZONES).map(z => [z.id, z.rent])) },
+        rounds: G.results, events: G.events
+      };
+      blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      name = 'workreach-session-' + stamp + '.json';
+    } else {
+      blob = new Blob([toCSV()], { type: 'text/csv' });
+      name = 'workreach-events-' + stamp + '.csv';
+    }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  }
+
+  function restart() {
+    closePanel();
+    G.balance = START_BALANCE;
+    G.results = [];
+    G.roundIndex = -1;
+    G.sandboxN = 0;
+    G.job = null;
+    G.events = [];
+    G.t0 = performance.now();
+    G.startedAt = new Date().toISOString();
+    G.sessionId = crypto.randomUUID ? crypto.randomUUID() : 'wr-' + Date.now().toString(36);
+    log('session_start', { detail: 'restart', version: VERSION });
+    nextRound();
+  }
+
+  function helpPanel() {
+    const wasState = G.state;
+    showPanel({
+      title: 'How to play',
+      body:
+        '<p>Each round is one month in Mexico City. Choose where to live, explore the map to find work before 8 PM, then live with the consequences in your ledger.</p>' +
+        '<dl class="kv">' +
+        '<dt>Walk</dt><dd>Arrow keys / WASD, or click / tap the map</dd>' +
+        '<dt>Interact</dt><dd>SPACE or E next to a building or station</dd>' +
+        '<dt>Formal jobs</dt><dd>Gold briefcase. Interview mini-game, taxes, IMSS protection</dd>' +
+        '<dt>Informal jobs</dt><dd>Green basket. Instant hire, no taxes, exposed to shocks</dd>' +
+        '<dt>Transit</dt><dd>Stations are the small squares on colored lines</dd>' +
+        '<dt>Friction</dt><dd>The HUD meter shows the daily commute if you worked where you stand</dd>' +
+        '<dt>Toggles</dt><dd>M sound · C CRT effect · H help</dd>' +
+        '</dl>' +
+        '<p class="note">Net = wage − rent − commute fares − commute time − shocks (and taxes for formal jobs).</p>',
+      buttons: [{ label: 'BACK', onClick: closePanel }],
+      closable: true,
+      onClose: () => { if (wasState === 'search') refreshNearbyPrompt(); }
+    });
+  }
+
+  /* ==========================================================
+   * Input
+   * ========================================================== */
+  const KEYMAP = { ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down', ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right' };
+
+  function startGame() {
+    if (G.state !== 'title') return;
+    Snd.init();
+    Snd.startMusic();
+    Snd.setMood('game');
+    Snd.sfx('pass');
+    $('#title').hidden = true;
+    log('session_start', { detail: 'title', version: VERSION });
+    nextRound();
+  }
+
+  window.addEventListener('keydown', e => {
+    if (e.code === 'KeyM' && !e.repeat) { toggleSound(); return; }
+    if (e.code === 'KeyC' && !e.repeat && !G.iv) { toggleCRT(); return; }
+    if (G.state === 'title') {
+      if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); startGame(); }
+      return;
+    }
+    if (G.iv) {
+      const d = KEYMAP[e.code];
+      if (d) { e.preventDefault(); if (!e.repeat) ivInput(d); }
+      else if (e.code === 'Space' || e.code === 'Enter') e.preventDefault();
+      return;
+    }
+    if (G.panel) {
+      if (e.code === 'Escape' && G.panel.closable) { e.preventDefault(); closePanel(); }
+      return;
+    }
+    if ((e.code === 'KeyH' || e.key === '?') && !e.repeat) { helpPanel(); return; }
+    if (G.state === 'month' && (e.code === 'Space' || e.code === 'Enter')) { e.preventDefault(); finishMonth(); return; }
+    if (G.state !== 'search') return;
+    if (KEYMAP[e.code]) {
+      e.preventDefault();
+      G.keys.add(KEYMAP[e.code]);
+      if (!e.repeat) G.queued = KEYMAP[e.code];
+      G.player.path = [];
+      G.player.pending = null;
+    } else if ((e.code === 'Space' || e.code === 'KeyE' || e.code === 'Enter') && !e.repeat) {
+      e.preventDefault();
+      interact();
+    }
+  });
+  window.addEventListener('keyup', e => { if (KEYMAP[e.code]) G.keys.delete(KEYMAP[e.code]); });
+  window.addEventListener('blur', () => G.keys.clear());
+
+  function eventTile(e) {
+    const r = canvas.getBoundingClientRect();
+    const x = Math.floor((e.clientX - r.left) / r.width * MAP_W);
+    const y = Math.floor((e.clientY - r.top) / r.height * MAP_H);
+    return inMap(x, y) ? { x, y } : null;
+  }
+
+  canvas.addEventListener('pointerdown', e => {
+    if (G.state === 'month') { finishMonth(); return; }
+    if (G.state !== 'search' || G.panel) return;
+    let t = eventTile(e);
+    if (!t) return;
+    const p = G.player;
+    // Small tiles are hard to hit with a finger: snap to a nearby station or job site.
+    if ((e.pointerType === 'touch' || scale < 2) && !blockAt(t.x, t.y)?.hub && !NET.stations.some(s => s.x === t.x && s.y === t.y)) {
+      const near = NET.stations.find(s => manhattan(s, t) <= 1);
+      const hubNear = HUBS.find(h => t.x >= h.bx - 1 && t.x <= h.bx + 2 && t.y >= h.by - 1 && t.y <= h.by + 2);
+      if (hubNear) t = { x: hubNear.bx, y: hubNear.by };
+      else if (near) t = { x: near.x, y: near.y };
+    }
+    const st = NET.stations.find(s => s.x === t.x && s.y === t.y);
+    if (st) {
+      if (manhattan(st, p) <= 1 && !p.moving) { interactWith({ type: 'station', station: st }); return; }
+      walkTo({ x: st.x, y: st.y }, { type: 'station', station: st });
+      return;
+    }
+    const bl = blockAt(t.x, t.y);
+    if (bl && bl.type === 'hub') {
+      const h = bl.hub;
+      if (p.x >= h.bx - 1 && p.x <= h.bx + 2 && p.y >= h.by - 1 && p.y <= h.by + 2 && !p.moving) { interactWith({ type: 'hub', hub: h }); return; }
+      walkTo(h.door, { type: 'hub', hub: h });
+      return;
+    }
+    if (bl && bl.type === 'home') { walkTo(HOMES[bl.zone].door, null); return; }
+    if (walkable(t.x, t.y)) walkTo(t, null);
+    else Snd.sfx('error');
+  });
+
+  canvas.addEventListener('pointermove', e => { G.hover = eventTile(e); });
+  canvas.addEventListener('pointerleave', () => { G.hover = null; });
+
+  $('#title').addEventListener('click', startGame);
+  $('#overlay').addEventListener('click', e => { if (e.target.id === 'overlay' && G.panel && G.panel.closable) closePanel(); });
+
+  function toggleSound() {
+    Snd.setMuted(!Snd.muted);
+    $('#btn-sound').setAttribute('aria-pressed', String(!Snd.muted));
+    if (!Snd.muted) { Snd.init(); if (G.state !== 'title') Snd.startMusic(); }
+  }
+  function toggleCRT() {
+    const on = !document.body.classList.contains('crt');
+    document.body.classList.toggle('crt', on);
+    $('#btn-crt').setAttribute('aria-pressed', String(on));
+  }
+  $('#btn-sound').addEventListener('click', e => { e.stopPropagation(); toggleSound(); });
+  $('#btn-crt').addEventListener('click', e => { e.stopPropagation(); toggleCRT(); });
+  $('#btn-help').addEventListener('click', e => { e.stopPropagation(); if (G.state !== 'title' && !G.panel && !G.iv) helpPanel(); });
+
+  /* ==========================================================
+   * Main loop
+   * ========================================================== */
+  function fit() {
+    const st = $('#stage');
+    const w = st.clientWidth - 24, h = st.clientHeight - 24;
+    let s = Math.min(w / BUF_W, h / BUF_H);
+    if (s >= 2) s = Math.floor(s * 2) / 2;
+    scale = Math.max(0.5, s);
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.style.width = Math.round(BUF_W * scale) + 'px';
+    canvas.style.height = Math.round(BUF_H * scale) + 'px';
+    canvas.width = Math.round(BUF_W * scale * dpr);
+    canvas.height = Math.round(BUF_H * scale * dpr);
+  }
+  window.addEventListener('resize', fit);
+
+  function update(dt) {
+    G.time += dt;
+    const p = G.player;
+    if (G.state === 'search' && !G.panel) {
+      if (p.moving) {
+        p.prog += dt / STEP_TIME;
+        if (p.prog >= 1) onArrive();
+        else {
+          p.rx = p.from.x + (p.to.x - p.from.x) * p.prog;
+          p.ry = p.from.y + (p.to.y - p.from.y) * p.prog;
+        }
+      }
+      if (!p.moving && G.state === 'search' && !G.panel) {
+        if (p.path.length) {
+          const nxt = p.path.shift();
+          const dx = nxt.x - p.x, dy = nxt.y - p.y;
+          const dir = dx > 0 ? 'right' : dx < 0 ? 'left' : dy > 0 ? 'down' : 'up';
+          if (!tryStep(dir)) p.path = [];
+        } else if (G.queued || G.keys.size) {
+          const dir = G.queued || [...G.keys][G.keys.size - 1];
+          G.queued = null;
+          if (!tryStep(dir)) p.dir = dir;
+        }
+      }
+    } else if (G.state === 'ride') {
+      G.ride.t += dt / G.ride.dur;
+      if (G.ride.t >= 1) endRide();
+    } else if (G.state === 'month') {
+      updateMonth(dt);
+    }
+    if (G.iv) ivTick();
+  }
+
+  function drawTrains() {
+    NET.lines.forEach((l, li) => {
+      const pts = l.stops.map(([x, y]) => ({ x, y }));
+      const len = pts.reduce((a, q, i) => a + (i ? manhattan(pts[i - 1], q) : 0), 0);
+      const period = len * 0.35;
+      for (let k = 0; k < 2; k++) {
+        let ph = ((G.time + k * period * 0.5 + li * 3) % (period * 2)) / period;
+        if (ph > 1) ph = 2 - ph;
+        const q = polyPoint(pts, ph);
+        const off = [0, 1, -1, 2][li] || 0;
+        P(b, Math.round(q.x * TILE + 2 + off), Math.round(q.y * TILE + 2 + off), 4, 4, '#000');
+        P(b, Math.round(q.x * TILE + 3 + off), Math.round(q.y * TILE + 3 + off), 2, 2, l.color === '#f0609e' ? '#ffd1e6' : '#f6e7cf');
+      }
+    });
+  }
+
+  function drawRoute(pts, color) {
+    b.fillStyle = color;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = pts[i], c = pts[i + 1];
+      const x0 = Math.min(a.x, c.x) * TILE + 3, y0 = Math.min(a.y, c.y) * TILE + 3;
+      const w = Math.abs(a.x - c.x) * TILE + 2, h = Math.abs(a.y - c.y) * TILE + 2;
+      b.fillRect(x0, y0, a.x === c.x ? 2 : w, a.y === c.y ? 2 : h);
+    }
+  }
+
+  function render() {
+    b.clearRect(0, 0, BUF_W, BUF_H);
+    b.drawImage(mapCanvas, 0, 0);
+    if (NET) drawTrains();
+
+    const bob = Math.round(Math.sin(G.time * 4) * 1.2);
+    HUBS.forEach(h => {
+      const x = h.bx * TILE + 4, y = h.by * TILE - 7 + bob;
+      const failed = G.attempts[h.id] === 'failed';
+      if (G.state === 'title') return;
+      P(b, x - 1, y - 1, 10, 10, failed ? '#555' : '#000');
+      drawIcon(b, failed ? ICONS.x : h.formal ? ICONS.brief : ICONS.basket, failed ? x + 1 : x, failed ? y + 1 : y);
+    });
+    if (G.home && G.state !== 'title') {
+      const hm = HOMES[G.home];
+      drawIcon(b, ICONS.heart, hm.bx * TILE + 4, hm.by * TILE - 5 + bob);
+    }
+
+    if (G.state === 'search' && !G.panel) {
+      const near = nearbyTarget();
+      if (near && near.type === 'hub') {
+        const a = 0.5 + 0.5 * Math.sin(G.time * 8);
+        b.strokeStyle = 'rgba(255,204,77,' + a.toFixed(2) + ')';
+        b.lineWidth = 1;
+        b.strokeRect(near.hub.bx * TILE - 0.5, near.hub.by * TILE - 0.5, 17, 17);
+      }
+      G.player.path.forEach((q, i) => { if (i % 2 === 0) P(b, q.x * TILE + 3, q.y * TILE + 3, 2, 2, 'rgba(255,255,255,0.7)'); });
+    }
+
+    if (G.state === 'month' && G.month) {
+      drawRoute(G.month.pts, 'rgba(255,107,53,0.9)');
+      const mo = G.month;
+      const dayT = (mo.t / mo.dur * 22) % 1;
+      const leg = dayT < 0.5 ? dayT * 2 : 2 - dayT * 2;
+      const q = polyPoint(mo.pts, leg);
+      drawAvatar(b, Math.round(q.x * TILE), Math.round(q.y * TILE - 3), 'down', Math.floor(G.time * 8) % 2 ? 1 : 2);
+    } else if (G.state === 'ride' && G.ride) {
+      drawRoute(G.ride.r.pts, 'rgba(255,255,255,0.55)');
+      const q = polyPoint(G.ride.r.pts, G.ride.t);
+      P(b, Math.round(q.x * TILE), Math.round(q.y * TILE + 1), 8, 6, '#000');
+      P(b, Math.round(q.x * TILE + 1), Math.round(q.y * TILE + 2), 6, 4, G.ride.color);
+      P(b, Math.round(q.x * TILE + 2), Math.round(q.y * TILE + 3), 4, 1, '#f6e7cf');
+    } else if (G.home && ['search', 'housing', 'fallback', 'ledger', 'intro'].includes(G.state)) {
+      const p = G.player;
+      const frame = p.moving ? (Math.floor(p.prog * 2) % 2 ? 1 : 2) : 0;
+      drawAvatar(b, Math.round(p.rx * TILE), Math.round(p.ry * TILE - 3), p.dir, frame);
+    }
+
+    if (G.hover && G.state === 'search' && !G.panel) {
+      b.strokeStyle = 'rgba(255,255,255,0.5)';
+      b.strokeRect(G.hover.x * TILE + 0.5, G.hover.y * TILE + 0.5, 7, 7);
+    }
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.imageSmoothingEnabled = false;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(buf, 0, 0, canvas.width, canvas.height);
+
+    // Labels drawn at screen resolution so text stays crisp.
+    const k = scale * dpr;
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.lineJoin = 'round';
+    const label = (text, x, y, size, color) => {
+      ctx.font = size + 'px "Press Start 2P", monospace';
+      ctx.lineWidth = 2.2 / scale + 0.6;
+      ctx.strokeStyle = 'rgba(0,0,0,0.85)';
+      ctx.strokeText(text, x, y);
+      ctx.fillStyle = color;
+      ctx.fillText(text, x, y);
+    };
+    const showMinor = scale >= 1.8;
+    label('CBD', 6.5 * TILE, 21.5 * TILE, 5, ZONES.cbd.label);
+    label('INTERMEDIATE RING', 19 * TILE, 21.5 * TILE - (showMinor ? 0 : 0), 4.2, ZONES.int.label);
+    label('PERIPHERY', 32 * TILE, 0.7 * TILE + (showMinor ? 0 : 0), 4.2, ZONES.per.label);
+    if (showMinor) {
+      DISTRICT_LABELS.forEach(d => {
+        if (d.text === 'COYOACÁN' || d.text === 'NEZA') return;
+        label(d.text, d.x * TILE, d.y * TILE, 3, 'rgba(246,231,207,0.82)');
+      });
+      Object.entries(PARK_NAMES).forEach(([k2, name]) => {
+        const [bx, by] = k2.split(',').map(Number);
+        label(name.toUpperCase(), bx * TILE + 8, by * TILE + 8, 2.4, '#d8f5c8');
+      });
+    }
+    if (G.hover && G.state === 'search' && !G.panel && showMinor) {
+      const bl = blockAt(G.hover.x, G.hover.y);
+      const st = NET && NET.stations.find(s => s.x === G.hover.x && s.y === G.hover.y);
+      let txt = null;
+      if (bl && bl.type === 'hub') txt = bl.hub.name;
+      else if (bl && bl.type === 'home') txt = HOMES[bl.zone].label;
+      else if (st) txt = st.name;
+      if (txt) label(txt, clamp(G.hover.x * TILE + 4, 40, BUF_W - 40), Math.max(6, G.hover.y * TILE - 6), 3.4, '#ffcc4d');
+    }
+  }
+
+  let last = performance.now();
+  function loop(now) {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    update(dt);
+    render();
+    requestAnimationFrame(loop);
+  }
+
+  /* ==========================================================
+   * Boot
+   * ========================================================== */
+  NET = renderMap(false);
+  fit();
+  updateHUD();
+  requestAnimationFrame(loop);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render());
+  $('#title').focus({ preventScroll: true });
+})();
+</script>
+</body>
+</html>
