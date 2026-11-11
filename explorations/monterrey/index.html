@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Where should I live in Monterrey? Walkability, bikeability, everyday places and safety on an H3 grid.">
+<meta name="description" content="Where should I live in Monterrey? Walkability, bikeability, everyday places, leisure visitors and safety on an H3 grid.">
 <title>Where should I live? Monterrey</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -109,6 +109,18 @@ button.r:focus-visible{outline:2px solid var(--cyan)}
 .lyr .op{display:grid;grid-template-columns:auto 90px 34px;gap:7px;align-items:center;cursor:default}
 .lyr .op input{width:100%;accent-color:var(--seagrass)}
 .lyr .op span:last-child{font-family:var(--f-data);font-size:11px;color:var(--muted);text-align:right}
+.search{position:relative}
+.search input{font:inherit;font-size:14px;width:100%;box-sizing:border-box;padding:9px 12px 9px 34px;border:1px solid var(--rule);border-radius:10px;background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%236C6472' stroke-width='2'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='m11 11 4 4'/%3E%3C/svg%3E") no-repeat 11px 50%;color:var(--ink)}
+.search ul{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:6;background:var(--paper);border:1px solid var(--rule);border-radius:10px;list-style:none;margin:0;padding:4px;max-height:300px;overflow-y:auto;box-shadow:0 6px 18px rgba(43,36,48,.16)}
+.search li{padding:7px 9px;border-radius:7px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;font-size:13px}
+.search li small{color:var(--muted);font-size:11.5px;white-space:nowrap}
+.search li[aria-selected="true"],.search li:hover{background:var(--ground)}
+.search li.none{cursor:default;color:var(--muted)}
+.sim{display:flex;flex-direction:column;gap:2px;margin-top:6px}
+.sim .rk{font-family:var(--f-data);font-size:11px;color:var(--muted)}
+.thr{display:grid;grid-template-columns:1fr 92px 38px;gap:8px;align-items:center;font-size:12.5px;padding-top:8px;border-top:1px solid var(--rule);margin-top:2px}
+.thr input{width:100%;accent-color:var(--muted)}
+.thr .w{font-family:var(--f-data);font-size:11px;color:var(--muted);text-align:right}
 .loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-family:var(--f-data);font-size:12px}
 @media (max-width:760px){
   .app{grid-template-columns:1fr;grid-template-rows:62vh auto;height:auto}
@@ -123,10 +135,23 @@ button.r:focus-visible{outline:2px solid var(--cyan)}
 <div class="app">
   <aside class="panel">
     <header>
-      <div class="eyebrow">Monterrey metro · H3 resolution 9 · Strava · DENUE · OSM · SESNSP</div>
+      <div class="eyebrow">Monterrey metro · H3 resolution 9 · Strava · DENUE · OSM · SESNSP · mobile location data</div>
       <h1 id="title">How easy is it to walk to EGyTP?</h1>
       <p class="lede">Each hexagon (~0.1 km²) is scored 0–100 on its commute to the Escuela de Gobierno y Transformación Pública and on how close everyday places are on foot.</p>
     </header>
+
+    <div class="search">
+      <input id="q" type="search" placeholder="Find a colonia…" autocomplete="off" disabled role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="qlist" aria-label="Find a colonia">
+      <ul id="qlist" role="listbox" hidden></ul>
+    </div>
+
+    <section class="card" id="colCard" hidden>
+      <div class="cardhead">
+        <div><div class="eyebrow">Colonia</div><div class="ct" id="colTitle"></div></div>
+        <button class="x" id="colClose" aria-label="Clear colonia">×</button>
+      </div>
+      <div class="rows" id="colRows"></div>
+    </section>
 
     <div class="seg" role="group" aria-label="Map type">
       <button id="t-single" aria-pressed="true">One variable</button>
@@ -145,6 +170,7 @@ button.r:focus-visible{outline:2px solid var(--cyan)}
       <div class="hint">Weights are relative. Set a slider to 0 to leave a variable out. Safety works differently: it only lowers the index, more as you slide it right.</div>
       <div id="sliders" class="sliders"></div>
       <button class="linkbtn" id="resetW">Reset to equal weights</button>
+      <label class="thr" for="thr"><span>Grey out hexagons below</span><input type="range" id="thr" min="0" max="100" step="5" value="0" aria-label="Minimum index to colour"><span class="w" id="thrV">0</span></label>
     </section>
 
     <section class="stats" aria-label="Summary">
@@ -191,6 +217,7 @@ button.r:focus-visible{outline:2px solid var(--cyan)}
       <p><b>Everyday places.</b> Real walking distance along the street network from the hexagon centre to the nearest place. Sources are <b>DENUE</b> (INEGI, records to <span id="denueDate">2026-04</span>) and <b>OpenStreetMap</b>. Convenience store means abarrotes (SCIAN 461110) and minisupers (462112). Panadería means panificación tradicional (311812) plus shops named “panadería”. Pharmacy covers 464111 and 464112. Cinema covers 512130 plus OSM cinemas. Coffee shop means every café named for coffee in DENUE restaurant and café codes (7225xx), plus coffee chains by brand and OSM cafés. Google Places cafés are added to both coffee layers. <b>Specialty coffee</b> keeps independent places that Google returns for “café de especialidad” or “specialty coffee” and whose main type is a coffee shop, café or roastery. Chains (Starbucks, Tim Hortons, Caffenio, Punta del Cielo, Dunkin’ and others) are excluded. DENUE and OSM cafés that Google doesn’t list stay in with an average rating. Each café gets a Bayesian rating, (reviews × stars + 50 × metro mean) ÷ (reviews + 50), so a 4.9 from 8 reviews can’t beat a 4.8 from 1,000. Its quality weight runs from 0 at 4.4 to 1 at 4.75 and above, and cafés at 4.4 or below are dropped. The page shows only a coarse tier (top, upper, listed) per café, not its rating. A hexagon scores its best option, quality × walking-distance decay (50 at 1 km), so a top café 1 km away can beat an average one next door. Parks are OSM parks, public gardens and recreation grounds of at least 500 m², reached at any point on their edge. Score 50 at 400 m (convenience, park), 600 m (panadería, pharmacy, coffee shop) or 2 km (cinema).</p>
       <p><b>Routes and ranges.</b> Every distance is walked along the street network from the hexagon’s access point, the street spot nearest its centre. Click a row in the card to see that route. The range under each place is the 10th–90th percentile of the same walk measured from every street point inside the hexagon.</p>
       <p><b>Colonias.</b> INEGI doesn’t publish colonia boundaries, but every DENUE business lists its colonia. Each ~0.015 km² hexagon (H3 resolution 10) takes the colonia most of its businesses report, then gaps of up to ~500 m are filled from the neighbours. Boundaries are approximate, and areas with few businesses stay unlabelled.</p>
+      <p><b>Leisure visitors.</b> Anonymous smartphone location data for 2024. Each device’s stops are labelled home, work or other. We keep “other” stops during leisure hours (weekdays 18:00–22:00, weekends 07:00–23:00) and count only the minutes inside those windows. A stop counts fully for its own hexagon and fades with distance, weight e<sup>−d/150 m</sup>: about 0.13 for the next ring of hexagons and 0.02 two rings out, nothing beyond. Visitors who live within 700 m are left out, so the measure captures people who travel there. Two weighted counts per hexagon: visitor-hours, and the number of distinct home hexagons the visitors come from. Each is divided by its 99th percentile across the map and square-rooted (capped at 1), and the score is 100 × the geometric mean of the two. A high score needs both many hours and many origins, and only real hotspots get near 100. The card shows the plain counts within ~500 m. Devices skew toward smartphone owners and apps that share location, so read the score as relative.</p>
       <p><b>Safety (municipal).</b> The share of violent crimes among all carpetas de investigación of the fuero común, 2023–2025, from SESNSP municipal open data. Violent means homicidio doloso, feminicidio, lesiones dolosas, secuestro, extorsión, violación and every robbery “con violencia”. The score is relative to the safest metro municipality with at least 1,000 carpetas (San Pedro, 7.2%): 100 × 7.2% ÷ the municipality’s share. Monterrey (12.5%) scores 58 and García (14.7%) 49. Nuevo León publishes no geolocated or colonia-level crime data, so every hexagon in a municipality gets the same value.</p>
       <p><b>Combined index.</b> The weighted mean of the chosen scores, then multiplied by a safety factor. Safety never raises a hexagon’s index. The factor is 1 in the safest municipality and drops with the violent share: factor = 1 − (slider ÷ 5) × (1 − safety score ÷ 100). At full slider, García’s hexagons keep 49% of their index and Monterrey’s 58%; at the default (1) they keep 90% and 92%. Bivariate classes split each variable into thirds of the mapped area.</p>
       <p><b>Limits.</b> Strava users skew sporty. DENUE locations can be a few metres off and may list closed businesses. Distances ignore slope, sidewalk quality and safety. Read it as a relative guide.</p>
@@ -208,7 +235,7 @@ button.r:focus-visible{outline:2px solid var(--cyan)}
     </div>
     <div class="zoom"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">−</button><button id="zhome" aria-label="Recentre on school">◎</button></div>
     <div class="tip" id="tip" hidden></div>
-    <div class="mapnote"><span>Heat: Strava Global Heatmap · Places: INEGI DENUE, OSM, Google · Ratings: Google · Colonias: derived from INEGI DENUE · Crime: SESNSP · Streets, parks &amp; limits: © OpenStreetMap contributors</span></div>
+    <div class="mapnote"><span>Heat: Strava Global Heatmap · Places: INEGI DENUE, OSM, Google · Ratings: Google · Colonias: derived from INEGI DENUE · Crime: SESNSP · Leisure visitors: mobile location data, aggregated · Streets, parks &amp; limits: © OpenStreetMap contributors</span></div>
   </main>
 </div>
 
@@ -219,6 +246,7 @@ const WALK10 = ['#E2DBBE','#DCD9B5','#D6D7AC','#C2CDAB','#A9C1AD','#94B5B0','#83
 const BIKE10 = ['#E8E0EE','#DFD4E9','#D6C8E3','#CDB6CC','#C4A2AF','#B48F9A','#9E7E8F','#896D83','#745C75','#5F4B66'];
 const AMEN10 = ['#EEEDDC','#E3E3C6','#D8D9B0','#C4CF9C','#ADC68A','#93B983','#76A887','#5B9484','#45796D','#2F5E55'];
 const INDEX10 = ['#E2DBBE','#C5CFA3','#A8C488','#8CB484','#6FA388','#519890','#30939D','#19889F','#1B6B81','#1D4E63'];
+const ATTR10 = ['#E2DBBE','#D3D3BE','#BFC7C0','#A8BAC2','#90ADC2','#769FB6','#5F8EAA','#4A7C9C','#386A8B','#285877'];
 const SAFE10 = ['#F1E9DC','#E9D9CB','#E0C8BC','#D6B6AE','#CBA3A1','#BD8F94','#AC7B86','#986878','#82556A','#6B435C'];
 const DIVERGE = ['#B2182B','#EF8A62','#FDDBC7','#F7F7F7','#D1E5F0','#67A9CF','#2166AC'];
 const DIV_EDGES = [0,15,30,43,57,70,85,101];
@@ -244,16 +272,17 @@ const VARS = [
   {id:'cinema', label:'Cinema', group:'Everyday places on foot', kind:'score', ramp:AMEN10, amen:'cinema'},
   {id:'coffee', label:'Coffee shop', group:'Everyday places on foot', kind:'score', ramp:AMEN10, amen:'coffee'},
   {id:'specialty', label:'Specialty coffee', group:'Everyday places on foot', kind:'score', ramp:AMEN10, amen:'specialty'},
+  {id:'attract', label:'Leisure visitors', group:'Mobility', kind:'score', ramp:ATTR10, attract:true},
   {id:'safety', label:'Safety (municipal)', group:'Safety', kind:'score', ramp:SAFE10, crime:true},
   {id:'swalk', label:'Strava walking activity', group:'Strava activity', kind:'activity', mode:'walk'},
   {id:'sbike', label:'Strava riding activity', group:'Strava activity', kind:'activity', mode:'bike'},
 ];
 const VAR = Object.fromEntries(VARS.map(v=>[v.id,v]));
 const lc = v => v.mode && v.kind==='score' ? v.label.replace('Walk','walking').replace('Bike','cycling') : v.label.toLowerCase();
-const DEFAULT_W = {walk:1,bike:1,convenience:1,bakery:1,pharmacy:1,park:1,cinema:1,coffee:1,specialty:1,safety:1,swalk:0,sbike:0};
+const DEFAULT_W = {walk:1,bike:1,convenience:1,bakery:1,pharmacy:1,park:1,cinema:1,coffee:1,specialty:1,attract:1,safety:1,swalk:0,sbike:0};
 
-let CR = null, SAFE = null, D, R = null, BASE = null, DETAIL = null, COL = null, deckgl, polys, centers, display, V = {}, T = {};
-let state = {tab:'single', single:'walk', bx:'walk', by:'convenience', w:{...DEFAULT_W}, selected:-1, focus:null, base:false, col:false, pois:false, alpha:0.8};
+let AT = null, CR = null, SAFE = null, D, R = null, BASE = null, DETAIL = null, COL = null, deckgl, polys, centers, display, V = {}, T = {};
+let state = {tab:'single', single:'walk', bx:'walk', by:'convenience', w:{...DEFAULT_W}, selected:-1, focus:null, base:false, col:false, pois:false, alpha:0.8, thr:0, colSel:-1, sims:[]};
 let indexVals = null;
 
 function binOf(v){ return Math.min(9, Math.max(0, Math.floor(v/10))); }
@@ -281,6 +310,7 @@ function colorFor(i){
     const cx = tercile(state.bx, V[state.bx][i]), cy = tercile(state.by, V[state.by][i]);
     return [...hex2rgb(BIV[cy][cx]), 255*state.alpha];
   }
+  if (indexVals[i] < state.thr) return [214,210,200, 200*state.alpha];
   const b = binOf(indexVals[i]); return [...hex2rgb(INDEX10[b]), (b===0 ? 170 : 255)*state.alpha];
 }
 
@@ -334,10 +364,10 @@ function layers(){
   L.push(new deck.PolygonLayer({id:'hex', data:display, getPolygon:i=>polys[i], getFillColor:colorFor,
       stroked:A > 0.15, getLineColor:[251,250,244,Math.round(110*A)], lineWidthMinPixels:0.4, lineWidthMaxPixels:1.2, getLineWidth:3, filled:true, pickable:true,
       autoHighlight:true, highlightColor:[43,36,48,70],
-      updateTriggers:{getFillColor:[state.tab, state.single, state.bx, state.by, JSON.stringify(state.w), A], getLineColor:[A]},
+      updateTriggers:{getFillColor:[state.tab, state.single, state.bx, state.by, JSON.stringify(state.w), A, state.thr], getLineColor:[A]},
       onHover, onClick:info=>select(info.object ?? -1)}));
-  if (col) L.push(new deck.PathLayer({id:'colLines', data:COL.paths, getPath:d=>d, getColor:[95,75,102, z < 12 ? 80 : 190], getWidth:z < 12 ? 0.7 : 1.3, widthUnits:'pixels', updateTriggers:{getColor:[z<12], getWidth:[z<12]},
-    ...(DASH ? {extensions:DASH, getDashArray:[5,3], dashJustified:true} : {})}));
+  if (col) L.push(new deck.PathLayer({id:'colLines', data:COL.paths, getPath:d=>d, getColor:[74,56,82, z < 12 ? 120 : 235], getWidth:z < 12 ? 1.2 : 2.4, widthUnits:'pixels', updateTriggers:{getColor:[z<12], getWidth:[z<12]},
+    ...(DASH ? {extensions:DASH, getDashArray:[4,2], dashJustified:true} : {})}));
   L.push(new deck.PathLayer({id:'muni', data:ctx.muni, getPath:d=>d, getColor:[95,75,102,150], getWidth:1.6, widthUnits:'pixels'}));
   L.push(new deck.PathLayer({id:'river', data:ctx.river, getPath:d=>d, getColor:[118,159,182,200], getWidth:2.4, widthUnits:'pixels'}));
   if (!base){
@@ -359,10 +389,21 @@ function layers(){
       extensions:COLL, collisionGroup:'labels', getCollisionPriority:d=>-10-d[4]}));
   }
   if (col && z >= 13.2) L.push(new deck.TextLayer({id:'colLabels', data:COL.labels, getPosition:d=>[d[0],d[1]], getText:d=>d[2],
-    getSize:16, getColor:[74,56,82,255], ...TXT, fontWeight:700,
-    extensions:COLL, collisionGroup:'labels', getCollisionPriority:d=>d[3]}));
+    getSize:19, getColor:[60,44,68,255], ...TXT, fontWeight:700,
+    extensions:COLL, collisionGroup:'labels', getCollisionPriority:d=>Math.min(900, d[3])}));
   if (z < 13.2) L.push(new deck.TextLayer({id:'labels', data:LABELS, getPosition:d=>[d[2],d[1]], getText:d=>d[0], getSize:15,
-    getColor:[43,36,48,235], ...TXT, fontWeight:700}));
+    getColor:[43,36,48,235], ...TXT, fontWeight:700, extensions:COLL, collisionGroup:'labels', getCollisionPriority:-900}));
+  // searched colonia (ink) and its five most similar (cyan), visible at every zoom
+  if (state.colSel >= 0 && CC){
+    const sim = state.sims.map(s=>({k:s.k, rank:s.rank, paths:colOutline(s.k)}));
+    const simPaths = sim.flatMap(s=>s.paths), selPaths = colOutline(state.colSel);
+    L.push(new deck.PathLayer({id:'simLines', data:simPaths, getPath:d=>d, getColor:[196,48,112,255], getWidth:z < 12 ? 3.5 : 5, widthUnits:'pixels', jointRounded:true, updateTriggers:{getWidth:[z<12]}}));
+    L.push(new deck.PathLayer({id:'colSelLine', data:selPaths, getPath:d=>d, getColor:[43,36,48,255], getWidth:z < 12 ? 4 : 6, widthUnits:'pixels', jointRounded:true, updateTriggers:{getWidth:[z<12]}}));
+    const tags = [{pos:CC.center[state.colSel], t:COL.names[state.colSel], sel:true}, ...sim.map(s=>({pos:CC.center[s.k], t:`${s.rank}  ${COL.names[s.k]}`, rank:s.rank}))];
+    L.push(new deck.TextLayer({id:'simTags', data:tags, getPosition:d=>d.pos, getText:d=>d.t, getSize:d=>d.sel ? 22 : 19,
+      getColor:[43,36,48,255], ...TXT, fontWeight:700,
+      extensions:COLL, collisionGroup:'labels', getCollisionPriority:d=>d.sel ? 1000 : 990 - d.rank}));
+  }
   // selection
   const i = state.selected;
   if (i >= 0){
@@ -398,9 +439,99 @@ const fmtM = m => m < 0 ? 'none within reach' : m < 1000 ? `${Math.round(m/10)*1
 const fmtR = (a, b) => a < 1000 && b < 1000 ? `${Math.round(a/10)*10}–${Math.round(b/10)*10} m` : `${(a/1000).toFixed(1)}–${(b/1000).toFixed(1)} km`;
 const esc = s => String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function colOf(i){ if (!COL) return null; const k = COL.cell[i]; return k >= 0 ? {name:COL.names[k], muni:COL.muni[k]} : null; }
+// ---- colonias: search, similarity on the combined index, outlines
+let CC = null; // {cells:[[i...]], center:[[lon,lat]], key:[normalized name], out:{}}
+const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9\u00f1 ]/g,' ').replace(/\s+/g,' ').trim();
+function buildColIndex(){
+  const m = COL.names.length, cells = Array.from({length:m}, ()=>[]);
+  for (const i of display){ const k = COL.cell[i]; if (k >= 0) cells[k].push(i); }
+  const center = cells.map(cs=>{ if (!cs.length) return null; let x=0,y=0; for (const i of cs){ x+=centers[i][0]; y+=centers[i][1]; }
+    // label at the member cell nearest the mean, so it always falls inside the colonia
+    x/=cs.length; y/=cs.length; let b=cs[0], bd=1e9; for (const i of cs){ const d=(centers[i][0]-x)**2+(centers[i][1]-y)**2; if (d<bd){bd=d;b=i;} } return centers[b]; });
+  CC = {cells, center, key:COL.names.map(norm), out:{}};
+  $('q').disabled = false;
+}
+function colOutline(k){
+  if (CC.out[k]) return CC.out[k];
+  const mp = h3.cellsToMultiPolygon(CC.cells[k].map(i=>D.cells[i]), true);
+  return CC.out[k] = mp.flatMap(poly=>poly.map(ring=>ring));
+}
+function colMean(k, f){ const cs = CC.cells[k]; let s=0; for (const i of cs) s += f(i); return s/cs.length; }
+// profile = weighted mean of each index variable over the colonia's hexagons; similarity = 100 − weighted RMS gap (0–100 scale)
+function colSims(k){
+  const ids = VARS.map(v=>v.id).filter(id=>state.w[id] > 0), tot = ids.reduce((a,id)=>a+state.w[id],0);
+  if (!tot) return [];
+  const prof = kk => ids.map(id=>colMean(kk, i=>V[id][i]));
+  const p0 = prof(k), out = [];
+  for (let kk=0; kk<CC.cells.length; kk++){
+    if (kk === k || CC.cells[kk].length < 3) continue;
+    const p = prof(kk); let s=0; ids.forEach((id,j)=>{ s += state.w[id]*(p[j]-p0[j])**2; });
+    out.push({k:kk, sim:100 - Math.sqrt(s/tot)});
+  }
+  return out.sort((a,b)=>b.sim-a.sim).slice(0,5).map((s,r)=>({...s, rank:r+1}));
+}
+function fitColonia(k){
+  const pts = colOutline(k).flat(); if (!pts.length) return;
+  let x0=180,y0=90,x1=-180,y1=-90; for (const [x,y] of pts){ x0=Math.min(x0,x); x1=Math.max(x1,x); y0=Math.min(y0,y); y1=Math.max(y1,y); }
+  const r = $('deck').getBoundingClientRect(), pad = Math.min(80, r.width/6, r.height/6);
+  const vp = new deck.WebMercatorViewport({width:r.width, height:r.height});
+  const {longitude, latitude, zoom} = vp.fitBounds([[x0,y0],[x1,y1]], {padding:pad});
+  viewState = {...viewState, longitude, latitude, zoom:Math.min(zoom, 16), transitionDuration:700, transitionInterpolator:new deck.FlyToInterpolator()};
+  deckgl.setProps({initialViewState:viewState});
+  if (viewState.zoom >= 12.8) loadDetail();
+}
+function renderColCard(){
+  const k = state.colSel, on = k >= 0 && CC;
+  $('colCard').hidden = !on; if (!on) return;
+  const n = CC.cells[k].length, ix = colMean(k, i=>indexVals[i]), b = binOf(ix);
+  $('colTitle').innerHTML = `${esc(COL.names[k])}<small>${esc(COL.muni[k])} · ${n} hexagon${n>1?'s':''}, ~${(n*AREA).toFixed(1)} km²</small>`;
+  let html = `<div class="r">${chipHTML(ix, INDEX10[b], b>=6, '')}<div class="n"><b>Combined index</b><div class="d">average over the colonia's hexagons, current weights</div></div></div>`;
+  html += `<div class="grp">Most similar colonias</div>`;
+  if (!state.sims.length) html += `<div class="hint">Give at least one variable a weight to compare colonias.</div>`;
+  html += `<div class="sim">` + state.sims.map(s=>{ const v = colMean(s.k, i=>indexVals[i]), bb = binOf(v);
+    return `<button class="r" data-k="${s.k}">${chipHTML(v, INDEX10[bb], bb>=6, '')}<div class="n"><span class="rk">${s.rank}</span> ${esc(COL.names[s.k])} <span class="go">go</span><div class="d">${esc(COL.muni[s.k])} · ${Math.round(s.sim)}% similar · ${CC.cells[s.k].length} hexagons</div></div></button>`; }).join('') + `</div>`;
+  html += `<div class="cardnote">Similarity compares the average of every variable in the combined index, weighted by your sliders (100% = identical profile). Colonias with fewer than 3 hexagons are skipped. On the map the selected colonia is outlined in black and these five in magenta.</div>`;
+  $('colRows').innerHTML = html;
+  $('colRows').querySelectorAll('button.r').forEach(btn=>btn.onclick=()=>{ fitColonia(+btn.dataset.k); redraw(); });
+}
+let preColView = null; // view before the first colonia was picked; restored on ×
+function pickColonia(k){
+  if (k >= 0 && state.colSel < 0) preColView = {longitude:viewState.longitude, latitude:viewState.latitude, zoom:viewState.zoom};
+  if (k < 0 && preColView){ viewState = {...viewState, ...preColView, transitionDuration:700, transitionInterpolator:new deck.FlyToInterpolator()}; deckgl.setProps({initialViewState:viewState}); preColView = null; }
+  state.colSel = k; state.sims = k >= 0 ? colSims(k) : [];
+  renderColCard(); if (k >= 0) fitColonia(k); redraw();
+}
+function setupSearch(){
+  const q = $('q'), ul = $('qlist'); let hits = [], act = -1;
+  const close = ()=>{ ul.hidden = true; q.setAttribute('aria-expanded','false'); act = -1; };
+  const paint = ()=>{ ul.querySelectorAll('li[data-k]').forEach((li,j)=>li.setAttribute('aria-selected', j===act)); const a = ul.querySelector('li[aria-selected="true"]'); if (a) a.scrollIntoView({block:'nearest'}); };
+  const choose = k=>{ q.value = COL.names[k]; close(); pickColonia(k); };
+  q.oninput = ()=>{
+    const t = norm(q.value); if (t.length < 2 || !CC){ close(); return; }
+    const pre = [], word = [], sub = [];
+    CC.key.forEach((s,k)=>{ if (!CC.cells[k].length) return; if (s.startsWith(t)) pre.push(k); else if (s.includes(' '+t)) word.push(k); else if (s.includes(t)) sub.push(k); });
+    const bySize = (a,b)=>CC.cells[b].length-CC.cells[a].length;
+    hits = [...pre.sort(bySize), ...word.sort(bySize), ...sub.sort(bySize)].slice(0,10); act = hits.length ? 0 : -1;
+    ul.innerHTML = hits.length ? hits.map((k,j)=>`<li role="option" id="qo${j}" data-k="${k}"><span>${esc(COL.names[k])}</span><small>${esc(COL.muni[k])}</small></li>`).join('') : `<li class="none">No colonia matches “${esc(q.value)}”</li>`;
+    ul.hidden = false; q.setAttribute('aria-expanded','true'); paint();
+    ul.querySelectorAll('li[data-k]').forEach(li=>li.onmousedown = e=>{ e.preventDefault(); choose(+li.dataset.k); });
+  };
+  q.onkeydown = e=>{
+    if (ul.hidden) return;
+    if (e.key==='ArrowDown'){ act = Math.min(hits.length-1, act+1); paint(); e.preventDefault(); }
+    else if (e.key==='ArrowUp'){ act = Math.max(0, act-1); paint(); e.preventDefault(); }
+    else if (e.key==='Enter' && act >= 0){ choose(hits[act]); e.preventDefault(); }
+    else if (e.key==='Escape') close();
+  };
+  q.onblur = ()=>setTimeout(close, 120);
+  $('colClose').onclick = ()=>{ q.value = ''; pickColonia(-1); };
+}
 function detail(id, i, full){
   const v = VAR[id];
   if (v.kind === 'activity') return heatOf(id,i) > 0 ? `metro percentile P${Math.round(V[id][i])}` : 'no recorded activity';
+  if (v.attract){ const u = AT.uv[i]; if (!u) return 'no leisure visits recorded nearby';
+    const who = u < 20 ? 'fewer than 20 visitors' : `${u.toLocaleString('en-US')} visitors from ${AT.uo[i].toLocaleString('en-US')} home hexagons`;
+    return `${who} · ${Math.round(AT.vh[i]).toLocaleString('en-US')} visitor-hours within ~500 m, evenings and weekends`; }
   if (v.crime){ const m = CR.cell[i]; if (m < 0) return 'no municipal data'; const r = CR.munis[m];
     return `${esc(r.name)}: ${r.share}% of carpetas are violent crimes (${CR.years}, ${r.total.toLocaleString('en-US')} carpetas). Same value for the whole municipality.`; }
   if (v.mode){ const M = D[v.mode]; return M.snap[i] > 400 ? 'no street within 400 m' : `${M.km[i].toFixed(1)} km · ${fmtMin(M.km[i], D.params[v.mode].speed)} · ${M.busy[i]}% on busy streets`; }
@@ -497,7 +628,7 @@ function refresh(){
   if (state.tab==='single'){
     const v = VAR[state.single], vals = display.map(i=>V[v.id][i]);
     $('title').innerHTML = v.mode && v.kind==='score' ? `How easy is it to <em style="color:${v.mode==='walk'?'var(--cyan)':'var(--grape)'}">${v.mode}</em> to EGyTP?`
-      : v.crime ? `How <em style="color:#82556A">safe</em> is each municipality?` : v.kind==='activity' ? `Where do people <em style="color:var(--cyan)">${v.mode==='walk'?'walk':'ride'}</em> on Strava?` : `How close is the nearest <em style="color:var(--seagrass)">${v.label.toLowerCase()}</em>?`;
+      : v.attract ? `Where do people <em style="color:#386A8B">go out</em> from all over the city?` : v.crime ? `How <em style="color:#82556A">safe</em> is each municipality?` : v.kind==='activity' ? `Where do people <em style="color:var(--cyan)">${v.mode==='walk'?'walk':'ride'}</em> on Strava?` : `How close is the nearest <em style="color:var(--seagrass)">${v.label.toLowerCase()}</em>?`;
     if (v.kind==='activity'){
       const bins = new Array(10).fill(0); let rec=0;
       for (const i of display) if (heatOf(v.id,i)>0){ bins[binOf(V[v.id][i])]++; rec++; }
@@ -508,7 +639,7 @@ function refresh(){
       const bins = new Array(10).fill(0); vals.forEach(x=>bins[binOf(x)]++);
       const Aw = v.amen && D.amenities[v.amen].weighted;
       const lo = v.amen ? (Aw ? 'far or low-rated' : 'far') : 'far or untravelled', hi = v.amen ? (Aw ? 'close to a top-rated café' : `close (50 at ${fmtM(D.amenities[v.amen].d50)})`) : 'close via busy streets';
-      setLegend(v.ramp, TEN, `${v.label} score`, v.crime ? 'highest violent share' : lo, v.crime ? 'lowest violent share' : hi);
+      setLegend(v.ramp, TEN, `${v.label} score`, v.crime ? 'highest violent share' : v.attract ? 'few visitors, from few places' : lo, v.crime ? 'lowest violent share' : v.attract ? 'many visitors, from many places' : hi);
       setBars(bins, v.ramp, TEN_N, 'Area by score band');
       const a70 = vals.filter(x=>x>=70).length, a40 = vals.filter(x=>x>=40).length;
       if (v.amen){
@@ -532,13 +663,16 @@ function refresh(){
     const vals = display.map(i=>indexVals[i]), bins = new Array(10).fill(0); vals.forEach(x=>bins[binOf(x)]++);
     setLegend(INDEX10, TEN, 'Combined index', 'low', 'high');
     setBars(bins, INDEX10, TEN_N, 'Area by index band');
-    setStats([(vals.filter(x=>x>=70).length*AREA).toFixed(0), 'km² scoring 70+'], [(vals.filter(x=>x>=40).length*AREA).toFixed(0), 'km² scoring 40+'], [Math.round(median(vals)), 'median index, mapped area']);
+    const cut = state.thr > 0 ? state.thr : 70;
+    setStats([(vals.filter(x=>x>=cut).length*AREA).toFixed(0), state.thr > 0 ? `km² still coloured (${cut}+)` : 'km² scoring 70+'], [(vals.filter(x=>x>=40).length*AREA).toFixed(0), 'km² scoring 40+'], [Math.round(median(vals)), 'median index, mapped area']);
     const tot = VARS.reduce((a,v)=>a+(v.id==='safety' ? 0 : state.w[v.id]),0);
     const worst = Math.min(...display.map(i=>SAFE[i]));
     for (const v of VARS){
       $('w-'+v.id).textContent = v.id==='safety' ? (state.w.safety ? '−'+Math.round(state.w.safety/5*(1-worst/100)*100)+'% max' : 'off') : tot ? Math.round(state.w[v.id]/tot*100)+'%' : '0%';
       $('sl-'+v.id).classList.toggle('off', state.w[v.id]===0); }
   }
+  if (state.colSel >= 0 && CC) state.sims = colSims(state.colSel);
+  renderColCard();
   renderCard();
   redraw();
 }
@@ -561,6 +695,8 @@ function buildControls(){
   $('resetW').onclick = ()=>{ state.w = {...DEFAULT_W}; for (const v of VARS) $('in-'+v.id).value = state.w[v.id]; computeIndex(); refresh(); };
   for (const t of ['single','bivar','index']) $('t-'+t).onclick = ()=>{ state.tab = t; state.focus = null; refresh(); };
   $('cardClose').onclick = ()=>select(-1);
+  setupSearch();
+  $('thr').oninput = e=>{ state.thr = +e.target.value; $('thrV').textContent = e.target.value; refresh(); };
   $('optBase').onchange = e=>{ state.base = e.target.checked; redraw(); };
   $('optCol').onchange = e=>{ state.col = e.target.checked; redraw(); };
   $('optPois').onchange = e=>{ state.pois = e.target.checked; redraw(); };
@@ -577,15 +713,15 @@ function loadDetail(){
 function loadExtras(){
   fetch('routes.json').then(r=>r.json()).then(d=>{ R = d; if (state.selected >= 0) redraw(); }).catch(e=>console.error(e));
   fetch('base.json').then(r=>r.json()).then(d=>{ BASE = {streets:{major:decodeAll(d.streets.major), mid:decodeAll(d.streets.mid)}, parks:decodeAll(d.parks), labels:d.labels}; redraw(); }).catch(e=>console.error(e));
-  fetch('colonias.json').then(r=>r.json()).then(d=>{ COL = {...d, paths:decodeAll(d.outlines)}; redraw(); if (state.selected >= 0) renderCard(); }).catch(e=>console.error(e));
+  fetch('colonias.json').then(r=>r.json()).then(d=>{ COL = {...d, paths:decodeAll(d.outlines)}; buildColIndex(); redraw(); if (state.selected >= 0) renderCard(); }).catch(e=>console.error(e));
   if (viewState.zoom >= 12.8) loadDetail();
 }
 const HOME = {longitude:-100.335, latitude:25.672, zoom:11.2, pitch:0, bearing:0};
 let viewState = {...HOME};
 function zoomBy(dz){ viewState = {...viewState, zoom: Math.max(9, Math.min(17, viewState.zoom + dz)), transitionDuration:300}; deckgl.setProps({initialViewState:viewState}); }
 
-Promise.all([fetch('data.json').then(r=>r.json()), fetch('crime.json').then(r=>r.json())]).then(([data, crime])=>{
-  D = data; CR = crime;
+Promise.all([fetch('data.json').then(r=>r.json()), fetch('crime.json').then(r=>r.json()), fetch('attract.json').then(r=>r.json())]).then(([data, crime, attract])=>{
+  D = data; CR = crime; AT = attract;
   { const ref = CR.munis.filter(m=>m.total >= 1000).map(m=>m.share), mx = Math.max(...ref), mn = Math.min(...ref);
     SAFE = CR.cell.map(m=> m < 0 ? 100 : Math.min(100, 100*mn/CR.munis[m].share)); }
   const n = D.cells.length;
@@ -596,7 +732,7 @@ Promise.all([fetch('data.json').then(r=>r.json()), fetch('crime.json').then(r=>r
   }
   for (const v of VARS){
     const a = new Float32Array(n);
-    for (let i=0;i<n;i++) a[i] = v.crime ? SAFE[i] : v.kind==='activity' ? (D[v.mode].heat[i] > 0 ? D[v.mode].pct[i] : 0) : v.mode ? D[v.mode].score[i] : D.amenities[v.amen].score[i];
+    for (let i=0;i<n;i++) a[i] = v.attract ? AT.score[i] : v.crime ? SAFE[i] : v.kind==='activity' ? (D[v.mode].heat[i] > 0 ? D[v.mode].pct[i] : 0) : v.mode ? D[v.mode].score[i] : D.amenities[v.amen].score[i];
     V[v.id] = a;
     const s = Float64Array.from(display.map(i=>a[i])).sort();
     // terciles; when ties (e.g. many zeros) collapse a break, split the values above it at their median
@@ -617,5 +753,6 @@ Promise.all([fetch('data.json').then(r=>r.json()), fetch('crime.json').then(r=>r
   $('zhome').onclick=()=>{ viewState={...HOME, zoom: window.innerWidth<760?10.4:HOME.zoom, transitionDuration:400}; deckgl.setProps({initialViewState:viewState}); };
 }).catch(err=>{ const l = $('loading'); if (l) l.textContent = 'The map data did not load. Reload the page to try again.'; console.error(err); });
 </script>
+
 </body>
 </html>
